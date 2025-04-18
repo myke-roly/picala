@@ -9,6 +9,8 @@ import {
   ScrollView
 } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
+import { useRouter } from 'expo-router';
+import { ThemeLinkText } from '@/components';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -16,6 +18,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async () => {
     setError('');
@@ -93,6 +96,7 @@ const Register = () => {
           >
             <ThemedText style={styles.buttonText}>Create Account</ThemedText>
           </TouchableOpacity>
+          <ThemeLinkText center onPress={() => router.back()}>Already have an account? Sign in</ThemeLinkText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -145,6 +149,9 @@ const styles = StyleSheet.create({
     color: '#ef4444',
     textAlign: 'center',
     marginBottom: 10,
+  },
+  linkContainer: {
+    marginTop: 20,
   },
 });
 

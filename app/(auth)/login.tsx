@@ -10,8 +10,7 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemeLinkText } from '@/components/ThemeLinkText';
+import { ThemedText, ThemeLinkText } from '@/components/';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -72,8 +71,9 @@ const Login = () => {
           >
             <ThemedText style={styles.buttonText}>Sign in</ThemedText>
           </TouchableOpacity>
+
+          <ThemeLinkText center  href="/register">Don't have an account? Sign up</ThemeLinkText>
         </View>
-        <ThemeLinkText center  href="/register">Don't have an account? Sign up</ThemeLinkText>
       </ScrollView>
     </KeyboardAvoidingView>
   );
