@@ -1,11 +1,14 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
+import { Image, StyleSheet, Platform, Button } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { Link, useNavigation } from 'expo-router';
 
-export default function HomeScreen() {
+
+
+
+const HomeScreen = () => {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -19,6 +22,9 @@ export default function HomeScreen() {
         <ThemedText type="title">Picala</ThemedText>
         <HelloWave />
       </ThemedView>
+      <Link href="/login" asChild>
+        <Button title="Login" />
+      </Link>
     </ParallaxScrollView>
   );
 }
@@ -41,3 +47,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
+export default HomeScreen;

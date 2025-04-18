@@ -1,9 +1,6 @@
-'use client';
-
 import React, { useState } from 'react';
 import { 
   View, 
-  Text, 
   TextInput, 
   TouchableOpacity, 
   StyleSheet,
@@ -11,23 +8,31 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
+import { ThemedText } from '@/components/ThemedText';
 
-const Login = () => {
+const Register = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async () => {
     setError('');
 
+    // Basic validation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
     try {
-      // Here you would typically make an API call to your authentication endpoint
-      console.log('Login attempt with:', { email, password });
+      // Here you would typically make an API call to your registration endpoint
+      console.log('Registration attempt with:', { name, email, password });
       
-      // Navigate to dashboard or home screen after successful login
-      // You would use navigation.navigate('Dashboard') here
+      // Navigate to login or home screen after successful registration
     } catch (err) {
-      setError('Failed to login. Please try again.');
+      setError('Failed to register. Please try again.');
     }
   };
 
@@ -38,9 +43,17 @@ const Login = () => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.formContainer}>
-          <Text style={styles.title}>Sign in to your account</Text>
+          <ThemedText type="title" style={styles.title}>Create your account</ThemedText>
           
           <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Full Name"
+              value={name}
+              onChangeText={setName}
+              autoCapitalize="words"
+            />
+            
             <TextInput
               style={styles.input}
               placeholder="Email address"
@@ -59,23 +72,32 @@ const Login = () => {
               secureTextEntry
               autoCapitalize="none"
             />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+              autoCapitalize="none"
+            />
           </View>
 
           {error ? (
-            <Text style={styles.errorText}>{error}</Text>
+            <ThemedText style={styles.errorText}>{error}</ThemedText>
           ) : null}
 
           <TouchableOpacity 
             style={styles.button}
             onPress={handleSubmit}
           >
-            <Text style={styles.buttonText}>Sign in</Text>
+            <ThemedText style={styles.buttonText}>Create Account</ThemedText>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -93,11 +115,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 30,
-    color: '#1f2937',
   },
   inputContainer: {
     marginBottom: 20,
@@ -129,4 +148,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Register;
+
