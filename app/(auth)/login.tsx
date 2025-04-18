@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { 
   View, 
-  Text, 
   TextInput, 
   TouchableOpacity, 
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
+import { ThemedText, ThemeLinkText } from '@/components/';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -38,7 +38,7 @@ const Login = () => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.formContainer}>
-          <Text style={styles.title}>Sign in to your account</Text>
+          <ThemedText type="title" style={styles.title}>Sign in to your account</ThemedText>
           
           <View style={styles.inputContainer}>
             <TextInput
@@ -62,15 +62,17 @@ const Login = () => {
           </View>
 
           {error ? (
-            <Text style={styles.errorText}>{error}</Text>
+            <ThemedText style={styles.errorText}>{error}</ThemedText>
           ) : null}
 
           <TouchableOpacity 
             style={styles.button}
             onPress={handleSubmit}
           >
-            <Text style={styles.buttonText}>Sign in</Text>
+            <ThemedText style={styles.buttonText}>Sign in</ThemedText>
           </TouchableOpacity>
+
+          <ThemeLinkText center  href="/register">Don't have an account? Sign up</ThemeLinkText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -93,11 +95,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 30,
-    color: '#1f2937',
   },
   inputContainer: {
     marginBottom: 20,
