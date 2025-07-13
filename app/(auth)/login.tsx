@@ -1,15 +1,6 @@
 import React, {useState} from 'react';
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert,
-} from 'react-native';
-import {ThemedText, ThemeLinkText} from '@/components/';
+import {View, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert} from 'react-native';
+import {ThemedText, ThemeLinkText, CustomInput} from '@/components/';
 import {signIn} from '@/services/auth';
 import {useRouter} from 'expo-router';
 
@@ -49,23 +40,25 @@ const Login = () => {
           </ThemedText>
 
           <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Email address"
+            <CustomInput
+              label="Email Address"
+              placeholder="Enter your email"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
+              required
             />
 
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
+            <CustomInput
+              label="Password"
+              placeholder="Enter your password"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
               autoCapitalize="none"
+              required
             />
           </View>
 
@@ -109,15 +102,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
-  },
-  input: {
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    fontSize: 16,
   },
   button: {
     backgroundColor: '#4f46e5',
