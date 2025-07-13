@@ -1,5 +1,5 @@
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import {ThemedText, ThemedView} from '@/components';
+import {StyleSheet, View} from 'react-native';
+import {ThemedText, ThemedView, CustomButton} from '@/components';
 import {useAuth} from '@/contexts/AuthContext';
 import {useRouter} from 'expo-router';
 
@@ -25,9 +25,7 @@ export default function TabTwoScreen() {
       ) : (
         <View style={styles.authPrompt}>
           <ThemedText style={styles.authMessage}>Sign in to explore all features and content</ThemedText>
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <ThemedText style={styles.loginButtonText}>Sign In to Continue</ThemedText>
-          </TouchableOpacity>
+          <CustomButton title="Sign In to Continue" onPress={handleLogin} />
         </View>
       )}
     </View>
@@ -65,16 +63,5 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  loginButton: {
-    backgroundColor: '#4f46e5',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  loginButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
   },
 });

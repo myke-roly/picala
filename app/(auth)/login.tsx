@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert} from 'react-native';
-import {ThemedText, ThemeLinkText, CustomInput} from '@/components/';
+import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert} from 'react-native';
+import {ThemedText, ThemeLinkText, CustomInput, CustomButton} from '@/components/';
 import {signIn} from '@/services/auth';
 import {useRouter} from 'expo-router';
 
@@ -64,13 +64,12 @@ const Login = () => {
 
           {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
 
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
+          <CustomButton
+            title={loading ? 'Signing in...' : 'Sign in'}
             onPress={handleSubmit}
+            loading={loading}
             disabled={loading}
-          >
-            <ThemedText style={styles.buttonText}>{loading ? 'Signing in...' : 'Sign in'}</ThemedText>
-          </TouchableOpacity>
+          />
 
           <ThemeLinkText center href="/register">
             Don't have an account? Sign up
@@ -102,20 +101,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
-  },
-  button: {
-    backgroundColor: '#4f46e5',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonDisabled: {
-    backgroundColor: '#9ca3af',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
   },
   errorText: {
     color: '#ef4444',

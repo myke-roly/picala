@@ -4,3 +4,4 @@ export * from './ThemeLinkText';
 export * from './ExternalLink';
 export * from './HapticTab';
 export * from './CustomInput';
+export * from './CustomButton';
