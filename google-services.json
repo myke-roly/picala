@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "224223110271",
+    "project_id": "picala-c6532",
+    "storage_bucket": "picala-c6532.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224223110271:android:ac30d4ebf7981b20890b4a",
+        "android_client_info": {
+          "package_name": "com.picala.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXzRnZklPb_1-PF5cgO6fyLeDXFRAHVY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
