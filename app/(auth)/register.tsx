@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView
-} from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { useRouter } from 'expo-router';
-import { ThemeLinkText } from '@/components';
+import React, {useState} from 'react';
+import {View, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
+import {ThemedText} from '@/components/ThemedText';
+import {useRouter} from 'expo-router';
+import {ThemeLinkText} from '@/components';
+import {signUp} from '@/services/auth';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -18,36 +11,50 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async () => {
     setError('');
+    setLoading(true);
 
     // Basic validation
+    if (!name || !email || !password || !confirmPassword) {
+      setError('Please fill in all fields');
+      setLoading(false);
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password should be at least 6 characters long');
+      setLoading(false);
       return;
     }
 
     try {
-      // Here you would typically make an API call to your registration endpoint
-      console.log('Registration attempt with:', { name, email, password });
-      
-      // Navigate to login or home screen after successful registration
-    } catch (err) {
-      setError('Failed to register. Please try again.');
+      await signUp(email, password);
+      router.replace('/(tabs)');
+    } catch (err: any) {
+      setError(err.message || 'Failed to register. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>Create your account</ThemedText>
-          
+          <ThemedText type="title" style={styles.title}>
+            Create your account
+          </ThemedText>
+
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
@@ -56,7 +63,7 @@ const Register = () => {
               onChangeText={setName}
               autoCapitalize="words"
             />
-            
+
             <TextInput
               style={styles.input}
               placeholder="Email address"
@@ -66,7 +73,7 @@ const Register = () => {
               autoCapitalize="none"
               autoComplete="email"
             />
-            
+
             <TextInput
               style={styles.input}
               placeholder="Password"
@@ -86,17 +93,18 @@ const Register = () => {
             />
           </View>
 
-          {error ? (
-            <ThemedText style={styles.errorText}>{error}</ThemedText>
-          ) : null}
+          {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
 
-          <TouchableOpacity 
-            style={styles.button}
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
             onPress={handleSubmit}
+            disabled={loading}
           >
-            <ThemedText style={styles.buttonText}>Create Account</ThemedText>
+            <ThemedText style={styles.buttonText}>{loading ? 'Creating Account...' : 'Create Account'}</ThemedText>
           </TouchableOpacity>
-          <ThemeLinkText center onPress={() => router.back()}>Already have an account? Sign in</ThemeLinkText>
+          <ThemeLinkText center onPress={() => router.back()}>
+            Already have an account? Sign in
+          </ThemeLinkText>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -140,6 +148,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  buttonDisabled: {
+    backgroundColor: '#9ca3af',
+  },
   buttonText: {
     color: 'white',
     fontSize: 16,
@@ -156,4 +167,3 @@ const styles = StyleSheet.create({
 });
 
 export default Register;
-
