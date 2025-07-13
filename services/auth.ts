@@ -1,62 +1,51 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  User,
-  AuthError,
-} from 'firebase/auth';
-import {auth} from '../config/firebase';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 export interface AuthErrorType {
   code: string;
   message: string;
 }
 
-export const signUp = async (email: string, password: string): Promise<User> => {
+export const signUp = async (email: string, password: string): Promise<FirebaseAuthTypes.User> => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await auth().createUserWithEmailAndPassword(email, password);
     return userCredential.user;
-  } catch (error) {
-    const authError = error as AuthError;
+  } catch (error: any) {
     throw {
-      code: authError.code,
-      message: getErrorMessage(authError.code),
+      code: error.code,
+      message: getErrorMessage(error.code),
     };
   }
 };
 
-export const signIn = async (email: string, password: string): Promise<User> => {
+export const signIn = async (email: string, password: string): Promise<FirebaseAuthTypes.User> => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await auth().signInWithEmailAndPassword(email, password);
     return userCredential.user;
-  } catch (error) {
-    const authError = error as AuthError;
+  } catch (error: any) {
     throw {
-      code: authError.code,
-      message: getErrorMessage(authError.code),
+      code: error.code,
+      message: getErrorMessage(error.code),
     };
   }
 };
 
 export const signOutUser = async (): Promise<void> => {
   try {
-    await signOut(auth);
-  } catch (error) {
-    const authError = error as AuthError;
+    await auth().signOut();
+  } catch (error: any) {
     throw {
-      code: authError.code,
-      message: getErrorMessage(authError.code),
+      code: error.code,
+      message: getErrorMessage(error.code),
     };
   }
 };
 
-export const getCurrentUser = (): User | null => {
-  return auth.currentUser;
+export const getCurrentUser = (): FirebaseAuthTypes.User | null => {
+  return auth().currentUser;
 };
 
-export const onAuthStateChange = (callback: (user: User | null) => void) => {
-  return onAuthStateChanged(auth, callback);
+export const onAuthStateChange = (callback: (user: FirebaseAuthTypes.User | null) => void) => {
+  return auth().onAuthStateChanged(callback);
 };
 
 // Helper function to convert Firebase error codes to user-friendly messages
