@@ -32,7 +32,7 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      router.replace('/(tabs)');
+      router.back();
     } catch (err: any) {
       setError(err.message || 'Failed to login. Please try again.');
     } finally {

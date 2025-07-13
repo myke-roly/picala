@@ -6,29 +6,42 @@ import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
 
 const HomeScreen = () => {
-  const {user} = useAuth();
+  const {user, isAuthenticated} = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
       await signOutUser();
-      router.replace('/(auth)/login');
     } catch (error) {
       console.error('Logout error:', error);
     }
   };
 
+  const handleLogin = () => {
+    router.push('/(auth)/login');
+  };
+
   return (
     <ThemedView style={styles.container}>
       <ThemedText type="title">Welcome to Picala</ThemedText>
-      {user && (
-        <View style={styles.userInfo}>
-          <ThemedText style={styles.userEmail}>{user.email}</ThemedText>
+
+      {isAuthenticated ? (
+        <>
+          <View style={styles.userInfo}>
+            <ThemedText style={styles.userEmail}>{user?.email}</ThemedText>
+          </View>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <ThemedText style={styles.logoutButtonText}>Sign Out</ThemedText>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <View style={styles.authContainer}>
+          <ThemedText style={styles.authMessage}>Sign in to access all features</ThemedText>
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <ThemedText style={styles.loginButtonText}>Sign In</ThemedText>
+          </TouchableOpacity>
         </View>
       )}
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <ThemedText style={styles.logoutButtonText}>Sign Out</ThemedText>
-      </TouchableOpacity>
     </ThemedView>
   );
 };
@@ -59,6 +72,27 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   logoutButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  authContainer: {
+    marginVertical: 20,
+    alignItems: 'center',
+  },
+  authMessage: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  loginButton: {
+    backgroundColor: '#4f46e5',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  loginButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',

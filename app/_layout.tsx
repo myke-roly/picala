@@ -8,7 +8,6 @@ import 'react-native-reanimated';
 
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {AuthProvider} from '@/contexts/AuthContext';
-import {AuthRedirect} from '@/components/AuthRedirect';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -38,7 +37,6 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
-        <AuthRedirect />
       </ThemeProvider>
     </AuthProvider>
   );

@@ -39,7 +39,7 @@ const Register = () => {
 
     try {
       await signUp(email, password);
-      router.replace('/(tabs)');
+      router.back();
     } catch (err: any) {
       setError(err.message || 'Failed to register. Please try again.');
     } finally {
