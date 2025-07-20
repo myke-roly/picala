@@ -46,13 +46,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     initializeAuth();
 
     // Listen for auth state changes
-    const unsubscribe = onAuthStateChange((user) => {
+    const {
+      data: {subscription},
+    } = onAuthStateChange((user) => {
       setUser(user);
       setLoading(false);
     });
 
     // Cleanup subscription on unmount
-    return () => unsubscribe.data.subscription.unsubscribe();
+    return () => subscription.unsubscribe();
   }, []);
 
   const value = {

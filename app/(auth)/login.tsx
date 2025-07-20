@@ -23,8 +23,10 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      router.back();
+      // Navigate to the main app after successful login
+      router.replace('/(tabs)');
     } catch (err: any) {
+      console.log(err);
       setError(err.message || 'Failed to login. Please try again.');
     } finally {
       setLoading(false);

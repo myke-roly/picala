@@ -39,8 +39,10 @@ const Register = () => {
 
     try {
       await signUp(email, password);
-      router.back();
+      // Navigate to the main app after successful registration
+      router.replace('/(tabs)');
     } catch (err: any) {
+      console.log(err);
       setError(err.message || 'Failed to register. Please try again.');
     } finally {
       setLoading(false);
