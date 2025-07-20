@@ -6,7 +6,6 @@ import {ThemeLinkText, CustomInput, CustomButton} from '@/components';
 import {signUp} from '@/services/auth';
 
 const Register = () => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,7 +18,7 @@ const Register = () => {
     setLoading(true);
 
     // Basic validation
-    if (!name || !email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword) {
       setError('Please fill in all fields');
       setLoading(false);
       return;
@@ -67,15 +66,6 @@ const Register = () => {
           </ThemedText>
 
           <View style={styles.inputContainer}>
-            <CustomInput
-              label="Full Name"
-              placeholder="Enter your full name"
-              value={name}
-              onChangeText={setName}
-              autoCapitalize="words"
-              required
-            />
-
             <CustomInput
               label="Email Address"
               placeholder="Enter your email"
