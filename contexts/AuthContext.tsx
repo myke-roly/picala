@@ -1,8 +1,9 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import {User} from '@supabase/supabase-js';
 import {onAuthStateChange, getCurrentUser} from '../services/auth';
 
 interface AuthContextType {
-  user: any | null;
+  user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
 }
@@ -26,14 +27,23 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Set initial user state
-    const currentUser = getCurrentUser();
-    setUser(currentUser);
-    setLoading(false);
+    const initializeAuth = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error('Error getting current user:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
 
     // Listen for auth state changes
     const unsubscribe = onAuthStateChange((user) => {
@@ -42,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     });
 
     // Cleanup subscription on unmount
-    return () => unsubscribe();
+    return () => unsubscribe.data.subscription.unsubscribe();
   }, []);
 
   const value = {

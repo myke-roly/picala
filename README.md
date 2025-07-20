@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# Welcome to Picala 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is an [Expo](https://expo.dev) project with Supabase integration for authentication and database functionality.
 
 ## Get started
 
@@ -10,10 +10,23 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Set up Supabase
+
+   - Create a Supabase project at [supabase.com](https://supabase.com)
+   - Copy your project URL and anon key
+   - Create a `.env` file in the project root with:
+
+   ```env
+   EXPO_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+   ```
+
+   See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for detailed setup instructions.
+
+3. Start the app
 
    ```bash
-    npx expo start
+   npx expo start
    ```
 
 In the output, you'll find options to open the app in a
