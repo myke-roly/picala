@@ -30,13 +30,6 @@ export const signUp = async (email: string, password: string): Promise<SignUpRes
       };
     }
 
-    if (!data.session) {
-      throw {
-        code: 'verification-required',
-        message: 'Please check your inbox for email verification!',
-      };
-    }
-
     if (!data.user) {
       throw {
         code: 'auth/user-not-found',
