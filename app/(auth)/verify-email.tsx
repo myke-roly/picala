@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-native';
 import {ThemeLinkText} from '@/components/';
-import Form, {FormField} from '@/components/Form';
+import Form, {FormField, FormButton} from '@/components/Form';
 import {resendVerificationEmail, verifyEmail} from '@/services/auth';
 import {useRouter, useLocalSearchParams} from 'expo-router';
 
@@ -90,20 +90,25 @@ const VerifyEmail = () => {
     },
   ];
 
+  const formButtons: FormButton[] = [
+    {
+      variant: 'default',
+      title: loading ? 'Verifying...' : 'Verify Email',
+      onPress: handleVerifyEmail,
+      loading: loading,
+      disabled: loading,
+    },
+    {
+      variant: 'secondary',
+      title: resendLoading ? 'Sending...' : 'Resend Email',
+      onPress: handleResendEmail,
+      loading: resendLoading,
+      disabled: resendLoading || loading,
+    },
+  ];
+
   return (
-    <Form
-      title="Verify Your Email"
-      fields={formFields}
-      onSubmit={handleVerifyEmail}
-      submitButtonText="Verify Email"
-      loadingButtonText="Verifying..."
-      error={error}
-      success={success}
-      loading={loading}
-    >
-      <ThemeLinkText center onPress={handleResendEmail}>
-        Didn't receive the email? Resend verification
-      </ThemeLinkText>
+    <Form title="Verify Your Email" fields={formFields} buttons={formButtons} error={error} success={success}>
       <ThemeLinkText center onPress={() => router.back()}>
         Back to Login
       </ThemeLinkText>

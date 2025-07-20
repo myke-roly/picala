@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useRouter} from 'expo-router';
 import {ThemeLinkText} from '@/components/';
-import Form, {FormField} from '@/components/Form';
+import Form, {FormField, FormButton} from '@/components/Form';
 import {signUp} from '@/services/auth';
 
 const Register = () => {
@@ -90,16 +90,18 @@ const Register = () => {
     },
   ];
 
+  const formButtons: FormButton[] = [
+    {
+      variant: 'default',
+      title: loading ? 'Creating Account...' : 'Create Account',
+      onPress: handleSubmit,
+      loading: loading,
+      disabled: loading,
+    },
+  ];
+
   return (
-    <Form
-      title="Create your account"
-      fields={formFields}
-      onSubmit={handleSubmit}
-      submitButtonText="Create Account"
-      loadingButtonText="Creating Account..."
-      error={error}
-      loading={loading}
-    >
+    <Form title="Create your account" fields={formFields} buttons={formButtons} error={error}>
       <ThemeLinkText center onPress={() => router.back()}>
         Already have an account? Sign in
       </ThemeLinkText>

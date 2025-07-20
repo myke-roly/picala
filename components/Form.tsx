@@ -16,6 +16,14 @@ export interface FormField {
   multiline?: boolean;
 }
 
+export interface FormButton {
+  variant: 'default' | 'secondary' | 'outline' | 'danger';
+  title: string;
+  onPress: () => void | Promise<void>;
+  loading?: boolean;
+  disabled?: boolean;
+}
+
 export interface FormValidation {
   [key: string]: (value: string) => string | null;
 }
@@ -23,30 +31,14 @@ export interface FormValidation {
 interface FormProps {
   title: string;
   fields: FormField[];
-  onSubmit: () => Promise<void>;
-  submitButtonText: string;
-  loadingButtonText?: string;
+  buttons: FormButton[];
   error?: string;
   success?: string;
-  loading?: boolean;
-  disabled?: boolean;
   children?: ReactNode;
   validation?: FormValidation;
 }
 
-const Form: React.FC<FormProps> = ({
-  title,
-  fields,
-  onSubmit,
-  submitButtonText,
-  loadingButtonText = 'Loading...',
-  error,
-  success,
-  loading = false,
-  disabled = false,
-  children,
-  validation,
-}) => {
+const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, children, validation}) => {
   const firstInputRef = useRef<TextInput>(null);
 
   // Auto-focus on first input when component mounts
@@ -55,15 +47,11 @@ const Form: React.FC<FormProps> = ({
       // Small delay to ensure the component is fully rendered
       const timer = setTimeout(() => {
         firstInputRef.current?.focus();
-      }, 100);
+      }, 500);
 
       return () => clearTimeout(timer);
     }
   }, [fields.length]);
-
-  const handleSubmit = async () => {
-    await onSubmit();
-  };
 
   return (
     <KeyboardAvoidingView
@@ -104,12 +92,17 @@ const Form: React.FC<FormProps> = ({
           {success ? <ThemedText style={styles.successText}>{success}</ThemedText> : null}
 
           <View style={styles.buttonContainer}>
-            <CustomButton
-              title={loading ? loadingButtonText : submitButtonText}
-              onPress={handleSubmit}
-              loading={loading}
-              disabled={disabled || loading}
-            />
+            {buttons.map((button, index) => (
+              <CustomButton
+                key={index}
+                title={button.title}
+                onPress={button.onPress}
+                variant={button.variant === 'default' ? 'primary' : button.variant}
+                loading={button.loading}
+                disabled={button.disabled}
+                style={index > 0 ? styles.secondaryButton : undefined}
+              />
+            ))}
           </View>
 
           {children}
@@ -144,6 +137,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginBottom: 20,
+    gap: 10,
+  },
+  secondaryButton: {
+    marginTop: 8,
   },
   errorText: {
     color: '#ef4444',

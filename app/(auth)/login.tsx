@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {ThemeLinkText} from '@/components/';
-import Form, {FormField} from '@/components/Form';
+import Form, {FormField, FormButton} from '@/components/Form';
 import {signIn} from '@/services/auth';
 import {useRouter, useLocalSearchParams} from 'expo-router';
 
@@ -66,17 +66,18 @@ const Login = () => {
     },
   ];
 
+  const formButtons: FormButton[] = [
+    {
+      variant: 'default',
+      title: loading ? 'Signing in...' : 'Sign in',
+      onPress: handleSubmit,
+      loading: loading,
+      disabled: loading,
+    },
+  ];
+
   return (
-    <Form
-      title="Sign in to your account"
-      fields={formFields}
-      onSubmit={handleSubmit}
-      submitButtonText="Sign in"
-      loadingButtonText="Signing in..."
-      error={error}
-      success={success}
-      loading={loading}
-    >
+    <Form title="Sign in to your account" fields={formFields} buttons={formButtons} error={error} success={success}>
       <ThemeLinkText center href="/register">
         Don't have an account? Sign up
       </ThemeLinkText>
