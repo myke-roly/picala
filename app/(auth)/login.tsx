@@ -1,15 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert} from 'react-native';
 import {ThemedText, ThemeLinkText, CustomInput, CustomButton} from '@/components/';
 import {signIn} from '@/services/auth';
-import {useRouter} from 'expo-router';
+import {useRouter, useLocalSearchParams} from 'expo-router';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const params = useLocalSearchParams();
+
+  // Check if user just verified their email
+  useEffect(() => {
+    if (params.verified === 'true') {
+      setSuccess('Email verified successfully! You can now sign in.');
+    }
+  }, [params]);
 
   const handleSubmit = async () => {
     setError('');
@@ -65,6 +74,7 @@ const Login = () => {
           </View>
 
           {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
+          {success ? <ThemedText style={styles.successText}>{success}</ThemedText> : null}
 
           <CustomButton
             title={loading ? 'Signing in...' : 'Sign in'}
@@ -106,6 +116,11 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#ef4444',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  successText: {
+    color: '#10b981',
     textAlign: 'center',
     marginBottom: 10,
   },

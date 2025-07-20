@@ -48,7 +48,15 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-
 2. Make sure "Email" is enabled
 3. Configure email templates if needed (optional)
 
-## 6. Set Up Database Tables (Optional)
+## 6. Configure Deep Links for Email Verification
+
+1. In your Supabase dashboard, go to "Authentication" → "Settings"
+2. Under "URL Configuration", set:
+   - **Site URL**: `picala://` (your app's URL scheme)
+   - **Redirect URLs**: Add `picala://verify-email`
+3. Save the changes
+
+## 7. Set Up Database Tables (Optional)
 
 If you need to store user profiles or additional data:
 
@@ -81,19 +89,30 @@ CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT WITH CHECK (auth.uid() = id);
 ```
 
-## 7. Test Your Setup
+## 8. Test Your Setup
 
 1. Start your Expo development server: `npm start`
 2. Try to register a new account using the registration form
-3. Try to sign in with the created account
-4. Verify that you can sign out and sign back in
+3. Check your email for the verification link
+4. Click the verification link - it should open your app
+5. Try to sign in with the created account
+6. Verify that you can sign out and sign back in
 
-## 8. Email Confirmation (Optional)
+## 9. Email Confirmation (Optional)
 
 By default, Supabase requires email confirmation. To disable this for development:
 
 1. Go to "Authentication" → "Settings"
 2. Under "User Registration", toggle off "Enable email confirmations"
+
+## Deep Link Testing
+
+To test deep links:
+
+1. **Development**: Use Expo Go and test with `picala://verify-email`
+2. **Production**: Build your app and test with real email verification links
+3. **Simulator**: Use `xcrun simctl openurl booted picala://verify-email` (iOS)
+4. **Emulator**: Use `adb shell am start -W -a android.intent.action.VIEW -d "picala://verify-email"` (Android)
 
 ## Troubleshooting
 
@@ -101,6 +120,7 @@ By default, Supabase requires email confirmation. To disable this for developmen
 - **"Network error"**: Make sure your Supabase project URL is correct and accessible.
 - **"User already registered"**: This means the email is already in use. Try signing in instead.
 - **"Email not confirmed"**: Check your email for a confirmation link, or disable email confirmation in Supabase settings.
+- **Deep links not working**: Make sure your app's URL scheme is properly configured in `app.json` and Supabase settings.
 
 ## Security Best Practices
 

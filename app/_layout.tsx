@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 
 import {useColorScheme} from '@/hooks/useColorScheme';
 import {AuthProvider} from '@/contexts/AuthContext';
+import {setupDeepLinkListener} from '@/utils/deepLinkHandler';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -21,6 +22,13 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+
+      // Set up deep link listener for email verification
+      const subscription = setupDeepLinkListener();
+
+      return () => {
+        subscription?.remove();
+      };
     }
   }, [loaded]);
 

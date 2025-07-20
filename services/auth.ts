@@ -1,22 +1,39 @@
 import {supabase} from '../config/supabase';
 import {User, AuthError} from '@supabase/supabase-js';
+import {DEEP_LINKS} from '../constants/deepLinks';
 
 export interface AuthErrorType {
   code: string;
   message: string;
 }
 
-export const signUp = async (email: string, password: string): Promise<User> => {
+export interface SignUpResult {
+  user: User | null;
+  session: any | null;
+  requiresEmailConfirmation: boolean;
+}
+
+export const signUp = async (email: string, password: string): Promise<SignUpResult> => {
   try {
     const {data, error} = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: DEEP_LINKS.VERIFY_EMAIL,
+      },
     });
 
     if (error) {
       throw {
         code: error.message,
         message: getErrorMessage(error.message),
+      };
+    }
+
+    if (!data.session) {
+      throw {
+        code: 'verification-required',
+        message: 'Please check your inbox for email verification!',
       };
     }
 
@@ -27,7 +44,11 @@ export const signUp = async (email: string, password: string): Promise<User> => 
       };
     }
 
-    return data.user;
+    return {
+      user: data.user,
+      session: data.session,
+      requiresEmailConfirmation: !data.session,
+    };
   } catch (error: any) {
     throw {
       code: error.code || 'auth/unknown',
@@ -54,6 +75,62 @@ export const signIn = async (email: string, password: string): Promise<User> => 
       throw {
         code: 'auth/user-not-found',
         message: 'No user found with these credentials.',
+      };
+    }
+
+    return data.user;
+  } catch (error: any) {
+    throw {
+      code: error.code || 'auth/unknown',
+      message: error.message || getErrorMessage(error.code),
+    };
+  }
+};
+
+export const resendVerificationEmail = async (email: string): Promise<{success: boolean; message: string}> => {
+  try {
+    const {error} = await supabase.auth.resend({
+      type: 'signup',
+      email,
+    });
+
+    if (error) {
+      throw {
+        code: error.message,
+        message: getErrorMessage(error.message),
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Verification email sent! Please check your inbox.',
+    };
+  } catch (error: any) {
+    throw {
+      code: error.code || 'auth/unknown',
+      message: error.message || getErrorMessage(error.code),
+    };
+  }
+};
+
+export const verifyEmail = async (token: string): Promise<User> => {
+  try {
+    const {data, error} = await supabase.auth.verifyOtp({
+      token_hash: token,
+      type: 'signup',
+    });
+
+    if (error) {
+      throw {
+        code: error.message,
+        message: getErrorMessage(error.message),
+      };
+    }
+
+    if (!data.user) {
+      throw {
+        code: 'auth/user-not-found',
+        message: 'Failed to verify email.',
       };
     }
 
@@ -111,6 +188,12 @@ const getErrorMessage = (code: string): string => {
       return 'Too many failed attempts. Please try again later.';
     case 'Network request failed':
       return 'Network error. Please check your connection and try again.';
+    case 'verification-required':
+      return 'Please check your inbox for email verification!';
+    case 'Invalid token':
+      return 'The verification link is invalid or has expired.';
+    case 'Token expired':
+      return 'The verification link has expired. Please request a new one.';
     default:
       return 'An error occurred. Please try again.';
   }

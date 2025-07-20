@@ -38,9 +38,18 @@ const Register = () => {
     }
 
     try {
-      await signUp(email, password);
-      // Navigate to the main app after successful registration
-      router.replace('/(tabs)');
+      const result = await signUp(email, password);
+
+      if (result.requiresEmailConfirmation) {
+        // Navigate to email verification screen
+        router.push({
+          pathname: '/(auth)/verify-email',
+          params: {email},
+        });
+      } else {
+        // User is already verified, navigate to main app
+        router.replace('/(tabs)');
+      }
     } catch (err: any) {
       console.log(err);
       setError(err.message || 'Failed to register. Please try again.');
