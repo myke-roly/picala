@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert} from 'react-native';
-import {ThemedText, ThemeLinkText, CustomInput, CustomButton} from '@/components/';
+import {ThemeLinkText} from '@/components/';
+import Form, {FormField} from '@/components/Form';
 import {signIn} from '@/services/auth';
 import {useRouter, useLocalSearchParams} from 'expo-router';
 
@@ -42,88 +42,46 @@ const Login = () => {
     }
   };
 
+  const formFields: FormField[] = [
+    {
+      key: 'email',
+      label: 'Email Address',
+      placeholder: 'Enter your email',
+      value: email,
+      onChangeText: setEmail,
+      keyboardType: 'email-address',
+      autoCapitalize: 'none',
+      autoComplete: 'email',
+      required: true,
+    },
+    {
+      key: 'password',
+      label: 'Password',
+      placeholder: 'Enter your password',
+      value: password,
+      onChangeText: setPassword,
+      secureTextEntry: true,
+      autoCapitalize: 'none',
+      required: true,
+    },
+  ];
+
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>
-            Sign in to your account
-          </ThemedText>
-
-          <View style={styles.inputContainer}>
-            <CustomInput
-              label="Email Address"
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              required
-            />
-
-            <CustomInput
-              label="Password"
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              required
-            />
-          </View>
-
-          {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
-          {success ? <ThemedText style={styles.successText}>{success}</ThemedText> : null}
-
-          <CustomButton
-            title={loading ? 'Signing in...' : 'Sign in'}
-            onPress={handleSubmit}
-            loading={loading}
-            disabled={loading}
-          />
-
-          <ThemeLinkText center href="/register">
-            Don't have an account? Sign up
-          </ThemeLinkText>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <Form
+      title="Sign in to your account"
+      fields={formFields}
+      onSubmit={handleSubmit}
+      submitButtonText="Sign in"
+      loadingButtonText="Signing in..."
+      error={error}
+      success={success}
+      loading={loading}
+    >
+      <ThemeLinkText center href="/register">
+        Don't have an account? Sign up
+      </ThemeLinkText>
+    </Form>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  formContainer: {
-    padding: 20,
-    width: '100%',
-    maxWidth: 400,
-    alignSelf: 'center',
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  errorText: {
-    color: '#ef4444',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  successText: {
-    color: '#10b981',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-});
 
 export default Login;

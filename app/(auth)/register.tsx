@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
-import {ThemedText} from '@/components/ThemedText';
 import {useRouter} from 'expo-router';
-import {ThemeLinkText, CustomInput, CustomButton} from '@/components';
+import {ThemeLinkText} from '@/components/';
+import Form, {FormField} from '@/components/Form';
 import {signUp} from '@/services/auth';
 
 const Register = () => {
@@ -57,94 +56,55 @@ const Register = () => {
     }
   };
 
+  const formFields: FormField[] = [
+    {
+      key: 'email',
+      label: 'Email Address',
+      placeholder: 'Enter your email',
+      value: email,
+      onChangeText: setEmail,
+      keyboardType: 'email-address',
+      autoCapitalize: 'none',
+      autoComplete: 'email',
+      required: true,
+    },
+    {
+      key: 'password',
+      label: 'Password',
+      placeholder: 'Enter your password',
+      value: password,
+      onChangeText: setPassword,
+      secureTextEntry: true,
+      autoCapitalize: 'none',
+      required: true,
+    },
+    {
+      key: 'confirmPassword',
+      label: 'Confirm Password',
+      placeholder: 'Confirm your password',
+      value: confirmPassword,
+      onChangeText: setConfirmPassword,
+      secureTextEntry: true,
+      autoCapitalize: 'none',
+      required: true,
+    },
+  ];
+
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>
-            Create your account
-          </ThemedText>
-
-          <View style={styles.inputContainer}>
-            <CustomInput
-              label="Email Address"
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              required
-            />
-
-            <CustomInput
-              label="Password"
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              required
-            />
-
-            <CustomInput
-              label="Confirm Password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-              autoCapitalize="none"
-              required
-            />
-          </View>
-
-          {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
-
-          <CustomButton
-            title={loading ? 'Creating Account...' : 'Create Account'}
-            onPress={handleSubmit}
-            loading={loading}
-            disabled={loading}
-          />
-          <ThemeLinkText center onPress={() => router.back()}>
-            Already have an account? Sign in
-          </ThemeLinkText>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <Form
+      title="Create your account"
+      fields={formFields}
+      onSubmit={handleSubmit}
+      submitButtonText="Create Account"
+      loadingButtonText="Creating Account..."
+      error={error}
+      loading={loading}
+    >
+      <ThemeLinkText center onPress={() => router.back()}>
+        Already have an account? Sign in
+      </ThemeLinkText>
+    </Form>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  formContainer: {
-    padding: 20,
-    width: '100%',
-    maxWidth: 400,
-    alignSelf: 'center',
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  errorText: {
-    color: '#ef4444',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  linkContainer: {
-    marginTop: 20,
-  },
-});
 
 export default Register;

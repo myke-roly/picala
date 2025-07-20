@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert} from 'react-native';
-import {ThemedText, ThemeLinkText, CustomInput, CustomButton} from '@/components/';
+import {Alert} from 'react-native';
+import {ThemeLinkText} from '@/components/';
+import Form, {FormField} from '@/components/Form';
 import {resendVerificationEmail, verifyEmail} from '@/services/auth';
 import {useRouter, useLocalSearchParams} from 'expo-router';
 
@@ -68,118 +69,46 @@ const VerifyEmail = () => {
     }
   };
 
+  const formFields: FormField[] = [
+    {
+      key: 'email',
+      label: 'Email Address',
+      placeholder: 'Enter your email',
+      value: email,
+      onChangeText: setEmail,
+      keyboardType: 'email-address',
+      autoCapitalize: 'none',
+      autoComplete: 'email',
+    },
+    {
+      key: 'token',
+      label: 'Verification Token (Optional)',
+      placeholder: 'Enter verification token from email',
+      value: token,
+      onChangeText: setToken,
+      autoCapitalize: 'none',
+    },
+  ];
+
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>
-            Verify Your Email
-          </ThemedText>
-
-          <ThemedText style={styles.description}>
-            We've sent a verification link to your email address. Please check your inbox and click the link to verify
-            your account.
-          </ThemedText>
-
-          <View style={styles.inputContainer}>
-            <CustomInput
-              label="Email Address"
-              placeholder="Enter your email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-            />
-
-            <CustomInput
-              label="Verification Token (Optional)"
-              placeholder="Enter verification token from email"
-              value={token}
-              onChangeText={setToken}
-              autoCapitalize="none"
-            />
-          </View>
-
-          {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
-          {success ? <ThemedText style={styles.successText}>{success}</ThemedText> : null}
-
-          <CustomButton
-            title={loading ? 'Verifying...' : 'Verify Email'}
-            onPress={handleVerifyEmail}
-            loading={loading}
-            disabled={loading}
-          />
-
-          <View style={styles.divider} />
-
-          <ThemedText style={styles.resendText}>Didn't receive the email?</ThemedText>
-
-          <CustomButton
-            title={resendLoading ? 'Sending...' : 'Resend Verification Email'}
-            onPress={handleResendEmail}
-            loading={resendLoading}
-            disabled={resendLoading}
-            variant="secondary"
-          />
-
-          <ThemeLinkText center onPress={() => router.back()}>
-            Back to Login
-          </ThemeLinkText>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <Form
+      title="Verify Your Email"
+      fields={formFields}
+      onSubmit={handleVerifyEmail}
+      submitButtonText="Verify Email"
+      loadingButtonText="Verifying..."
+      error={error}
+      success={success}
+      loading={loading}
+    >
+      <ThemeLinkText center onPress={handleResendEmail}>
+        Didn't receive the email? Resend verification
+      </ThemeLinkText>
+      <ThemeLinkText center onPress={() => router.back()}>
+        Back to Login
+      </ThemeLinkText>
+    </Form>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  formContainer: {
-    padding: 20,
-    width: '100%',
-    maxWidth: 400,
-    alignSelf: 'center',
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  description: {
-    textAlign: 'center',
-    marginBottom: 30,
-    color: '#6b7280',
-    lineHeight: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  errorText: {
-    color: '#ef4444',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  successText: {
-    color: '#10b981',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#e5e7eb',
-    marginVertical: 20,
-  },
-  resendText: {
-    textAlign: 'center',
-    marginBottom: 15,
-    color: '#6b7280',
-  },
-});
 
 export default VerifyEmail;
