@@ -52,8 +52,16 @@ const Form: React.FC<FormProps> = ({
   };
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.formContainer}>
           <ThemedText type="title" style={styles.title}>
             {title}
@@ -80,12 +88,14 @@ const Form: React.FC<FormProps> = ({
           {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
           {success ? <ThemedText style={styles.successText}>{success}</ThemedText> : null}
 
-          <CustomButton
-            title={loading ? loadingButtonText : submitButtonText}
-            onPress={handleSubmit}
-            loading={loading}
-            disabled={disabled || loading}
-          />
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title={loading ? loadingButtonText : submitButtonText}
+              onPress={handleSubmit}
+              loading={loading}
+              disabled={disabled || loading}
+            />
+          </View>
 
           {children}
         </View>
@@ -116,7 +126,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 20,
   },
-
+  buttonContainer: {
+    marginTop: 10,
+    marginBottom: 20,
+  },
   errorText: {
     color: '#ef4444',
     textAlign: 'center',
