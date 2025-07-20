@@ -1,6 +1,6 @@
 import React, {useState, ReactNode, useRef, useEffect} from 'react';
 import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
-import {ThemedText, CustomButton, CustomInput} from '@/components/';
+import {ThemedText, CustomButton, CustomInput, CustomButtonProps} from '@/components/';
 
 export interface FormField {
   key: string;
@@ -16,12 +16,8 @@ export interface FormField {
   multiline?: boolean;
 }
 
-export interface FormButton {
-  variant: 'default' | 'secondary' | 'outline' | 'danger';
+export interface FormButton extends CustomButtonProps {
   title: string;
-  onPress: () => void | Promise<void>;
-  loading?: boolean;
-  disabled?: boolean;
 }
 
 export interface FormValidation {
@@ -97,10 +93,9 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
                 key={index}
                 title={button.title}
                 onPress={button.onPress}
-                variant={button.variant === 'default' ? 'primary' : button.variant}
+                variant={button.variant}
                 loading={button.loading}
                 disabled={button.disabled}
-                style={index > 0 ? styles.secondaryButton : undefined}
               />
             ))}
           </View>
@@ -135,12 +130,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonContainer: {
-    marginTop: 10,
-    marginBottom: 20,
-    gap: 10,
-  },
-  secondaryButton: {
-    marginTop: 8,
+    gap: 16,
   },
   errorText: {
     color: '#ef4444',

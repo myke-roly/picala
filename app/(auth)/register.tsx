@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {useRouter} from 'expo-router';
-import {ThemeLinkText} from '@/components/';
 import Form, {FormField, FormButton} from '@/components/Form';
 import {signUp} from '@/services/auth';
 
@@ -92,21 +91,20 @@ const Register = () => {
 
   const formButtons: FormButton[] = [
     {
-      variant: 'default',
       title: loading ? 'Creating Account...' : 'Create Account',
       onPress: handleSubmit,
       loading: loading,
       disabled: loading,
     },
+    {
+      variant: 'link',
+      title: 'Already have an account? Sign in',
+      onPress: () => router.push('/login'),
+      disabled: loading,
+    },
   ];
 
-  return (
-    <Form title="Create your account" fields={formFields} buttons={formButtons} error={error}>
-      <ThemeLinkText center onPress={() => router.back()}>
-        Already have an account? Sign in
-      </ThemeLinkText>
-    </Form>
-  );
+  return <Form title="Create your account" fields={formFields} buttons={formButtons} error={error} />;
 };
 
 export default Register;

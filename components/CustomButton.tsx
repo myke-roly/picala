@@ -1,9 +1,9 @@
 import React from 'react';
 import {TouchableOpacity, TouchableOpacityProps, StyleSheet, Text, ActivityIndicator} from 'react-native';
 
-interface CustomButtonProps extends TouchableOpacityProps {
+export interface CustomButtonProps extends TouchableOpacityProps {
   title: string;
-  variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+  variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'link';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
   disabled?: boolean;
@@ -29,7 +29,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
     style,
   ];
 
-  const textStyle = [styles.text, styles[`${variant}Text`], styles[`${size}Text`], disabled && styles.disabledText];
+  const textStyle = [styles.text, styles[`${variant}Text`], styles[`${size}Text`]];
 
   return (
     <TouchableOpacity style={buttonStyle} disabled={disabled || loading} activeOpacity={0.8} {...props}>
@@ -66,6 +66,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#6b7280',
   },
+  link: {
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+  },
 
   // Sizes
   small: {
@@ -88,8 +92,7 @@ const styles = StyleSheet.create({
 
   // Disabled state
   disabled: {
-    backgroundColor: '#9ca3af',
-    borderColor: '#9ca3af',
+    opacity: 0.5,
   },
 
   // Text styles
@@ -109,6 +112,9 @@ const styles = StyleSheet.create({
   outlineText: {
     color: '#6b7280',
   },
+  linkText: {
+    color: '#4f46e5',
+  },
 
   // Text sizes
   smallText: {
@@ -119,10 +125,5 @@ const styles = StyleSheet.create({
   },
   largeText: {
     fontSize: 18,
-  },
-
-  // Disabled text
-  disabledText: {
-    color: '#6b7280',
   },
 });

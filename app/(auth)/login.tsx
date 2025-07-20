@@ -68,20 +68,21 @@ const Login = () => {
 
   const formButtons: FormButton[] = [
     {
-      variant: 'default',
       title: loading ? 'Signing in...' : 'Sign in',
       onPress: handleSubmit,
       loading: loading,
       disabled: loading,
     },
+    {
+      variant: 'link',
+      title: "Don't have an account? Sign up",
+      onPress: () => router.push('/register'),
+      disabled: loading,
+    },
   ];
 
   return (
-    <Form title="Sign in to your account" fields={formFields} buttons={formButtons} error={error} success={success}>
-      <ThemeLinkText center href="/register">
-        Don't have an account? Sign up
-      </ThemeLinkText>
-    </Form>
+    <Form title="Sign in to your account" fields={formFields} buttons={formButtons} error={error} success={success} />
   );
 };
 
