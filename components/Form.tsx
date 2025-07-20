@@ -1,5 +1,5 @@
-import React, {useState, ReactNode} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
+import React, {useState, ReactNode, useRef, useEffect} from 'react';
+import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
 import {ThemedText, CustomButton, CustomInput} from '@/components/';
 
 export interface FormField {
@@ -47,6 +47,20 @@ const Form: React.FC<FormProps> = ({
   children,
   validation,
 }) => {
+  const firstInputRef = useRef<TextInput>(null);
+
+  // Auto-focus on first input when component mounts
+  useEffect(() => {
+    if (fields.length > 0 && firstInputRef.current) {
+      // Small delay to ensure the component is fully rendered
+      const timer = setTimeout(() => {
+        firstInputRef.current?.focus();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [fields.length]);
+
   const handleSubmit = async () => {
     await onSubmit();
   };
@@ -68,9 +82,10 @@ const Form: React.FC<FormProps> = ({
           </ThemedText>
 
           <View style={styles.inputContainer}>
-            {fields.map((field) => (
+            {fields.map((field, index) => (
               <CustomInput
                 key={field.key}
+                ref={index === 0 ? firstInputRef : null}
                 label={field.label}
                 placeholder={field.placeholder}
                 value={field.value}

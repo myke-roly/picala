@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {TextInput, TextInputProps, StyleSheet, View, Text} from 'react-native';
 
 interface CustomInputProps extends TextInputProps {
@@ -8,20 +8,29 @@ interface CustomInputProps extends TextInputProps {
   required?: boolean;
 }
 
-export const CustomInput: React.FC<CustomInputProps> = ({label, error, containerStyle, style, required, ...props}) => {
-  return (
-    <View style={[styles.container, containerStyle]}>
-      {label && (
-        <Text style={styles.label}>
-          {label}
-          {required && <Text style={styles.required}> *</Text>}
-        </Text>
-      )}
-      <TextInput style={[styles.input, error && styles.inputError, style]} placeholderTextColor="#9ca3af" {...props} />
-      {error && <Text style={styles.errorText}>{error}</Text>}
-    </View>
-  );
-};
+export const CustomInput = forwardRef<TextInput, CustomInputProps>(
+  ({label, error, containerStyle, style, required, ...props}, ref) => {
+    return (
+      <View style={[styles.container, containerStyle]}>
+        {label && (
+          <Text style={styles.label}>
+            {label}
+            {required && <Text style={styles.required}> *</Text>}
+          </Text>
+        )}
+        <TextInput
+          ref={ref}
+          style={[styles.input, error && styles.inputError, style]}
+          placeholderTextColor="#9ca3af"
+          {...props}
+        />
+        {error && <Text style={styles.errorText}>{error}</Text>}
+      </View>
+    );
+  }
+);
+
+CustomInput.displayName = 'CustomInput';
 
 const styles = StyleSheet.create({
   container: {
