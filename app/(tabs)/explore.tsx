@@ -1,10 +1,10 @@
 import {StyleSheet, View} from 'react-native';
 import {ThemedText, ThemedView, CustomButton} from '@/components';
-import {useAuth} from '@/contexts/AuthContext';
+import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {useRouter} from 'expo-router';
 
 export default function TabTwoScreen() {
-  const {isAuthenticated} = useAuth();
+  const {isAuthenticated} = usePersistentAuth();
   const router = useRouter();
 
   const handleLogin = () => {

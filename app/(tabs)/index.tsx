@@ -1,13 +1,13 @@
 import {StyleSheet, Button, View} from 'react-native';
 import {ThemedText} from '@/components/ThemedText';
 import {ThemedView} from '@/components/ThemedView';
-import {useAuth} from '@/contexts/AuthContext';
+import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
 import {CustomButton} from '@/components';
 
 const HomeScreen = () => {
-  const {user, isAuthenticated} = useAuth();
+  const {user, isAuthenticated} = usePersistentAuth();
   const router = useRouter();
 
   const handleLogout = async () => {

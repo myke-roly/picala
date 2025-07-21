@@ -154,14 +154,84 @@ export const signOutUser = async (): Promise<void> => {
 };
 
 export const getCurrentUser = async (): Promise<User | null> => {
-  const {data} = await supabase.auth.getUser();
-  return data.user;
+  try {
+    const {
+      data: {user},
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    return null;
+  }
+};
+
+export const getCurrentSession = async () => {
+  try {
+    const {
+      data: {session},
+      error,
+    } = await supabase.auth.getSession();
+
+    if (error) {
+      console.error('Error getting current session:', error);
+      return null;
+    }
+
+    return session;
+  } catch (error) {
+    console.error('Error getting current session:', error);
+    return null;
+  }
 };
 
 export const onAuthStateChange = (callback: (user: User | null) => void) => {
   return supabase.auth.onAuthStateChange((event, session) => {
+    console.log('Auth event:', event, session?.user?.email);
     callback(session?.user || null);
   });
+};
+
+export const refreshSession = async () => {
+  try {
+    const {data, error} = await supabase.auth.refreshSession();
+
+    if (error) {
+      console.error('Error refreshing session:', error);
+      return null;
+    }
+
+    return data.session;
+  } catch (error) {
+    console.error('Error refreshing session:', error);
+    return null;
+  }
+};
+
+export const isSessionValid = async (): Promise<boolean> => {
+  try {
+    const session = await getCurrentSession();
+    return !!session && !isTokenExpired(session);
+  } catch (error) {
+    console.error('Error checking session validity:', error);
+    return false;
+  }
+};
+
+const isTokenExpired = (session: any): boolean => {
+  if (!session?.expires_at) return true;
+
+  const expiresAt = new Date(session.expires_at * 1000);
+  const now = new Date();
+
+  // Consider token expired if it expires within the next 5 minutes
+  return expiresAt.getTime() <= now.getTime() + 5 * 60 * 1000;
 };
 
 // Helper function to convert Supabase error messages to user-friendly messages
