@@ -10,7 +10,6 @@ import {useColorScheme} from '@/hooks/useColorScheme';
 import {AuthProvider, useAuth} from '@/contexts/AuthContext';
 import {setupDeepLinkListener} from '@/utils/deepLinkHandler';
 import {AuthLoadingScreen} from '@/components/AuthLoadingScreen';
-import {VerificationErrorHandler} from '@/components/VerificationErrorHandler';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -41,14 +40,13 @@ function RootLayoutContent() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <VerificationErrorHandler>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-          <Stack.Screen name="(auth)" options={{headerShown: false}} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </VerificationErrorHandler>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+        <Stack.Screen name="(auth)" options={{headerShown: false}} />
+        <Stack.Screen name="linking" options={{headerShown: false}} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+      <StatusBar style="auto" />
     </ThemeProvider>
   );
 }

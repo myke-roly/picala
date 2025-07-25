@@ -50,11 +50,6 @@ const LinkingScreen = () => {
   );
 };
 
-LinkingScreen.options = {
-  headerShown: false,
-  presentation: 'modal',
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
