@@ -99,7 +99,7 @@ const Register = () => {
     {
       variant: 'link',
       title: 'Already have an account? Sign in',
-      onPress: () => router.push('/login'),
+      onPress: () => router.back(),
       disabled: loading,
     },
   ];
