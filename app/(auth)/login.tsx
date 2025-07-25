@@ -18,7 +18,7 @@ const Login = () => {
     if (params.verified === 'true') {
       setSuccess('Email verified successfully! You can now sign in.');
     }
-  }, [params]);
+  }, [params.verified]);
 
   const handleSubmit = async () => {
     setError('');
