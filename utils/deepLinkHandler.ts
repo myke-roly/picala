@@ -1,53 +1,7 @@
 import {Linking, Platform} from 'react-native';
 import {verifyEmail} from '../services/auth';
 import {router} from 'expo-router';
-import {DEEP_LINKS, URL_SCHEME} from '../constants/deepLinks';
-
-export const handleEmailVerificationLink = async (url: string) => {
-  try {
-    console.log('Processing email verification link:', url);
-
-    // Parse the URL to extract token and type
-    const urlObj = new URL(url);
-    const token = urlObj.searchParams.get('token');
-    const type = urlObj.searchParams.get('type');
-    const email = urlObj.searchParams.get('email');
-
-    console.log('Extracted params:', {token: !!token, type, email});
-
-    if (token && type === 'signup') {
-      console.log('Redirecting to verification screen...');
-
-      // Navigate to the dedicated verification screen
-      router.replace({
-        pathname: '/verify-email',
-        params: {token, type},
-      });
-
-      return true;
-    } else {
-      console.log('Invalid verification link - missing token or wrong type');
-
-      // Navigate to verification screen with error
-      router.replace({
-        pathname: '/verify-email',
-        params: {error: 'invalid_link'},
-      });
-    }
-
-    return false;
-  } catch (error) {
-    console.error('Error handling email verification link:', error);
-
-    // Navigate to verification screen with error
-    router.replace({
-      pathname: '/verify-email',
-      params: {error: 'verification_failed'},
-    });
-
-    return false;
-  }
-};
+import {DEEP_LINK_PATHS, DEEP_LINKS, URL_SCHEME} from '../constants/deepLinks';
 
 export const handleUrl = (url: string) => {
   console.log('Deep link received:', url);
@@ -55,10 +9,17 @@ export const handleUrl = (url: string) => {
   try {
     const urlObj = new URL(url);
     const path = urlObj.pathname;
+    // const token = urlObj.searchParams.get('token');
 
-    switch (path) {
-      case '/verify-email':
+    switch (true) {
+      case path.includes(DEEP_LINK_PATHS.VERIFY_EMAIL):
         router.replace('/(auth)/verify-email');
+        break;
+      case path.includes(DEEP_LINK_PATHS.LOGIN):
+        router.replace('/(auth)/login');
+        break;
+      case path.includes(DEEP_LINK_PATHS.REGISTER):
+        router.replace('/(auth)/register');
         break;
       default:
         break;
