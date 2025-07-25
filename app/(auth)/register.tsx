@@ -40,7 +40,7 @@ const Register = () => {
       if (result.requiresEmailConfirmation) {
         // Navigate to email verification screen
         router.push({
-          pathname: '/(auth)/verify-email',
+          pathname: '/(auth)/send-email',
           params: {email},
         });
       } else {
