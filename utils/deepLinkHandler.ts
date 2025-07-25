@@ -1,32 +1,19 @@
-import {Linking, Platform} from 'react-native';
-import {verifyEmail} from '../services/auth';
+import {Linking} from 'react-native';
 import {router} from 'expo-router';
-import {DEEP_LINK_PATHS, DEEP_LINKS, URL_SCHEME} from '../constants/deepLinks';
 
 export const handleUrl = (url: string) => {
   console.log('Deep link received:', url);
 
-  try {
-    const urlObj = new URL(url);
-    const path = urlObj.pathname;
-    // const token = urlObj.searchParams.get('token');
+  const urlObj = new URL(url);
+  const path = urlObj.pathname;
+  const params = Object.fromEntries(urlObj.searchParams);
 
-    switch (true) {
-      case path.includes(DEEP_LINK_PATHS.VERIFY_EMAIL):
-        router.replace('/(auth)/verify-email');
-        break;
-      case path.includes(DEEP_LINK_PATHS.LOGIN):
-        router.replace('/(auth)/login');
-        break;
-      case path.includes(DEEP_LINK_PATHS.REGISTER):
-        router.replace('/(auth)/register');
-        break;
-      default:
-        break;
-    }
-  } catch (error) {
-    console.error('Error handling app scheme:', error);
-  }
+  if (!path) return;
+
+  router.replace({
+    pathname: '/linking',
+    params: {path, ...params},
+  });
 };
 
 export const setupDeepLinkListener = () => {
