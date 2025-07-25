@@ -21,7 +21,7 @@ const LinkingScreen = () => {
         router.replace('/(auth)/login?verified=true');
       }, 2000);
     } catch (error) {
-      router.replace('/');
+      router.replace('/(auth)/invalid-magic-link');
     }
   };
 
@@ -48,6 +48,11 @@ const LinkingScreen = () => {
       </View>
     </View>
   );
+};
+
+LinkingScreen.options = {
+  headerShown: false,
+  presentation: 'modal',
 };
 
 const styles = StyleSheet.create({
