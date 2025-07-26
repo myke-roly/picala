@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {useRouter} from 'expo-router';
-import {ThemedText} from '@/components/ThemedText';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants/Colors';
+import {Text} from '@/components';
+import {BackgroundColors, TextColors, AccentColors} from '@/constants';
 
 export default function ExploreScreen() {
   const router = useRouter();
@@ -15,30 +15,30 @@ export default function ExploreScreen() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <ThemedText style={styles.title}>Explore</ThemedText>
-          <ThemedText style={styles.subtitle}>Discover new matches and events</ThemedText>
+          <Text style={styles.title}>Explore</Text>
+          <Text style={styles.subtitle}>Discover new matches and events</Text>
         </View>
 
         <View style={styles.content}>
-          <ThemedText style={styles.sectionTitle}>Featured Matches</ThemedText>
+          <Text style={styles.sectionTitle}>Featured Matches</Text>
           <TouchableOpacity style={styles.featuredCard} onPress={handleMatchPress}>
-            <ThemedText style={styles.cardTitle}>Barcelona vs Real Madrid</ThemedText>
-            <ThemedText style={styles.cardSubtitle}>El Clásico - This Weekend</ThemedText>
+            <Text variant="title">Barcelona vs Real Madrid</Text>
+            <Text>El Clásico - This Weekend</Text>
             <View style={styles.cardDetails}>
-              <ThemedText style={styles.detailText}>📍 Camp Nou</ThemedText>
-              <ThemedText style={styles.detailText}>🕐 20:00</ThemedText>
-              <ThemedText style={styles.detailText}>📅 Saturday, April 15</ThemedText>
+              <Text>📍 Camp Nou</Text>
+              <Text>🕐 20:00</Text>
+              <Text>📅 Saturday, April 15</Text>
             </View>
           </TouchableOpacity>
 
-          <ThemedText style={styles.sectionTitle}>Nearby Events</ThemedText>
+          <Text style={styles.sectionTitle}>Nearby Events</Text>
           <View style={styles.eventCard}>
-            <ThemedText style={styles.cardTitle}>Local Tournament</ThemedText>
-            <ThemedText style={styles.cardSubtitle}>Community Soccer League</ThemedText>
+            <Text variant="title">Local Tournament</Text>
+            <Text>Community Soccer League</Text>
             <View style={styles.cardDetails}>
-              <ThemedText style={styles.detailText}>📍 Central Park</ThemedText>
-              <ThemedText style={styles.detailText}>🕐 14:00</ThemedText>
-              <ThemedText style={styles.detailText}>📅 Sunday, April 16</ThemedText>
+              <Text>📍 Central Park</Text>
+              <Text>🕐 14:00</Text>
+              <Text>📅 Sunday, April 16</Text>
             </View>
           </View>
         </View>
@@ -50,7 +50,7 @@ export default function ExploreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BackgroundColors.primary,
+    backgroundColor: BackgroundColors.light,
   },
   scrollView: {
     flex: 1,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   featuredCard: {
-    backgroundColor: BackgroundColors.secondary,
+    backgroundColor: BackgroundColors.white,
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
@@ -88,27 +88,12 @@ const styles = StyleSheet.create({
     borderLeftColor: AccentColors.primary,
   },
   eventCard: {
-    backgroundColor: BackgroundColors.secondary,
+    backgroundColor: BackgroundColors.white,
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: TextColors.primary,
-    marginBottom: 4,
-  },
-  cardSubtitle: {
-    fontSize: 14,
-    color: TextColors.secondary,
-    marginBottom: 12,
-  },
   cardDetails: {
     gap: 4,
-  },
-  detailText: {
-    fontSize: 14,
-    color: TextColors.secondary,
   },
 });

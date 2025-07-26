@@ -2,7 +2,7 @@ import React from 'react';
 import {View, ActivityIndicator, StyleSheet} from 'react-native';
 import {useRouter} from 'expo-router';
 import {useAuth} from '@/contexts/AuthContext';
-import {ThemedText} from './ThemedText';
+import {Text} from './Text';
 
 export const AuthRedirect: React.FC = () => {
   const {user, loading, isAuthenticated} = useAuth();
@@ -22,7 +22,7 @@ export const AuthRedirect: React.FC = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4f46e5" />
-        <ThemedText style={styles.loadingText}>Loading...</ThemedText>
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
   }

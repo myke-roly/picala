@@ -2,8 +2,7 @@ import React from 'react';
 import {View, StyleSheet, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Ionicons} from '@expo/vector-icons';
-import {ThemedText} from '@/components/ThemedText';
-import {CustomButton} from '@/components/CustomButton';
+import {CustomButton, Text} from '@/components';
 import HeaderNavigation from '@/components/HeaderNavigation';
 import TeamMatch from '@/components/TeamMatch';
 import {BackgroundColors, TextColors, AccentColors} from '@/constants';
@@ -51,49 +50,49 @@ export default function MatchScreen() {
           <View style={styles.infoCard}>
             <View style={styles.infoRow}>
               <Ionicons name="location-outline" size={20} color={TextColors.secondary} />
-              <ThemedText color="primary">Camp Nou, Barcelona</ThemedText>
+              <Text>Camp Nou, Barcelona</Text>
             </View>
             <View style={styles.infoRow}>
               <Ionicons name="calendar-outline" size={20} color={TextColors.secondary} />
-              <ThemedText color="primary">Saturday, April 15, 2024</ThemedText>
+              <Text>Saturday, April 15, 2024</Text>
             </View>
             <View style={styles.infoRow}>
               <Ionicons name="time-outline" size={20} color={TextColors.secondary} />
-              <ThemedText color="primary">20:00 - 22:00 (2 hours)</ThemedText>
+              <Text>20:00 - 22:00 (2 hours)</Text>
             </View>
           </View>
         </View>
 
         {/* Player Status */}
         <View style={styles.playerSection}>
-          <ThemedText variant="subtitle" level="md" color="primary" strong>
+          <Text variant="subtitle" level="md" strong>
             Player Status
-          </ThemedText>
+          </Text>
           <View style={styles.playerCard}>
             <View style={styles.playerStats}>
               <View style={styles.statItem}>
-                <ThemedText variant="title" level="lg" color="primary" strong>
+                <Text variant="title" level="lg" strong>
                   8
-                </ThemedText>
-                <ThemedText variant="caption" color="secondary">
+                </Text>
+                <Text variant="caption" color="secondary">
                   Current Players
-                </ThemedText>
+                </Text>
               </View>
               <View style={styles.statItem}>
-                <ThemedText variant="title" level="lg" color="primary" strong>
+                <Text variant="title" level="lg" strong>
                   11
-                </ThemedText>
-                <ThemedText variant="caption" color="secondary">
+                </Text>
+                <Text variant="caption" color="secondary">
                   Max Players
-                </ThemedText>
+                </Text>
               </View>
               <View style={styles.statItem}>
-                <ThemedText variant="title" level="lg" color="primary" strong>
+                <Text variant="title" level="lg" strong>
                   3
-                </ThemedText>
-                <ThemedText variant="caption" color="secondary">
+                </Text>
+                <Text variant="caption" color="secondary">
                   Needed
-                </ThemedText>
+                </Text>
               </View>
             </View>
             <View style={styles.progressBar}>
@@ -104,25 +103,25 @@ export default function MatchScreen() {
 
         {/* Match Rules */}
         <View style={styles.rulesSection}>
-          <ThemedText variant="subtitle" level="md" color="primary" strong>
+          <Text variant="subtitle" level="md" strong>
             Match Rules
-          </ThemedText>
+          </Text>
           <View style={styles.rulesCard}>
             <View style={styles.ruleItem}>
               <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <ThemedText color="primary">11 players per team</ThemedText>
+              <Text>11 players per team</Text>
             </View>
             <View style={styles.ruleItem}>
               <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <ThemedText color="primary">90 minutes duration</ThemedText>
+              <Text>90 minutes duration</Text>
             </View>
             <View style={styles.ruleItem}>
               <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <ThemedText color="primary">Bring your own equipment</ThemedText>
+              <Text>Bring your own equipment</Text>
             </View>
             <View style={styles.ruleItem}>
               <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <ThemedText color="primary">Fair play required</ThemedText>
+              <Text>Fair play required</Text>
             </View>
           </View>
         </View>

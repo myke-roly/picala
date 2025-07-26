@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {ThemedText} from '@/components/ThemedText';
+import {Text} from '@/components';
 
 interface MatchCardProps {
   team1: string;
@@ -31,7 +31,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
     <CardContainer style={styles.container} onPress={onPress} activeOpacity={0.7}>
       {/* Location at the top center */}
       <View style={styles.locationContainer}>
-        <ThemedText style={styles.locationText}>{location}</ThemedText>
+        <Text>{location}</Text>
       </View>
 
       {/* Main content with three sections */}
@@ -39,22 +39,22 @@ const MatchCard: React.FC<MatchCardProps> = ({
         {/* Left section - Team 1 */}
         <View style={styles.teamSection}>
           <View style={styles.teamIcon}>
-            <ThemedText style={styles.iconText}>x</ThemedText>
+            <Text>x</Text>
           </View>
-          <ThemedText style={styles.teamName}>{team1}</ThemedText>
+          <Text>{team1}</Text>
         </View>
 
         {/* Center section - Time and Date */}
         <View style={styles.timeSection}>
-          <ThemedText style={styles.timeText}>{time}</ThemedText>
-          <ThemedText style={styles.dateText}>{date}</ThemedText>
+          <Text>{time}</Text>
+          <Text>{date}</Text>
         </View>
 
         {/* Right section - Team 2 */}
         <View style={styles.teamSection}>
-          <ThemedText style={styles.teamName}>{team2}</ThemedText>
+          <Text>{team2}</Text>
           <View style={styles.teamIcon}>
-            <ThemedText style={styles.iconText}>x</ThemedText>
+            <Text>x</Text>
           </View>
         </View>
       </View>
@@ -62,9 +62,9 @@ const MatchCard: React.FC<MatchCardProps> = ({
       {/* Optional player count info */}
       {playerCount !== undefined && maxPlayers !== undefined && (
         <View style={styles.playerInfo}>
-          <ThemedText style={styles.playerText}>
+          <Text>
             {playerCount}/{maxPlayers} players
-          </ThemedText>
+          </Text>
         </View>
       )}
     </CardContainer>
@@ -91,11 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  locationText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-  },
   mainContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -115,37 +110,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  iconText: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#000000',
-  },
-  teamName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#000000',
-  },
   timeSection: {
     alignItems: 'center',
     flex: 1,
   },
-  timeText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-  },
-  dateText: {
-    fontSize: 14,
-    color: '#000000',
-    marginTop: 2,
-  },
   playerInfo: {
     marginTop: 8,
     alignItems: 'center',
-  },
-  playerText: {
-    fontSize: 12,
-    color: '#666666',
   },
 });
 

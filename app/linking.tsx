@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
-import {ThemedText} from '@/components/ThemedText';
+import {Text} from '@/components/Text';
 import {verifyEmail} from '@/services/auth';
 import {DEEP_LINK_PATHS} from '@/constants/deepLinks';
 
@@ -44,7 +44,7 @@ const LinkingScreen = () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <ActivityIndicator size="large" color="#3b82f6" style={styles.loader} />
-        <ThemedText style={styles.title}>{message}</ThemedText>
+        <Text style={styles.title}>{message}</Text>
       </View>
     </View>
   );

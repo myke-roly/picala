@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
-import {ThemedText} from '@/components/ThemedText';
+import {Text} from '@/components/Text';
 import {ColorCombinations} from '@/constants';
 
 interface HeaderProps {
@@ -24,8 +24,8 @@ const Header: React.FC<HeaderProps> = ({title, text, button}) => {
     >
       <View style={styles.content}>
         <View style={styles.textContainer}>
-          <ThemedText style={styles.title}>{title}</ThemedText>
-          {text && <ThemedText style={styles.text}>{text}</ThemedText>}
+          <Text style={styles.title}>{title}</Text>
+          {text && <Text style={styles.text}>{text}</Text>}
         </View>
 
         {button && (
@@ -35,9 +35,7 @@ const Header: React.FC<HeaderProps> = ({title, text, button}) => {
             disabled={button.disabled}
             activeOpacity={0.7}
           >
-            <ThemedText style={[styles.buttonText, button.disabled && styles.buttonTextDisabled]}>
-              {button.title}
-            </ThemedText>
+            <Text style={[styles.buttonText, button.disabled && styles.buttonTextDisabled]}>{button.title}</Text>
           </TouchableOpacity>
         )}
       </View>

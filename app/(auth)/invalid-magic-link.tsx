@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
 import {useRouter} from 'expo-router';
-import {ThemedText, CustomButton} from '@/components/';
+import {Text, CustomButton} from '@/components/';
 
 const InvalidMagicLinkScreen = () => {
   const router = useRouter();
@@ -18,24 +18,20 @@ const InvalidMagicLinkScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.content}>
-          <ThemedText style={styles.icon}>🔗</ThemedText>
+          <Text style={styles.icon}>🔗</Text>
 
-          <ThemedText style={styles.title}>Invalid Magic Link</ThemedText>
+          <Text style={styles.title}>Invalid Magic Link</Text>
 
-          <ThemedText style={styles.message}>
-            The magic link you used is invalid or has expired. This can happen if:
-          </ThemedText>
+          <Text style={styles.message}>The magic link you used is invalid or has expired. This can happen if:</Text>
 
           <View style={styles.reasonsContainer}>
-            <ThemedText style={styles.reason}>• The link has expired</ThemedText>
-            <ThemedText style={styles.reason}>• The link was already used</ThemedText>
-            <ThemedText style={styles.reason}>• The link was modified</ThemedText>
-            <ThemedText style={styles.reason}>• You're using an old link</ThemedText>
+            <Text style={styles.reason}>• The link has expired</Text>
+            <Text style={styles.reason}>• The link was already used</Text>
+            <Text style={styles.reason}>• The link was modified</Text>
+            <Text style={styles.reason}>• You're using an old link</Text>
           </View>
 
-          <ThemedText style={styles.helpText}>
-            Please request a new magic link or try logging in with your credentials.
-          </ThemedText>
+          <Text style={styles.helpText}>Please request a new magic link or try logging in with your credentials.</Text>
 
           <View style={styles.buttonContainer}>
             <CustomButton

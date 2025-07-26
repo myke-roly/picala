@@ -1,9 +1,8 @@
-import {StyleSheet, Button, View, ScrollView, SafeAreaView} from 'react-native';
-import {ThemedText} from '@/components/ThemedText';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
-import {CustomButton, Header, MatchCard} from '@/components';
+import {CustomButton, Header, MatchCard, Text} from '@/components';
 
 const HomeScreen = () => {
   const {user, isAuthenticated} = usePersistentAuth();
@@ -76,17 +75,15 @@ const HomeScreen = () => {
         />
 
         <View style={styles.header}>
-          <ThemedText type="title" style={styles.title}>
-            Upcoming Matches
-          </ThemedText>
+          <Text style={styles.title}>Upcoming Matches</Text>
 
           {isAuthenticated ? (
             <View style={styles.userInfo}>
-              <ThemedText style={styles.userEmail}>Welcome, {user?.email}</ThemedText>
+              <Text style={styles.userEmail}>Welcome, {user?.email}</Text>
             </View>
           ) : (
             <View style={styles.authContainer}>
-              <ThemedText style={styles.authMessage}>Sign in to join matches</ThemedText>
+              <Text style={styles.authMessage}>Sign in to join matches</Text>
               <CustomButton title="Sign In" onPress={handleLogin} />
             </View>
           )}

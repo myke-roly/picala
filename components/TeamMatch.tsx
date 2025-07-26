@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle} from 'react-native';
-import {ThemedText} from '@/components';
+import {Text} from '@/components';
 import {TextColors, BackgroundColors} from '@/constants';
 
 interface TeamMatchProps {
@@ -25,36 +25,36 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
         {/* Team 1 */}
         <View style={styles.teamSection}>
           <View style={styles.teamLogo}>
-            <ThemedText variant="title" strong>
+            <Text variant="title" strong>
               {team1.logo}
-            </ThemedText>
+            </Text>
           </View>
-          <ThemedText strong>{team1.name}</ThemedText>
+          <Text strong>{team1.name}</Text>
         </View>
 
         {/* VS and Time */}
         <View style={styles.vsContainer}>
           {showVS && (
-            <ThemedText variant="subtitle" color="secondary" strong>
+            <Text variant="subtitle" color="secondary" strong>
               VS
-            </ThemedText>
+            </Text>
           )}
-          {matchTime && <ThemedText strong>{matchTime}</ThemedText>}
+          {matchTime && <Text strong>{matchTime}</Text>}
           {matchDate && (
-            <ThemedText variant="caption" color={TextColors.secondary}>
+            <Text variant="caption" color={TextColors.secondary}>
               {matchDate}
-            </ThemedText>
+            </Text>
           )}
         </View>
 
         {/* Team 2 */}
         <View style={styles.teamSection}>
           <View style={styles.teamLogo}>
-            <ThemedText variant="title" strong>
+            <Text variant="title" strong>
               {team2.logo}
-            </ThemedText>
+            </Text>
           </View>
-          <ThemedText strong>{team2.name}</ThemedText>
+          <Text strong>{team2.name}</Text>
         </View>
       </View>
     </View>

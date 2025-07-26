@@ -2,7 +2,7 @@ import React, {memo, PropsWithChildren} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Ionicons} from '@expo/vector-icons';
-import {ThemedText} from '@/components/ThemedText';
+import {Text} from '@/components/Text';
 import IconPress from '@/components/IconPress';
 import {ColorCombinations, TextColors} from '@/constants';
 
@@ -29,9 +29,9 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({title, onBackPress, 
         </View>
 
         <View style={styles.centerSection}>
-          <ThemedText variant="subtitle" level="md" color="white" strong center>
+          <Text variant="subtitle" level="md" color="white" strong center>
             {title}
-          </ThemedText>
+          </Text>
         </View>
 
         <View style={styles.rightSection}>
