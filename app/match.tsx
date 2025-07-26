@@ -38,8 +38,8 @@ export default function MatchScreen() {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Match Header */}
         <TeamMatch
-          team1={{logo: 'FCB', name: 'Barcelona'}}
-          team2={{logo: 'RMA', name: 'Real Madrid'}}
+          team1={{logo: '', name: 'Barcelona'}}
+          team2={{logo: '', name: 'Real Madrid'}}
           matchTime="20:00"
           matchDate="Sat, 15 Apr"
           style={{marginBottom: 24}}

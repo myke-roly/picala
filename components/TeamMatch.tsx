@@ -1,17 +1,45 @@
 import React from 'react';
-import {View, StyleSheet, StyleProp, ViewStyle} from 'react-native';
+import {View, StyleSheet, StyleProp, ViewStyle, Image} from 'react-native';
 import {Text} from '@/components';
 import {TextColors, BackgroundColors} from '@/constants';
 
-interface TeamMatchProps {
-  team1: {
-    logo: string;
-    name: string;
-  };
-  team2: {
-    logo: string;
-    name: string;
-  };
+const EmptyTeamLogo = ({name = 'N N', size = 48}: {name: string; size?: number}) => {
+  const initials = name
+    .split(' ')
+    .map((n) => n[0])
+    .join('');
+
+  return (
+    <View style={[styles.teamLogo, {width: size, height: size}]}>
+      <Text level="lg" strong>
+        {initials.toUpperCase()}
+      </Text>
+    </View>
+  );
+};
+
+const Team = ({logo, name}: Team) => {
+  const isEmpty = !logo;
+
+  return (
+    <View style={styles.teamSection}>
+      {isEmpty ? <EmptyTeamLogo name={name} /> : <Image source={{uri: logo}} style={styles.teamLogo} />}
+
+      <Text center strong>
+        {name}
+      </Text>
+    </View>
+  );
+};
+
+interface Team {
+  logo: string;
+  name: string;
+}
+
+export interface TeamMatchProps {
+  team1: Team;
+  team2: Team;
   matchTime?: string;
   matchDate?: string;
   showVS?: boolean;
@@ -23,14 +51,7 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
     <View style={[styles.container, style]}>
       <View style={styles.content}>
         {/* Team 1 */}
-        <View style={styles.teamSection}>
-          <View style={styles.teamLogo}>
-            <Text variant="title" strong>
-              {team1.logo}
-            </Text>
-          </View>
-          <Text strong>{team1.name}</Text>
-        </View>
+        <Team logo={team1.logo} name={team1.name} />
 
         {/* VS and Time */}
         <View style={styles.vsContainer}>
@@ -48,14 +69,7 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
         </View>
 
         {/* Team 2 */}
-        <View style={styles.teamSection}>
-          <View style={styles.teamLogo}>
-            <Text variant="title" strong>
-              {team2.logo}
-            </Text>
-          </View>
-          <Text strong>{team2.name}</Text>
-        </View>
+        <Team logo={team2.logo} name={team2.name} />
       </View>
     </View>
   );
@@ -74,17 +88,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   teamSection: {
-    alignItems: 'center',
     flex: 1,
+    alignItems: 'center',
+    gap: 8,
   },
   teamLogo: {
-    backgroundColor: BackgroundColors.elevated,
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
     width: 48,
     height: 48,
+    borderRadius: 25,
+    padding: 8,
+    backgroundColor: BackgroundColors.light,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   vsContainer: {
     alignItems: 'center',
