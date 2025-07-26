@@ -11,3 +11,6 @@ export {default as Form} from './Form';
 export {default as MatchCard} from './MatchCard';
 export {default as Header} from './Header';
 export {default as HeaderNavigation} from './HeaderNavigation';
+export {default as Icon} from './Icon';
+export {default as IconPress} from './IconPress';
+export {default as TeamMatch} from './TeamMatch';

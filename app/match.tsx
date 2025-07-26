@@ -38,28 +38,13 @@ export default function MatchScreen() {
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Match Header */}
-        <View style={styles.matchHeader}>
-          <View style={styles.teamsContainer}>
-            <View style={styles.teamSection}>
-              <View style={styles.teamLogo}>
-                <ThemedText style={styles.teamLogoText}>FCB</ThemedText>
-              </View>
-              <ThemedText style={styles.teamName}>Barcelona</ThemedText>
-            </View>
-
-            <View style={styles.vsContainer}>
-              <ThemedText style={styles.vsText}>VS</ThemedText>
-              <ThemedText style={styles.matchTime}>20:00</ThemedText>
-            </View>
-
-            <View style={styles.teamSection}>
-              <View style={styles.teamLogo}>
-                <ThemedText style={styles.teamLogoText}>RMA</ThemedText>
-              </View>
-              <ThemedText style={styles.teamName}>Real Madrid</ThemedText>
-            </View>
-          </View>
-        </View>
+        <TeamMatch
+          team1={{logo: 'FCB', name: 'Barcelona'}}
+          team2={{logo: 'RMA', name: 'Real Madrid'}}
+          matchTime="20:00"
+          matchDate="Sat, 15 Apr"
+          style={{marginBottom: 24}}
+        />
 
         {/* Match Info */}
         <View style={styles.infoSection}>
@@ -155,58 +140,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  matchHeader: {
-    padding: 20,
-    backgroundColor: BackgroundColors.white,
-    margin: 16,
-    borderRadius: 12,
-  },
-  teamsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  teamSection: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  teamLogo: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: Colors.backgrounds.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  teamLogoText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.backgrounds.dark,
-  },
-  teamName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: TextColors.primary,
-    textAlign: 'center',
-  },
-  vsContainer: {
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  vsText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: AccentColors.primary,
-    marginBottom: 4,
-  },
-  matchTime: {
-    fontSize: 14,
-    color: TextColors.secondary,
+    padding: 16,
   },
   infoSection: {
-    paddingHorizontal: 16,
     marginBottom: 20,
   },
   infoCard: {
