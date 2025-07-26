@@ -1,7 +1,7 @@
-import {Text, type TextProps, StyleSheet} from 'react-native';
+import {Text as RNText, type TextProps as RNTextProps, StyleSheet} from 'react-native';
 import {TextColors, AccentColors} from '@/constants/Colors';
 
-export type ThemedTextProps = TextProps & {
+export type CustomTextProps = RNTextProps & {
   variant?: 'default' | 'title' | 'subtitle' | 'body' | 'caption' | 'link';
   level?: 'sm' | 'md' | 'lg' | 'xl';
   color?: keyof typeof TextColors | keyof typeof AccentColors | string;
@@ -9,7 +9,7 @@ export type ThemedTextProps = TextProps & {
   strong?: boolean;
 };
 
-export function ThemedText({
+export function Text({
   style,
   variant = 'default',
   level = 'md',
@@ -17,7 +17,7 @@ export function ThemedText({
   center = false,
   strong = false,
   ...rest
-}: ThemedTextProps) {
+}: CustomTextProps) {
   const getVariantStyle = () => {
     switch (variant) {
       case 'title':
@@ -71,7 +71,7 @@ export function ThemedText({
   };
 
   return (
-    <Text
+    <RNText
       style={[
         getVariantStyle(),
         getLevelStyle(),

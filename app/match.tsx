@@ -6,7 +6,7 @@ import {ThemedText} from '@/components/ThemedText';
 import {CustomButton} from '@/components/CustomButton';
 import HeaderNavigation from '@/components/HeaderNavigation';
 import TeamMatch from '@/components/TeamMatch';
-import Colors, {BackgroundColors, TextColors, AccentColors} from '@/constants/Colors';
+import {BackgroundColors, TextColors, AccentColors} from '@/constants';
 
 export default function MatchScreen() {
   const router = useRouter();
