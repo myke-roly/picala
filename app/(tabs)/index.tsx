@@ -23,7 +23,10 @@ const HomeScreen = () => {
 
   const handleMatchPress = (matchId: string) => {
     console.log('Match pressed:', matchId);
-    // TODO: Navigate to match details
+    router.push({
+      pathname: '/match',
+      params: {matchId},
+    });
   };
 
   // Mock data for matches

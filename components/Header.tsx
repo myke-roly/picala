@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import {ThemedText} from '@/components/ThemedText';
-import Colors from '@/constants/Colors';
+import {ColorCombinations} from '@/constants';
 
 interface HeaderProps {
   title: string;
@@ -17,7 +17,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({title, text, button}) => {
   return (
     <LinearGradient
-      colors={[Colors.backgrounds.tertiary, Colors.backgrounds.secondary]}
+      colors={ColorCombinations.headerGradient}
       start={{x: 0.3, y: 0}}
       end={{x: 0.7, y: 0.5}}
       style={styles.container}

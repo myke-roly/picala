@@ -2,14 +2,18 @@
 
 // Fondos (Backgrounds)
 export const BackgroundColors = {
-  primary: '#eafcfc', // light cyan for cards
+  primary: '#4A2B34', // dark teal background
   secondary: '#1c434e', // dark teal background
-  tertiary: '#4A2B34', // dark teal background
+  white: '#ffffff', // light cyan for cards
+  light: '#f5f5f5', // light cyan for cards
+  dark: '#2c2c2c', // light cyan for cards
   elevated: '#afc8cc', // medium cyan for elevated surfaces
 } as const;
 
 // Texto (Text Colors)
 export const TextColors = {
+  white: '#ffffff', // white for text
+  dark: '#2c2c2c', // dark for text
   primary: '#1c434e', // dark teal for primary text
   secondary: '#a58266', // warm brown for secondary text
   disabled: '#afc8cc', // medium cyan for disabled text
@@ -61,7 +65,7 @@ export const getAccentColor = (type: keyof typeof AccentColors) => {
 // Common color combinations
 export const ColorCombinations = {
   // Header gradient
-  headerGradient: [BackgroundColors.elevated, BackgroundColors.primary],
+  headerGradient: [BackgroundColors.primary, BackgroundColors.secondary],
 
   // Card backgrounds
   cardBackground: BackgroundColors.secondary,

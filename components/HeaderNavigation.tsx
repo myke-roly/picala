@@ -3,7 +3,7 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Ionicons} from '@expo/vector-icons';
 import {ThemedText} from '@/components/ThemedText';
-import {ColorCombinations, TextColors, BackgroundColors} from '@/constants/Colors';
+import Colors, {ColorCombinations, TextColors, BackgroundColors} from '@/constants/Colors';
 
 interface HeaderNavigationProps {
   title: string;
@@ -39,13 +39,13 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
         <View style={styles.leftSection}>
           {showBackButton && (
             <TouchableOpacity style={styles.iconButton} onPress={onBackPress} activeOpacity={0.7}>
-              <Ionicons name="chevron-back" size={24} color={TextColors.primary} />
+              <Ionicons name="chevron-back" size={24} color={TextColors.white} />
             </TouchableOpacity>
           )}
 
           {showCloseButton && (
             <TouchableOpacity style={styles.iconButton} onPress={onClosePress} activeOpacity={0.7}>
-              <Ionicons name="close" size={24} color={TextColors.primary} />
+              <Ionicons name="close" size={24} color={TextColors.white} />
             </TouchableOpacity>
           )}
         </View>
@@ -60,7 +60,7 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
         <View style={styles.rightSection}>
           {rightButton && (
             <TouchableOpacity style={styles.iconButton} onPress={rightButton.onPress} activeOpacity={0.7}>
-              <Ionicons name={rightButton.icon} size={24} color={TextColors.primary} />
+              <Ionicons name={rightButton.icon} size={24} color={TextColors.white} />
             </TouchableOpacity>
           )}
         </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    paddingTop: 50, // Extra padding for status bar
+    paddingTop: 32, // Extra padding for status bar
   },
   leftSection: {
     width: 60,
@@ -103,19 +103,14 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   iconButton: {
+    color: TextColors.white,
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: '700',
-    color: TextColors.primary,
+    color: TextColors.white,
     textAlign: 'center',
   },
   subtitle: {
