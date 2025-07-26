@@ -4,7 +4,7 @@ import {ThemedView} from '@/components/ThemedView';
 import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
-import {CustomButton, MatchCard} from '@/components';
+import {CustomButton, Header, MatchCard} from '@/components';
 
 const HomeScreen = () => {
   const {user, isAuthenticated} = usePersistentAuth();
@@ -65,8 +65,14 @@ const HomeScreen = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <Header
+          title="Earn more"
+          text="Invite friends to join the app and earn more points"
+          button={{title: 'Invite friends', onPress: () => {}}}
+        />
+
         <View style={styles.header}>
           <ThemedText type="title" style={styles.title}>
             Upcoming Matches
@@ -107,7 +113,7 @@ const HomeScreen = () => {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 };
 
