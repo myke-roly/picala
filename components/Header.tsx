@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {LinearGradient} from 'expo-linear-gradient';
 import {ThemedText} from '@/components/ThemedText';
+import Colors from '@/constants/Colors';
 
 interface HeaderProps {
   title: string;
@@ -14,7 +16,12 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({title, text, button}) => {
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[Colors.backgrounds.tertiary, Colors.backgrounds.secondary]}
+      start={{x: 0.3, y: 0}}
+      end={{x: 0.7, y: 0.5}}
+      style={styles.container}
+    >
       <View style={styles.content}>
         <View style={styles.textContainer}>
           <ThemedText style={styles.title}>{title}</ThemedText>
@@ -34,13 +41,12 @@ const Header: React.FC<HeaderProps> = ({title, text, button}) => {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     shadowColor: '#000',
@@ -68,24 +74,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1f2937',
+    color: '#ffffff',
     marginBottom: 4,
   },
   text: {
     fontSize: 14,
-    color: '#6b7280',
+    color: '#f3f4f6',
     lineHeight: 20,
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
     minWidth: 80,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   buttonDisabled: {
-    backgroundColor: '#d1d5db',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   buttonText: {
     fontSize: 14,
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   buttonTextDisabled: {
-    color: '#9ca3af',
+    color: 'rgba(255, 255, 255, 0.5)',
   },
 });
 

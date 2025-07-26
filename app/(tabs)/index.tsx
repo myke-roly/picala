@@ -1,6 +1,5 @@
 import {StyleSheet, Button, View, ScrollView, SafeAreaView} from 'react-native';
 import {ThemedText} from '@/components/ThemedText';
-import {ThemedView} from '@/components/ThemedView';
 import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
