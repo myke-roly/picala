@@ -25,24 +25,36 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
         {/* Team 1 */}
         <View style={styles.teamSection}>
           <View style={styles.teamLogo}>
-            <ThemedText style={[styles.teamLogoText]}>{team1.logo}</ThemedText>
+            <ThemedText variant="title" strong>
+              {team1.logo}
+            </ThemedText>
           </View>
-          <ThemedText style={[styles.teamName]}>{team1.name}</ThemedText>
+          <ThemedText strong>{team1.name}</ThemedText>
         </View>
 
         {/* VS and Time */}
         <View style={styles.vsContainer}>
-          {showVS && <ThemedText style={[styles.vsText]}>VS</ThemedText>}
-          {matchTime && <ThemedText style={[styles.matchTime]}>{matchTime}</ThemedText>}
-          {matchDate && <ThemedText style={[styles.matchDate]}>{matchDate}</ThemedText>}
+          {showVS && (
+            <ThemedText variant="subtitle" color="secondary" strong>
+              VS
+            </ThemedText>
+          )}
+          {matchTime && <ThemedText strong>{matchTime}</ThemedText>}
+          {matchDate && (
+            <ThemedText variant="caption" color={TextColors.secondary}>
+              {matchDate}
+            </ThemedText>
+          )}
         </View>
 
         {/* Team 2 */}
         <View style={styles.teamSection}>
           <View style={styles.teamLogo}>
-            <ThemedText style={[styles.teamLogoText]}>{team2.logo}</ThemedText>
+            <ThemedText variant="title" strong>
+              {team2.logo}
+            </ThemedText>
           </View>
-          <ThemedText style={[styles.teamName]}>{team2.name}</ThemedText>
+          <ThemedText strong>{team2.name}</ThemedText>
         </View>
       </View>
     </View>
@@ -74,31 +86,10 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
-  teamLogoText: {
-    fontWeight: '700',
-    color: TextColors.primary,
-    fontSize: 16,
-  },
-  teamName: {
-    fontWeight: '600',
-    color: TextColors.primary,
-    textAlign: 'center',
-    fontSize: 16,
-  },
   vsContainer: {
     alignItems: 'center',
     paddingHorizontal: 16,
-  },
-  vsText: {
-    color: TextColors.secondary,
-    marginBottom: 4,
-  },
-  matchTime: {
-    color: TextColors.primary,
-    marginBottom: 2,
-  },
-  matchDate: {
-    color: TextColors.secondary,
+    gap: 4,
   },
 });
 

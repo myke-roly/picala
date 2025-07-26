@@ -29,7 +29,9 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({title, onBackPress, 
         </View>
 
         <View style={styles.centerSection}>
-          <ThemedText style={styles.title}>{title}</ThemedText>
+          <ThemedText variant="subtitle" level="md" color="white" strong center>
+            {title}
+          </ThemedText>
         </View>
 
         <View style={styles.rightSection}>
@@ -73,12 +75,7 @@ const styles = StyleSheet.create({
     width: 60,
     alignItems: 'flex-end',
   },
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: TextColors.white,
-    textAlign: 'center',
-  },
+
   subtitle: {
     fontSize: 14,
     color: TextColors.secondary,

@@ -1,6 +1,6 @@
-import React, {useState, ReactNode, useRef, useEffect} from 'react';
+import React, {ReactNode, useRef, useEffect} from 'react';
 import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
-import {ThemedText, CustomButton, CustomInput, CustomButtonProps} from '@/components/';
+import {ThemedText, CustomButton, CustomInput, CustomButtonProps} from '@/components';
 
 export interface FormField {
   key: string;
@@ -61,7 +61,7 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>
+          <ThemedText variant="title" style={styles.title}>
             {title}
           </ThemedText>
 

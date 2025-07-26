@@ -3,7 +3,7 @@ export {ThemedView} from './ThemedView';
 export {ThemeLinkText} from './ThemeLinkText';
 export {HapticTab} from './HapticTab';
 export {CustomInput} from './CustomInput';
-export {CustomButton} from './CustomButton';
+export * from './CustomButton';
 export {AuthLoadingScreen} from './AuthLoadingScreen';
 export {AuthRedirect} from './AuthRedirect';
 export {ProtectedRoute} from './ProtectedRoute';
