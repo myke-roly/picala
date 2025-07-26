@@ -1,32 +1,21 @@
-import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {memo, PropsWithChildren} from 'react';
+import {View, StyleSheet} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Ionicons} from '@expo/vector-icons';
 import {ThemedText} from '@/components/ThemedText';
-import Colors, {ColorCombinations, TextColors, BackgroundColors} from '@/constants/Colors';
+import IconPress from '@/components/IconPress';
+import {ColorCombinations, TextColors} from '@/constants';
 
-interface HeaderNavigationProps {
+interface HeaderNavigationProps extends PropsWithChildren {
   title: string;
-  subtitle?: string;
-  showBackButton?: boolean;
-  showCloseButton?: boolean;
   onBackPress?: () => void;
-  onClosePress?: () => void;
   rightButton?: {
     icon: keyof typeof Ionicons.glyphMap;
     onPress: () => void;
   };
 }
 
-const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
-  title,
-  subtitle,
-  showBackButton = false,
-  showCloseButton = false,
-  onBackPress,
-  onClosePress,
-  rightButton,
-}) => {
+const HeaderNavigation: React.FC<HeaderNavigationProps> = ({title, onBackPress, rightButton, children}) => {
   return (
     <LinearGradient
       colors={ColorCombinations.headerGradient}
@@ -35,36 +24,19 @@ const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
       style={styles.container}
     >
       <View style={styles.content}>
-        {/* Left side - Back/Close button */}
         <View style={styles.leftSection}>
-          {showBackButton && (
-            <TouchableOpacity style={styles.iconButton} onPress={onBackPress} activeOpacity={0.7}>
-              <Ionicons name="chevron-back" size={24} color={TextColors.white} />
-            </TouchableOpacity>
-          )}
-
-          {showCloseButton && (
-            <TouchableOpacity style={styles.iconButton} onPress={onClosePress} activeOpacity={0.7}>
-              <Ionicons name="close" size={24} color={TextColors.white} />
-            </TouchableOpacity>
-          )}
+          <IconPress name="chevron-back" size="md" color="white" onPress={onBackPress} />
         </View>
 
-        {/* Center - Title and subtitle */}
         <View style={styles.centerSection}>
           <ThemedText style={styles.title}>{title}</ThemedText>
-          {subtitle && <ThemedText style={styles.subtitle}>{subtitle}</ThemedText>}
         </View>
 
-        {/* Right side - Optional right button */}
         <View style={styles.rightSection}>
-          {rightButton && (
-            <TouchableOpacity style={styles.iconButton} onPress={rightButton.onPress} activeOpacity={0.7}>
-              <Ionicons name={rightButton.icon} size={24} color={TextColors.white} />
-            </TouchableOpacity>
-          )}
+          {rightButton && <IconPress name={rightButton.icon} size="md" color="white" onPress={rightButton.onPress} />}
         </View>
       </View>
+      {children && <View style={styles.childrenContainer}>{children}</View>}
     </LinearGradient>
   );
 };
@@ -86,9 +58,9 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    paddingTop: 32, // Extra padding for status bar
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+    paddingTop: 50,
   },
   leftSection: {
     width: 60,
@@ -96,19 +68,13 @@ const styles = StyleSheet.create({
   },
   centerSection: {
     flex: 1,
-    alignItems: 'center',
   },
   rightSection: {
     width: 60,
     alignItems: 'flex-end',
   },
-  iconButton: {
-    color: TextColors.white,
-    width: 40,
-    height: 40,
-  },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '700',
     color: TextColors.white,
     textAlign: 'center',
@@ -119,6 +85,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 2,
   },
+  childrenContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
 });
 
-export default HeaderNavigation;
+export default memo(HeaderNavigation);

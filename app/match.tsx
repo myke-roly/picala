@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Ionicons} from '@expo/vector-icons';
 import {ThemedText} from '@/components/ThemedText';
 import {CustomButton} from '@/components/CustomButton';
 import HeaderNavigation from '@/components/HeaderNavigation';
+import TeamMatch from '@/components/TeamMatch';
 import Colors, {BackgroundColors, TextColors, AccentColors} from '@/constants/Colors';
 
 export default function MatchScreen() {
@@ -27,9 +28,7 @@ export default function MatchScreen() {
   return (
     <View style={styles.container}>
       <HeaderNavigation
-        title="Match Details"
-        subtitle="Barcelona vs Real Madrid"
-        showBackButton={true}
+        title="Barcelona vs Real Madrid"
         onBackPress={handleBackPress}
         rightButton={{
           icon: 'share-outline',
