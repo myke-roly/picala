@@ -1,6 +1,6 @@
-import React, {useState, ReactNode, useRef, useEffect} from 'react';
+import React, {ReactNode, useRef, useEffect} from 'react';
 import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
-import {ThemedText, CustomButton, CustomInput, CustomButtonProps} from '@/components/';
+import {Text, CustomButton, CustomInput} from '@/components';
 
 export interface FormField {
   key: string;
@@ -16,8 +16,12 @@ export interface FormField {
   multiline?: boolean;
 }
 
-export interface FormButton extends CustomButtonProps {
+export interface FormButton {
   title: string;
+  onPress: () => void;
+  variant?: 'primary' | 'secondary' | 'outline';
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 export interface FormValidation {
@@ -61,9 +65,9 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.formContainer}>
-          <ThemedText type="title" style={styles.title}>
+          <Text variant="title" style={styles.title}>
             {title}
-          </ThemedText>
+          </Text>
 
           <View style={styles.inputContainer}>
             {fields.map((field, index) => (
@@ -84,8 +88,8 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
             ))}
           </View>
 
-          {error ? <ThemedText style={styles.errorText}>{error}</ThemedText> : null}
-          {success ? <ThemedText style={styles.successText}>{success}</ThemedText> : null}
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          {success ? <Text style={styles.successText}>{success}</Text> : null}
 
           <View style={styles.buttonContainer}>
             {buttons.map((button, index) => (

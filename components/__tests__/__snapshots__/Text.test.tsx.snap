@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text Component combines multiple props 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "700",
+      },
+      {
+        "fontSize": 20,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {
+        "fontWeight": "700",
+      },
+      {
+        "textAlign": "center",
+      },
+      undefined,
+    ]
+  }
+>
+  Combined Props Text
+</Text>
+`;
+
+exports[`Text Component renders with center alignment 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "400",
+      },
+      {
+        "fontSize": 16,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {},
+      {
+        "textAlign": "center",
+      },
+      undefined,
+    ]
+  }
+>
+  Centered Text
+</Text>
+`;
+
+exports[`Text Component renders with custom color 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "400",
+      },
+      {
+        "fontSize": 16,
+      },
+      {
+        "color": "#a58266",
+      },
+      {},
+      undefined,
+      undefined,
+    ]
+  }
+>
+  Colored Text
+</Text>
+`;
+
+exports[`Text Component renders with default props 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "400",
+      },
+      {
+        "fontSize": 16,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {},
+      undefined,
+      undefined,
+    ]
+  }
+>
+  Hello World
+</Text>
+`;
+
+exports[`Text Component renders with different levels 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "400",
+      },
+      {
+        "fontSize": 20,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {},
+      undefined,
+      undefined,
+    ]
+  }
+>
+  Large Text
+</Text>
+`;
+
+exports[`Text Component renders with strong styling 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "400",
+      },
+      {
+        "fontSize": 16,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {
+        "fontWeight": "700",
+      },
+      undefined,
+      undefined,
+    ]
+  }
+>
+  Strong Text
+</Text>
+`;
+
+exports[`Text Component renders with subtitle variant 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "600",
+      },
+      {
+        "fontSize": 16,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {},
+      undefined,
+      undefined,
+    ]
+  }
+>
+  Subtitle Text
+</Text>
+`;
+
+exports[`Text Component renders with title variant 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontWeight": "700",
+      },
+      {
+        "fontSize": 16,
+      },
+      {
+        "color": "#1c434e",
+      },
+      {},
+      undefined,
+      undefined,
+    ]
+  }
+>
+  Title Text
+</Text>
+`;

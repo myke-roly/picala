@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
-import {ThemedText} from './ThemedText';
+import {Text} from './Text';
 
 interface AuthLoadingScreenProps {
   message?: string;
@@ -10,7 +10,7 @@ export const AuthLoadingScreen: React.FC<AuthLoadingScreenProps> = ({message = '
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#4f46e5" />
-      <ThemedText style={styles.message}>{message}</ThemedText>
+      <Text style={styles.message}>{message}</Text>
     </View>
   );
 };

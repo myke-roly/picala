@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
 import {useLocalSearchParams, useRouter} from 'expo-router';
-import {ThemedText, CustomButton, CustomInput} from '@/components/';
+import {Text, CustomButton, CustomInput} from '@/components/';
 import {resendVerificationEmail} from '@/services/auth';
 
 const SendEmailScreen = () => {
@@ -33,17 +33,17 @@ const SendEmailScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.content}>
-          <ThemedText style={styles.icon}>📧</ThemedText>
+          <Text style={styles.icon}>📧</Text>
 
-          <ThemedText style={styles.title}>Email Sent to {email}</ThemedText>
+          <Text style={styles.title}>Email Sent to {email}</Text>
 
-          <ThemedText style={styles.message}>
+          <Text style={styles.message}>
             We've sent a magic link to your email address. Please check your inbox and click the link to continue.
-          </ThemedText>
+          </Text>
 
-          <ThemedText style={styles.helpText}>Don't see the email? Check your spam folder or try resending.</ThemedText>
+          <Text style={styles.helpText}>Don't see the email? Check your spam folder or try resending.</Text>
 
-          {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
           <View style={styles.buttonContainer}>
             <CustomButton

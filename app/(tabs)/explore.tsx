@@ -1,33 +1,48 @@
-import {StyleSheet, View} from 'react-native';
-import {ThemedText, ThemedView, CustomButton} from '@/components';
-import {usePersistentAuth} from '@/hooks/usePersistentAuth';
+import React from 'react';
+import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {useRouter} from 'expo-router';
+import {Text} from '@/components';
+import {BackgroundColors, TextColors, AccentColors} from '@/constants';
 
-export default function TabTwoScreen() {
-  const {isAuthenticated} = usePersistentAuth();
+export default function ExploreScreen() {
   const router = useRouter();
 
-  const handleLogin = () => {
-    router.push('/(auth)/login');
+  const handleMatchPress = () => {
+    router.push('/match');
   };
 
   return (
     <View style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Explore</Text>
+          <Text style={styles.subtitle}>Discover new matches and events</Text>
+        </View>
 
-      {isAuthenticated ? (
         <View style={styles.content}>
-          <ThemedText>This app includes example code to help you get started.</ThemedText>
-          <ThemedText style={styles.featureText}>🎉 You have access to all features!</ThemedText>
+          <Text style={styles.sectionTitle}>Featured Matches</Text>
+          <TouchableOpacity style={styles.featuredCard} onPress={handleMatchPress}>
+            <Text variant="title">Barcelona vs Real Madrid</Text>
+            <Text>El Clásico - This Weekend</Text>
+            <View style={styles.cardDetails}>
+              <Text>📍 Camp Nou</Text>
+              <Text>🕐 20:00</Text>
+              <Text>📅 Saturday, April 15</Text>
+            </View>
+          </TouchableOpacity>
+
+          <Text style={styles.sectionTitle}>Nearby Events</Text>
+          <View style={styles.eventCard}>
+            <Text variant="title">Local Tournament</Text>
+            <Text>Community Soccer League</Text>
+            <View style={styles.cardDetails}>
+              <Text>📍 Central Park</Text>
+              <Text>🕐 14:00</Text>
+              <Text>📅 Sunday, April 16</Text>
+            </View>
+          </View>
         </View>
-      ) : (
-        <View style={styles.authPrompt}>
-          <ThemedText style={styles.authMessage}>Sign in to explore all features and content</ThemedText>
-          <CustomButton title="Sign In to Continue" onPress={handleLogin} />
-        </View>
-      )}
+      </ScrollView>
     </View>
   );
 }
@@ -35,33 +50,50 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: BackgroundColors.light,
   },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 20,
+  scrollView: {
+    flex: 1,
+  },
+  header: {
+    padding: 20,
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: TextColors.primary,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: TextColors.secondary,
   },
   content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20,
   },
-  featureText: {
-    fontSize: 18,
+  sectionTitle: {
+    fontSize: 20,
     fontWeight: '600',
-    marginTop: 20,
-    color: '#4f46e5',
+    color: TextColors.primary,
+    marginBottom: 16,
+    marginTop: 24,
   },
-  authPrompt: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  featuredCard: {
+    backgroundColor: BackgroundColors.white,
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: AccentColors.primary,
   },
-  authMessage: {
-    fontSize: 16,
-    color: '#6b7280',
-    textAlign: 'center',
-    marginBottom: 20,
+  eventCard: {
+    backgroundColor: BackgroundColors.white,
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+  },
+  cardDetails: {
+    gap: 4,
   },
 });
