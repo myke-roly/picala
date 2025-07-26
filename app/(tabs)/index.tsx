@@ -1,10 +1,10 @@
-import {StyleSheet, Button, View} from 'react-native';
+import {StyleSheet, Button, View, ScrollView, SafeAreaView} from 'react-native';
 import {ThemedText} from '@/components/ThemedText';
 import {ThemedView} from '@/components/ThemedView';
 import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
-import {CustomButton} from '@/components';
+import {CustomButton, MatchCard} from '@/components';
 
 const HomeScreen = () => {
   const {user, isAuthenticated} = usePersistentAuth();
@@ -22,39 +22,113 @@ const HomeScreen = () => {
     router.push('/(auth)/login');
   };
 
-  return (
-    <ThemedView style={styles.container}>
-      <ThemedText type="title">Welcome to Picala</ThemedText>
+  const handleMatchPress = (matchId: string) => {
+    console.log('Match pressed:', matchId);
+    // TODO: Navigate to match details
+  };
 
-      {isAuthenticated ? (
-        <>
-          <View style={styles.userInfo}>
-            <ThemedText style={styles.userEmail}>{user?.email}</ThemedText>
-          </View>
-          <CustomButton title="Sign Out" variant="danger" onPress={handleLogout} />
-        </>
-      ) : (
-        <View style={styles.authContainer}>
-          <ThemedText style={styles.authMessage}>Sign in to access all features</ThemedText>
-          <CustomButton title="Sign In" onPress={handleLogin} />
+  // Mock data for matches
+  const matches = [
+    {
+      id: '1',
+      team1: 'Barcelona FC',
+      team2: 'Real Madrid',
+      date: 'Dec 15, 2024',
+      time: '20:00',
+      location: 'Camp Nou, Barcelona',
+      needsPlayers: true,
+      playerCount: 8,
+      maxPlayers: 11,
+    },
+    {
+      id: '2',
+      team1: 'Manchester United',
+      team2: 'Liverpool',
+      date: 'Dec 16, 2024',
+      time: '15:30',
+      location: 'Old Trafford, Manchester',
+      needsPlayers: false,
+      playerCount: 11,
+      maxPlayers: 11,
+    },
+    {
+      id: '3',
+      team1: 'Bayern Munich',
+      team2: 'Borussia Dortmund',
+      date: 'Dec 17, 2024',
+      time: '19:45',
+      location: 'Allianz Arena, Munich',
+      needsPlayers: true,
+      playerCount: 6,
+      maxPlayers: 11,
+    },
+  ];
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <ThemedText type="title" style={styles.title}>
+            Upcoming Matches
+          </ThemedText>
+
+          {isAuthenticated ? (
+            <View style={styles.userInfo}>
+              <ThemedText style={styles.userEmail}>Welcome, {user?.email}</ThemedText>
+            </View>
+          ) : (
+            <View style={styles.authContainer}>
+              <ThemedText style={styles.authMessage}>Sign in to join matches</ThemedText>
+              <CustomButton title="Sign In" onPress={handleLogin} />
+            </View>
+          )}
         </View>
-      )}
-    </ThemedView>
+
+        <View style={styles.matchesContainer}>
+          {matches.map((match) => (
+            <MatchCard
+              key={match.id}
+              team1={match.team1}
+              team2={match.team2}
+              date={match.date}
+              time={match.time}
+              location={match.location}
+              needsPlayers={match.needsPlayers}
+              playerCount={match.playerCount}
+              maxPlayers={match.maxPlayers}
+              onPress={() => handleMatchPress(match.id)}
+            />
+          ))}
+        </View>
+
+        {isAuthenticated && (
+          <View style={styles.logoutContainer}>
+            <CustomButton title="Sign Out" variant="danger" onPress={handleLogout} />
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#f9fafb',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  scrollView: {
+    flex: 1,
+  },
+  header: {
+    padding: 20,
+    paddingTop: 10,
+  },
+  title: {
+    marginBottom: 20,
+    textAlign: 'center',
   },
   userInfo: {
-    marginVertical: 20,
+    marginVertical: 10,
     alignItems: 'center',
   },
   userEmail: {
@@ -62,7 +136,7 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   authContainer: {
-    marginVertical: 20,
+    marginVertical: 10,
     alignItems: 'center',
   },
   authMessage: {
@@ -70,6 +144,13 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  matchesContainer: {
+    paddingBottom: 20,
+  },
+  logoutContainer: {
+    padding: 20,
+    paddingTop: 0,
   },
 });
 
