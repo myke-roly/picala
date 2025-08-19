@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, screen} from '@testing-library/react-native';
-import {Text} from '../Text';
+import {Text} from '@/components';
 
 describe('Text Component', () => {
   it('renders with default props', () => {

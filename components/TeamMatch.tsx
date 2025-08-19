@@ -1,36 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle, Image} from 'react-native';
 import {Text} from '@/components';
-import {TextColors, BackgroundColors} from '@/constants';
-
-const EmptyTeamLogo = ({name = 'N N', size = 48}: {name: string; size?: number}) => {
-  const initials = name
-    .split(' ')
-    .map((n) => n[0])
-    .join('');
-
-  return (
-    <View style={[styles.teamLogo, {width: size, height: size}]}>
-      <Text level="lg" strong>
-        {initials.toUpperCase()}
-      </Text>
-    </View>
-  );
-};
-
-const Team = ({logo, name}: Team) => {
-  const isEmpty = !logo;
-
-  return (
-    <View style={styles.teamSection}>
-      {isEmpty ? <EmptyTeamLogo name={name} /> : <Image source={{uri: logo}} style={styles.teamLogo} />}
-
-      <Text center strong>
-        {name}
-      </Text>
-    </View>
-  );
-};
+import {BackgroundColors, TextColors} from '@/constants/Colors';
 
 interface Team {
   logo: string;
@@ -46,12 +17,42 @@ export interface TeamMatchProps {
   style?: StyleProp<ViewStyle>;
 }
 
+const EmptyTeamLogo = ({name, size = 48}: {name: string; size?: number}) => {
+  const initials = name
+    .split(' ')
+    .map((word) => word.charAt(0))
+    .join('')
+    .slice(0, 2);
+
+  return (
+    <View style={[styles.teamLogo, {width: size, height: size}]}>
+      <Text level="lg" strong>
+        {initials.toUpperCase()}
+      </Text>
+    </View>
+  );
+};
+
+const TeamComponent = ({logo, name}: Team) => {
+  const isEmpty = !logo;
+
+  return (
+    <View style={styles.teamSection}>
+      {isEmpty ? <EmptyTeamLogo name={name} /> : <Image source={{uri: logo}} style={styles.teamLogo} />}
+
+      <Text center strong>
+        {name}
+      </Text>
+    </View>
+  );
+};
+
 const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate, showVS = true, style}) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.content}>
         {/* Team 1 */}
-        <Team logo={team1.logo} name={team1.name} />
+        <TeamComponent logo={team1.logo} name={team1.name} />
 
         {/* VS and Time */}
         <View style={styles.vsContainer}>
@@ -69,7 +70,7 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
         </View>
 
         {/* Team 2 */}
-        <Team logo={team2.logo} name={team2.name} />
+        <TeamComponent logo={team2.logo} name={team2.name} />
       </View>
     </View>
   );

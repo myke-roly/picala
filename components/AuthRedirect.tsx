@@ -5,7 +5,7 @@ import {useAuth} from '@/contexts/AuthContext';
 import {Text} from './Text';
 
 export const AuthRedirect: React.FC = () => {
-  const {user, loading, isAuthenticated} = useAuth();
+  const {loading, isAuthenticated} = useAuth();
   const router = useRouter();
 
   React.useEffect(() => {

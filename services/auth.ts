@@ -1,5 +1,5 @@
 import {supabase} from '../config/supabase';
-import {User, AuthError} from '@supabase/supabase-js';
+import {User} from '@supabase/supabase-js';
 import {DEEP_LINKS} from '../constants/deepLinks';
 
 export interface AuthErrorType {

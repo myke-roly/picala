@@ -38,7 +38,7 @@ interface FormProps {
   validation?: FormValidation;
 }
 
-const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, children, validation}) => {
+const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, children}) => {
   const firstInputRef = useRef<TextInput>(null);
 
   // Auto-focus on first input when component mounts

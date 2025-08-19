@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
-import {useLocalSearchParams, useRouter} from 'expo-router';
-import {Text, CustomButton, CustomInput} from '@/components/';
+import {useLocalSearchParams} from 'expo-router';
+import {Text, CustomButton} from '@/components/';
 import {resendVerificationEmail} from '@/services/auth';
 
 const SendEmailScreen = () => {
   const params = useLocalSearchParams();
-  const router = useRouter();
   const {email} = params;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -23,10 +22,6 @@ const SendEmailScreen = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoToLogin = () => {
-    router.replace('/(auth)/login');
   };
 
   return (

@@ -6,7 +6,7 @@ import {refreshSession, isSessionValid} from '@/services/auth';
 export const usePersistentAuth = () => {
   const {user, loading, isAuthenticated} = useAuth();
   const appState = useRef(AppState.currentState);
-  const refreshTimeoutRef = useRef<number | null>(null);
+  const refreshTimeoutRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const handleAppStateChange = async (nextAppState: AppStateStatus) => {

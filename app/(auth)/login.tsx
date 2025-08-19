@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {ThemeLinkText} from '@/components/';
 import Form, {FormField, FormButton} from '@/components/Form';
 import {signIn} from '@/services/auth';
 import {useRouter, useLocalSearchParams} from 'expo-router';
@@ -74,7 +73,7 @@ const Login = () => {
       disabled: loading,
     },
     {
-      variant: 'link',
+      variant: 'primary',
       title: "Don't have an account? Sign up",
       onPress: () => router.push('/register'),
       disabled: loading,
