@@ -3,7 +3,6 @@ import {usePersistentAuth} from '@/hooks/usePersistentAuth';
 import {signOutUser} from '@/services/auth';
 import {useRouter} from 'expo-router';
 import {CustomButton, Header, MatchCard, Text} from '@/components';
-import {BackgroundColors} from '@/constants';
 
 const HomeScreen = () => {
   const {user, isAuthenticated} = usePersistentAuth();
@@ -71,13 +70,12 @@ const HomeScreen = () => {
 
   return (
     <>
+      <Header
+        title="Earn more"
+        text="Invite friends to join the app and earn more points"
+        button={{title: 'Invite friends', onPress: () => {}}}
+      />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <Header
-          title="Earn more"
-          text="Invite friends to join the app and earn more points"
-          button={{title: 'Invite friends', onPress: () => {}}}
-        />
-
         <View style={styles.header}>
           {isAuthenticated ? (
             <Text>Welcome, {user?.email}</Text>
