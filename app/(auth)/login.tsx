@@ -74,7 +74,7 @@ const Login = () => {
       disabled: loading,
     },
     {
-      variant: 'link',
+      variant: 'primary',
       title: "Don't have an account? Sign up",
       onPress: () => router.push('/register'),
       disabled: loading,

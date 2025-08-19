@@ -18,7 +18,7 @@ const EmptyTeamLogo = ({name = 'N N', size = 48}: {name: string; size?: number})
   );
 };
 
-const Team = ({logo, name}: Team) => {
+const TeamComponent = ({logo, name}: Team) => {
   const isEmpty = !logo;
 
   return (
@@ -51,7 +51,7 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
     <View style={[styles.container, style]}>
       <View style={styles.content}>
         {/* Team 1 */}
-        <Team logo={team1.logo} name={team1.name} />
+        <TeamComponent logo={team1.logo} name={team1.name} />
 
         {/* VS and Time */}
         <View style={styles.vsContainer}>
@@ -69,7 +69,7 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
         </View>
 
         {/* Team 2 */}
-        <Team logo={team2.logo} name={team2.name} />
+        <TeamComponent logo={team2.logo} name={team2.name} />
       </View>
     </View>
   );
