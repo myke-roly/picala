@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {ThemeLinkText} from '@/components/';
 import Form, {FormField, FormButton} from '@/components/Form';
 import {signIn} from '@/services/auth';
 import {useRouter, useLocalSearchParams} from 'expo-router';

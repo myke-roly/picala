@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import {useRouter} from 'expo-router';
 import {Ionicons} from '@expo/vector-icons';
 import {CustomButton, Text} from '@/components';

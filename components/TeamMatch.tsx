@@ -1,13 +1,28 @@
 import React from 'react';
 import {View, StyleSheet, StyleProp, ViewStyle, Image} from 'react-native';
 import {Text} from '@/components';
-import {TextColors, BackgroundColors} from '@/constants';
+import {BackgroundColors, TextColors} from '@/constants/Colors';
 
-const EmptyTeamLogo = ({name = 'N N', size = 48}: {name: string; size?: number}) => {
+interface Team {
+  logo: string;
+  name: string;
+}
+
+export interface TeamMatchProps {
+  team1: Team;
+  team2: Team;
+  matchTime?: string;
+  matchDate?: string;
+  showVS?: boolean;
+  style?: StyleProp<ViewStyle>;
+}
+
+const EmptyTeamLogo = ({name, size = 48}: {name: string; size?: number}) => {
   const initials = name
     .split(' ')
-    .map((n) => n[0])
-    .join('');
+    .map((word) => word.charAt(0))
+    .join('')
+    .slice(0, 2);
 
   return (
     <View style={[styles.teamLogo, {width: size, height: size}]}>
@@ -31,20 +46,6 @@ const TeamComponent = ({logo, name}: Team) => {
     </View>
   );
 };
-
-interface Team {
-  logo: string;
-  name: string;
-}
-
-export interface TeamMatchProps {
-  team1: Team;
-  team2: Team;
-  matchTime?: string;
-  matchDate?: string;
-  showVS?: boolean;
-  style?: StyleProp<ViewStyle>;
-}
 
 const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate, showVS = true, style}) => {
   return (

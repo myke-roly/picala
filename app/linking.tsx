@@ -38,7 +38,7 @@ const LinkingScreen = () => {
     };
 
     handleVerification();
-  }, []);
+  }, [params.path, handleVerifyEmail]);
 
   return (
     <View style={styles.container}>
