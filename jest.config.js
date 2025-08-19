@@ -13,7 +13,9 @@ module.exports = {
     '!**/__tests__/**',
     '!**/coverage/**',
   ],
-  coverageReporters: ['text', 'lcov', 'html'],
+  coverageReporters: process.env.CI
+    ? ['text', 'lcov', 'html'] // En CI/CD
+    : ['text'], // Solo texto en desarrollo
   testEnvironment: 'jsdom',
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
