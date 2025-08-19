@@ -8,11 +8,14 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --watchAll",
-    "lint": "expo lint \"./**/*.{js,jsx,ts,tsx}\""
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "lint": "expo lint \"./**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "expo lint \"./**/*.{js,jsx,ts,tsx}\" --fix",
+    "type-check": "tsc --noEmit",
+    "ci": "npm run type-check && npm run lint && npm run test:ci"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",

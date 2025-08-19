@@ -97,7 +97,7 @@ const Register = () => {
       disabled: loading,
     },
     {
-      variant: 'link',
+      variant: 'outline',
       title: 'Already have an account? Sign in',
       onPress: () => router.back(),
       disabled: loading,
