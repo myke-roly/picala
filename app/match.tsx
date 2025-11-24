@@ -1,11 +1,11 @@
+
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
-import {useRouter} from 'expo-router';
-import {Ionicons} from '@expo/vector-icons';
-import {CustomButton, Text} from '@/components';
-import HeaderNavigation from '@/components/HeaderNavigation';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { CustomButton, Text, Header, IconPress } from '@/components';
 import TeamMatch from '@/components/TeamMatch';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants';
+import { BackgroundColors, TextColors, AccentColors } from '@/constants';
 
 export default function MatchScreen() {
   const router = useRouter();
@@ -26,23 +26,21 @@ export default function MatchScreen() {
 
   return (
     <View style={styles.container}>
-      <HeaderNavigation
+      <Header
         title="Barcelona vs Real Madrid"
-        onBackPress={handleBackPress}
-        rightButton={{
-          icon: 'share-outline',
-          onPress: handleShareMatch,
-        }}
+        centerTitle
+        left={<IconPress name="chevron-back" size="md" color="white" onPress={handleBackPress} />}
+        right={<IconPress name="share-outline" size="md" color="white" onPress={handleShareMatch} />}
       />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Match Header */}
         <TeamMatch
-          team1={{logo: '', name: 'Barcelona'}}
-          team2={{logo: '', name: 'Real Madrid'}}
+          team1={{ logo: '', name: 'Barcelona' }}
+          team2={{ logo: '', name: 'Real Madrid' }}
           matchTime="20:00"
           matchDate="Sat, 15 Apr"
-          style={{marginBottom: 24}}
+          style={{ marginBottom: 24 }}
         />
 
         {/* Match Info */}
@@ -96,7 +94,7 @@ export default function MatchScreen() {
               </View>
             </View>
             <View style={styles.progressBar}>
-              <View style={[styles.progressFill, {width: '73%'}]} />
+              <View style={[styles.progressFill, { width: '73%' }]} />
             </View>
           </View>
         </View>
