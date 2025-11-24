@@ -3,7 +3,7 @@ const createStorage = () => {
     const AsyncStorage = require('@react-native-async-storage/async-storage').default;
     return AsyncStorage;
   } catch (error) {
-    console.error('AsyncStorage not available:', error);
+
     // Fallback to memory storage
     const memoryStorage = new Map<string, string>();
     return {

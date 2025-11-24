@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {useRouter} from 'expo-router';
-import Form, {FormField, FormButton} from '@/components/Form';
-import {signUp} from '@/services/auth';
+import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import Form, { FormField, FormButton } from '@/components/Form';
+import { signUp } from '@/services/auth';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +11,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async () => {
+  const handleRegister = async () => {
     setError('');
     setLoading(true);
 
@@ -41,14 +41,14 @@ const Register = () => {
         // Navigate to email verification screen
         router.push({
           pathname: '/(auth)/send-email',
-          params: {email},
+          params: { email },
         });
       } else {
         // User is already verified, navigate to main app
         router.replace('/(tabs)');
       }
     } catch (err: any) {
-      console.log(err);
+
       setError(err.message || 'Failed to register. Please try again.');
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ const Register = () => {
   const formButtons: FormButton[] = [
     {
       title: loading ? 'Creating Account...' : 'Create Account',
-      onPress: handleSubmit,
+      onPress: handleRegister,
       loading: loading,
       disabled: loading,
     },

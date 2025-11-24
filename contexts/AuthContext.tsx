@@ -1,6 +1,7 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
-import {User} from '@supabase/supabase-js';
-import {onAuthStateChange, getCurrentUser, getCurrentSession} from '../services/auth';
+
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { User } from '@supabase/supabase-js';
+import { onAuthStateChange, getSession } from '../services/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -26,7 +27,7 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,17 +36,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
     const initializeAuth = async () => {
       try {
         // Get current session first (includes token validation)
-        const session = await getCurrentSession();
+        const session = await getSession();
 
         if (session?.user) {
           setUser(session.user);
         } else {
-          // Fallback to get user if session is not available
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
+          setUser(null);
         }
       } catch (error) {
-        console.error('Error initializing auth:', error);
+        // Silent failure for initialization
         setUser(null);
       } finally {
         setLoading(false);
@@ -56,9 +55,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
     // Listen for auth state changes
     const {
-      data: {subscription},
+      data: { subscription },
     } = onAuthStateChange((user) => {
-      console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
+
       setUser(user);
       setLoading(false);
     });
