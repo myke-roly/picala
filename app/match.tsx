@@ -16,12 +16,14 @@ export default function MatchScreen() {
 
   const handleJoinMatch = () => {
     console.log('Joining match...');
-    // Add join match logic here
+    // TODO: Implement join match logic with Supabase
+    // Should check if user is authenticated and if match is full
   };
 
   const handleShareMatch = () => {
     console.log('Sharing match...');
-    // Add share logic here
+    // TODO: Implement share functionality using Expo Sharing
+    // Should generate a deep link to this match
   };
 
   return (

@@ -3,6 +3,7 @@ import { usePersistentAuth } from '@/hooks/usePersistentAuth';
 import { signOut } from '@/services/auth';
 import { useRouter } from 'expo-router';
 import { CustomButton, Header, MatchCard, Text } from '@/components';
+import { BackgroundColors } from '@/constants/Colors';
 
 const HomeScreen = () => {
   const { user, isAuthenticated } = usePersistentAuth();
@@ -28,6 +29,16 @@ const HomeScreen = () => {
     });
   };
 
+  // TODO: Replace with real data from Supabase
+  const upcomingMatch = {
+    team1: { logo: '', name: 'Barcelona' },
+    team2: { logo: '', name: 'Real Madrid' },
+    date: 'Sat, 15 Apr',
+    time: '20:00',
+    location: 'Camp Nou',
+    playerCount: 8,
+    maxPlayers: 11,
+  };
   // Mock data for matches
   const matches = [
     {
@@ -82,6 +93,23 @@ const HomeScreen = () => {
           ) : (
             <CustomButton title="Sign In" onPress={handleLogin} />
           )}
+        </View>
+
+        <View style={styles.inviteSection}>
+          <Text variant="subtitle" level="md" strong style={styles.sectionTitle}>
+            Invite Friends
+          </Text>
+          {/* TODO: Implement invite friends functionality */}
+          <View style={styles.inviteCard}>
+            <Text>Invite your friends to play!</Text>
+            <CustomButton
+              title="Invite"
+              onPress={() => console.log('Invite friends')} // TODO: Implement share/invite logic
+              variant="outline"
+              size="small"
+              style={{ marginTop: 8 }}
+            />
+          </View>
         </View>
 
         <View style={styles.matchesContainer}>
@@ -140,8 +168,30 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   logoutContainer: {
-    padding: 20,
-    paddingTop: 0,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  inviteSection: {
+    marginHorizontal: 16,
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    marginBottom: 8,
+  },
+  inviteCard: {
+    backgroundColor: BackgroundColors.white,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

@@ -23,5 +23,7 @@ const createStorage = () => {
   }
 };
 
+// TODO: Consider using a more robust storage solution like MMKV for better performance
+// or expo-secure-store for sensitive data if needed.
 const storage = createStorage();
 export default storage;

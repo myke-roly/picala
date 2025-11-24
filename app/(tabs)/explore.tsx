@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
-import {useRouter} from 'expo-router';
-import {Text} from '@/components';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Text } from '@/components';
+import { BackgroundColors, TextColors, AccentColors } from '@/constants';
 
 export default function ExploreScreen() {
   const router = useRouter();
@@ -47,6 +47,29 @@ export default function ExploreScreen() {
   );
 }
 
+// TODO: Replace with real data from Supabase
+const featuredMatches = [
+  {
+    id: 1,
+    team1: { logo: '', name: 'Man City' },
+    team2: { logo: '', name: 'Liverpool' },
+    date: 'Sun, 16 Apr',
+    time: '18:30',
+    location: 'Etihad Stadium',
+    playerCount: 10,
+    maxPlayers: 11,
+  },
+  {
+    id: 2,
+    team1: { logo: '', name: 'Arsenal' },
+    team2: { logo: '', name: 'Chelsea' },
+    date: 'Mon, 17 Apr',
+    time: '20:00',
+    location: 'Emirates Stadium',
+    playerCount: 6,
+    maxPlayers: 11,
+  },
+];
 const styles = StyleSheet.create({
   container: {
     flex: 1,
