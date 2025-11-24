@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Text, MatchCard } from '@/components';
@@ -7,6 +7,16 @@ import { BackgroundColors, TextColors, AccentColors } from '@/constants';
 
 export default function ExploreScreen() {
   const router = useRouter();
+
+  const [featuredMatches, setFeaturedMatches] = React.useState<Match[]>([]);
+
+  React.useEffect(() => {
+    const loadMatches = async () => {
+      const matches = await getFeaturedMatches();
+      setFeaturedMatches(matches);
+    };
+    loadMatches();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -19,7 +29,9 @@ export default function ExploreScreen() {
         <View style={styles.content}>
           <Text style={styles.sectionTitle}>Featured Matches</Text>
           <View style={styles.matchesContainer}>
-            <ExploreContent />
+            <ExploreContentList
+              featuredMatches={featuredMatches}
+              onPressItem={(match) => router.push({ pathname: '/match', params: { id: match.id } })} />
           </View>
         </View>
       </ScrollView>
@@ -27,25 +39,17 @@ export default function ExploreScreen() {
   );
 }
 
-const ExploreContent = () => {
-  const [featuredMatches, setFeaturedMatches] = React.useState<Match[]>([]);
-  const router = useRouter();
-
-  React.useEffect(() => {
-    const loadMatches = async () => {
-      const matches = await getFeaturedMatches();
-      setFeaturedMatches(matches);
-    };
-    loadMatches();
-  }, []);
-
+const ExploreContentList: FC<{ featuredMatches: Match[]; onPressItem: (match: Match) => void }> = ({
+  featuredMatches,
+  onPressItem,
+}) => {
   return (
     <>
       {featuredMatches.map((match) => (
         <MatchCard
           key={match.id}
           {...match}
-          onPress={() => router.push({ pathname: '/match', params: { id: match.id } })}
+          onPress={() => onPressItem(match)}
         />
       ))}
     </>
