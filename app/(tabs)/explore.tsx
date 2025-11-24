@@ -1,15 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Text } from '@/components';
+import { Text, MatchCard } from '@/components';
+import { getFeaturedMatches, Match } from '@/services/matches';
 import { BackgroundColors, TextColors, AccentColors } from '@/constants';
 
 export default function ExploreScreen() {
   const router = useRouter();
-
-  const handleMatchPress = () => {
-    router.push('/match');
-  };
 
   return (
     <View style={styles.container}>
@@ -21,25 +18,8 @@ export default function ExploreScreen() {
 
         <View style={styles.content}>
           <Text style={styles.sectionTitle}>Featured Matches</Text>
-          <TouchableOpacity style={styles.featuredCard} onPress={handleMatchPress}>
-            <Text variant="title">Barcelona vs Real Madrid</Text>
-            <Text>El Clásico - This Weekend</Text>
-            <View style={styles.cardDetails}>
-              <Text>📍 Camp Nou</Text>
-              <Text>🕐 20:00</Text>
-              <Text>📅 Saturday, April 15</Text>
-            </View>
-          </TouchableOpacity>
-
-          <Text style={styles.sectionTitle}>Nearby Events</Text>
-          <View style={styles.eventCard}>
-            <Text variant="title">Local Tournament</Text>
-            <Text>Community Soccer League</Text>
-            <View style={styles.cardDetails}>
-              <Text>📍 Central Park</Text>
-              <Text>🕐 14:00</Text>
-              <Text>📅 Sunday, April 16</Text>
-            </View>
+          <View style={styles.matchesContainer}>
+            <ExploreContent />
           </View>
         </View>
       </ScrollView>
@@ -47,29 +27,30 @@ export default function ExploreScreen() {
   );
 }
 
-// TODO: Replace with real data from Supabase
-const featuredMatches = [
-  {
-    id: 1,
-    team1: { logo: '', name: 'Man City' },
-    team2: { logo: '', name: 'Liverpool' },
-    date: 'Sun, 16 Apr',
-    time: '18:30',
-    location: 'Etihad Stadium',
-    playerCount: 10,
-    maxPlayers: 11,
-  },
-  {
-    id: 2,
-    team1: { logo: '', name: 'Arsenal' },
-    team2: { logo: '', name: 'Chelsea' },
-    date: 'Mon, 17 Apr',
-    time: '20:00',
-    location: 'Emirates Stadium',
-    playerCount: 6,
-    maxPlayers: 11,
-  },
-];
+const ExploreContent = () => {
+  const [featuredMatches, setFeaturedMatches] = React.useState<Match[]>([]);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const loadMatches = async () => {
+      const matches = await getFeaturedMatches();
+      setFeaturedMatches(matches);
+    };
+    loadMatches();
+  }, []);
+
+  return (
+    <>
+      {featuredMatches.map((match) => (
+        <MatchCard
+          key={match.id}
+          {...match}
+          onPress={() => router.push({ pathname: '/match', params: { id: match.id } })}
+        />
+      ))}
+    </>
+  );
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,13 +78,15 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: '600',
-    color: TextColors.primary,
+    fontWeight: '700',
+    color: '#1c434e',
     marginBottom: 16,
-    marginTop: 24,
+  },
+  matchesContainer: {
+    gap: 16,
   },
   featuredCard: {
-    backgroundColor: BackgroundColors.white,
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,

@@ -6,6 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { CustomButton, Text, Header, IconPress } from '@/components';
 import TeamMatch from '@/components/TeamMatch';
 import { BackgroundColors, TextColors, AccentColors } from '@/constants';
+import { joinMatch } from '@/services/matches';
+import { Share, Alert } from 'react-native';
 
 export default function MatchScreen() {
   const router = useRouter();
@@ -14,16 +16,26 @@ export default function MatchScreen() {
     router.back();
   };
 
-  const handleJoinMatch = () => {
-    console.log('Joining match...');
-    // TODO: Implement join match logic with Supabase
-    // Should check if user is authenticated and if match is full
+  const handleJoinMatch = async () => {
+    try {
+      const success = await joinMatch('current-match-id');
+      if (success) {
+        Alert.alert('Success', 'You have joined the match!');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to join match.');
+    }
   };
 
-  const handleShareMatch = () => {
-    console.log('Sharing match...');
-    // TODO: Implement share functionality using Expo Sharing
-    // Should generate a deep link to this match
+  const handleShareMatch = async () => {
+    try {
+      await Share.share({
+        message: 'Check out this match on Picala!',
+        url: 'https://picala.app/match/current-match-id', // Mock URL
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Could not share match.');
+    }
   };
 
   return (

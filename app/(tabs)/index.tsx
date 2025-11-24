@@ -1,9 +1,12 @@
+import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { usePersistentAuth } from '@/hooks/usePersistentAuth';
 import { signOut } from '@/services/auth';
 import { useRouter } from 'expo-router';
 import { CustomButton, Header, MatchCard, Text } from '@/components';
 import { BackgroundColors } from '@/constants/Colors';
+import { getUpcomingMatch, Match } from '@/services/matches';
+import { Share, Alert } from 'react-native';
 
 const HomeScreen = () => {
   const { user, isAuthenticated } = usePersistentAuth();
@@ -29,15 +32,24 @@ const HomeScreen = () => {
     });
   };
 
-  // TODO: Replace with real data from Supabase
-  const upcomingMatch = {
-    team1: { logo: '', name: 'Barcelona' },
-    team2: { logo: '', name: 'Real Madrid' },
-    date: 'Sat, 15 Apr',
-    time: '20:00',
-    location: 'Camp Nou',
-    playerCount: 8,
-    maxPlayers: 11,
+  const [upcomingMatch, setUpcomingMatch] = React.useState<Match | null>(null);
+
+  React.useEffect(() => {
+    const loadMatch = async () => {
+      const match = await getUpcomingMatch();
+      setUpcomingMatch(match);
+    };
+    loadMatch();
+  }, []);
+
+  const handleInvite = async () => {
+    try {
+      await Share.share({
+        message: 'Join me for a match on Picala! Download the app now.',
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Could not share invite.');
+    }
   };
   // Mock data for matches
   const matches = [
@@ -104,7 +116,7 @@ const HomeScreen = () => {
             <Text>Invite your friends to play!</Text>
             <CustomButton
               title="Invite"
-              onPress={() => console.log('Invite friends')} // TODO: Implement share/invite logic
+              onPress={handleInvite}
               variant="outline"
               size="small"
               style={{ marginTop: 8 }}

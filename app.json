@@ -11,7 +11,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.picala.app",
-      "associatedDomains": ["applinks:your-domain.com"]
+      "associatedDomains": [
+        "applinks:your-domain.com"
+      ]
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +30,10 @@
               "scheme": "picala"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -55,7 +60,8 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

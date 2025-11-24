@@ -1,6 +1,7 @@
 import { supabase } from '../config/supabase';
 import { User } from '@supabase/supabase-js';
 import { DEEP_LINKS } from '../constants/deepLinks';
+import Logger from './logger';
 
 export interface AuthErrorType {
   code: string;
@@ -251,7 +252,7 @@ const ERROR_MESSAGES: Record<string, string> = {
 const DEFAULT_ERROR_MESSAGE = 'An error occurred. Please try again.';
 
 // Helper function to convert Supabase error messages to user-friendly messages
-const getErrorMessage = (code: string): string => { // TODO: Integrate with a proper error reporting service (e.g., Sentry)
-  // console.error(error); // Assuming 'error' here refers to the 'code' parameter or a different error object
+const getErrorMessage = (code: string): string => {
+  Logger.error(`Auth Error: ${code}`);
   return ERROR_MESSAGES[code] || DEFAULT_ERROR_MESSAGE;
 };
