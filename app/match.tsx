@@ -1,11 +1,13 @@
+
 import React from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
-import {useRouter} from 'expo-router';
-import {Ionicons} from '@expo/vector-icons';
-import {CustomButton, Text} from '@/components';
-import HeaderNavigation from '@/components/HeaderNavigation';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { CustomButton, Text, Header, IconPress } from '@/components';
 import TeamMatch from '@/components/TeamMatch';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants';
+import { BackgroundColors, TextColors, AccentColors } from '@/constants';
+import { joinMatch } from '@/services/matches';
+import { Share, Alert } from 'react-native';
 
 export default function MatchScreen() {
   const router = useRouter();
@@ -14,35 +16,45 @@ export default function MatchScreen() {
     router.back();
   };
 
-  const handleJoinMatch = () => {
-    console.log('Joining match...');
-    // Add join match logic here
+  const handleJoinMatch = async () => {
+    try {
+      const success = await joinMatch('current-match-id');
+      if (success) {
+        Alert.alert('Success', 'You have joined the match!');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to join match.');
+    }
   };
 
-  const handleShareMatch = () => {
-    console.log('Sharing match...');
-    // Add share logic here
+  const handleShareMatch = async () => {
+    try {
+      await Share.share({
+        message: 'Check out this match on Picala!',
+        url: 'https://picala.app/match/current-match-id', // Mock URL
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Could not share match.');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <HeaderNavigation
+      <Header
         title="Barcelona vs Real Madrid"
-        onBackPress={handleBackPress}
-        rightButton={{
-          icon: 'share-outline',
-          onPress: handleShareMatch,
-        }}
+        centerTitle
+        left={<IconPress name="chevron-back" size="md" color="white" onPress={handleBackPress} />}
+        right={<IconPress name="share-outline" size="md" color="white" onPress={handleShareMatch} />}
       />
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Match Header */}
         <TeamMatch
-          team1={{logo: '', name: 'Barcelona'}}
-          team2={{logo: '', name: 'Real Madrid'}}
+          team1={{ logo: '', name: 'Barcelona' }}
+          team2={{ logo: '', name: 'Real Madrid' }}
           matchTime="20:00"
           matchDate="Sat, 15 Apr"
-          style={{marginBottom: 24}}
+          style={{ marginBottom: 24 }}
         />
 
         {/* Match Info */}
@@ -96,7 +108,7 @@ export default function MatchScreen() {
               </View>
             </View>
             <View style={styles.progressBar}>
-              <View style={[styles.progressFill, {width: '73%'}]} />
+              <View style={[styles.progressFill, { width: '73%' }]} />
             </View>
           </View>
         </View>

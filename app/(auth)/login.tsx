@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import Form, {FormField, FormButton} from '@/components/Form';
-import {signIn} from '@/services/auth';
-import {useRouter, useLocalSearchParams} from 'expo-router';
+import React, { useState, useEffect } from 'react';
+import Form, { FormField, FormButton } from '@/components/Form';
+import { signIn } from '@/services/auth';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ const Login = () => {
     }
   }, [params.verified]);
 
-  const handleSubmit = async () => {
+  const handleLogin = async () => {
     setError('');
     setLoading(true);
 
@@ -34,7 +34,7 @@ const Login = () => {
       // Navigate to the main app after successful login
       router.replace('/(tabs)');
     } catch (err: any) {
-      console.log(err);
+
       setError(err.message || 'Failed to login. Please try again.');
     } finally {
       setLoading(false);
@@ -68,7 +68,7 @@ const Login = () => {
   const formButtons: FormButton[] = [
     {
       title: loading ? 'Signing in...' : 'Sign in',
-      onPress: handleSubmit,
+      onPress: handleLogin,
       loading: loading,
       disabled: loading,
     },

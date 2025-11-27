@@ -1,18 +1,22 @@
-import {StyleSheet, View, ScrollView} from 'react-native';
-import {usePersistentAuth} from '@/hooks/usePersistentAuth';
-import {signOutUser} from '@/services/auth';
-import {useRouter} from 'expo-router';
-import {CustomButton, Header, MatchCard, Text} from '@/components';
+import React from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { usePersistentAuth } from '@/hooks/usePersistentAuth';
+import { signOut } from '@/services/auth';
+import { useRouter } from 'expo-router';
+import { CustomButton, Header, MatchCard, Text } from '@/components';
+import { BackgroundColors } from '@/constants/Colors';
+import { getUpcomingMatch, Match } from '@/services/matches';
+import { Share, Alert } from 'react-native';
 
 const HomeScreen = () => {
-  const {user, isAuthenticated} = usePersistentAuth();
+  const { user, isAuthenticated } = usePersistentAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
-      await signOutUser();
+      await signOut();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error(error)
     }
   };
 
@@ -21,19 +25,38 @@ const HomeScreen = () => {
   };
 
   const handleMatchPress = (matchId: string) => {
-    console.log('Match pressed:', matchId);
+
     router.push({
       pathname: '/match',
-      params: {matchId},
+      params: { matchId },
     });
   };
 
+  const [upcomingMatch, setUpcomingMatch] = React.useState<Match | null>(null);
+
+  React.useEffect(() => {
+    const loadMatch = async () => {
+      const match = await getUpcomingMatch();
+      setUpcomingMatch(match);
+    };
+    loadMatch();
+  }, []);
+
+  const handleInvite = async () => {
+    try {
+      await Share.share({
+        message: 'Join me for a match on Picala! Download the app now.',
+      });
+    } catch (error) {
+      Alert.alert('Error', 'Could not share invite.');
+    }
+  };
   // Mock data for matches
   const matches = [
     {
       id: '1',
-      team1: {logo: '', name: 'Barcelona FC'},
-      team2: {logo: '', name: 'Real Madrid'},
+      team1: { logo: '', name: 'Barcelona FC' },
+      team2: { logo: '', name: 'Real Madrid' },
       date: 'Dec 15, 2024',
       time: '20:00',
       location: 'Camp Nou, Barcelona',
@@ -58,8 +81,8 @@ const HomeScreen = () => {
     },
     {
       id: '3',
-      team1: {logo: '', name: 'Bayern Munich'},
-      team2: {logo: '', name: 'Borussia Dortmund'},
+      team1: { logo: '', name: 'Bayern Munich' },
+      team2: { logo: '', name: 'Borussia Dortmund' },
       date: 'Dec 17, 2024',
       time: '19:45',
       location: 'Allianz Arena, Munich',
@@ -73,7 +96,7 @@ const HomeScreen = () => {
       <Header
         title="Earn more"
         text="Invite friends to join the app and earn more points"
-        button={{title: 'Invite friends', onPress: () => {}}}
+        button={{ title: 'Invite friends', onPress: () => { } }}
       />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
@@ -82,6 +105,23 @@ const HomeScreen = () => {
           ) : (
             <CustomButton title="Sign In" onPress={handleLogin} />
           )}
+        </View>
+
+        <View style={styles.inviteSection}>
+          <Text variant="subtitle" level="md" strong style={styles.sectionTitle}>
+            Invite Friends
+          </Text>
+          {/* TODO: Implement invite friends functionality */}
+          <View style={styles.inviteCard}>
+            <Text>Invite your friends to play!</Text>
+            <CustomButton
+              title="Invite"
+              onPress={handleInvite}
+              variant="outline"
+              size="small"
+              style={{ marginTop: 8 }}
+            />
+          </View>
         </View>
 
         <View style={styles.matchesContainer}>
@@ -140,8 +180,30 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   logoutContainer: {
-    padding: 20,
-    paddingTop: 0,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  inviteSection: {
+    marginHorizontal: 16,
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    marginBottom: 8,
+  },
+  inviteCard: {
+    backgroundColor: BackgroundColors.white,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

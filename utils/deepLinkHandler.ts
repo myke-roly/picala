@@ -1,8 +1,8 @@
-import {Linking} from 'react-native';
-import {router} from 'expo-router';
+import { Linking } from 'react-native';
+import { router } from 'expo-router';
 
 export const handleUrl = (url: string) => {
-  console.log('Deep link received:', url);
+
 
   const urlObj = new URL(url);
   const path = urlObj.pathname;
@@ -12,7 +12,7 @@ export const handleUrl = (url: string) => {
 
   router.replace({
     pathname: '/linking',
-    params: {path, ...params},
+    params: { path, ...params },
   });
 };
 
@@ -24,8 +24,8 @@ export const setupDeepLinkListener = () => {
         handleUrl(url);
       }
     })
-    .catch((error) => {
-      console.error('Error getting initial URL:', error);
+    .catch(() => {
+
     });
 
   // Listen for incoming links when app is already running

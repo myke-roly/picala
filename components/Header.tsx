@@ -1,11 +1,16 @@
-import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {LinearGradient} from 'expo-linear-gradient';
-import {Text} from '@/components/Text';
-import {ColorCombinations} from '@/constants';
+import React, { PropsWithChildren, ReactNode } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Text } from '@/components/Text';
+import { ColorCombinations } from '@/constants';
 
-interface HeaderProps {
+interface HeaderProps extends PropsWithChildren {
   title: string;
+  subtitle?: string;
+  left?: ReactNode;
+  right?: ReactNode;
+  centerTitle?: boolean;
+  // Legacy props support (to be deprecated or mapped)
   text?: string;
   button?: {
     title: string;
@@ -14,31 +19,68 @@ interface HeaderProps {
   };
 }
 
-const Header: React.FC<HeaderProps> = ({title, text, button}) => {
+const Header: React.FC<HeaderProps> = ({
+  title,
+  subtitle,
+  left,
+  right,
+  centerTitle = false,
+  children,
+  // Legacy props
+  text,
+  button,
+}) => {
+  // Map legacy props to new API if used
+  const effectiveSubtitle = subtitle || text;
+  const effectiveRight = right || (button ? (
+    <TouchableOpacity
+      style={[styles.button, button.disabled && styles.buttonDisabled]}
+      onPress={button.onPress}
+      disabled={button.disabled}
+      activeOpacity={0.7}
+    >
+      <Text style={[styles.buttonText, button.disabled && styles.buttonTextDisabled]}>{button.title}</Text>
+    </TouchableOpacity>
+  ) : null);
+
   return (
     <LinearGradient
       colors={ColorCombinations.headerGradient}
-      start={{x: 0.3, y: 0}}
-      end={{x: 0.7, y: 0.5}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
       style={styles.container}
     >
-      <View style={styles.content}>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{title}</Text>
-          {text && <Text style={styles.text}>{text}</Text>}
+      <View style={[styles.content, centerTitle ? styles.contentCenter : styles.contentLeft]}>
+        {/* Left Section */}
+        <View style={styles.leftSection}>
+          {left}
         </View>
 
-        {button && (
-          <TouchableOpacity
-            style={[styles.button, button.disabled && styles.buttonDisabled]}
-            onPress={button.onPress}
-            disabled={button.disabled}
-            activeOpacity={0.7}
+        {/* Center Section */}
+        <View style={styles.centerSection}>
+          <Text
+            style={[styles.title, centerTitle && styles.textCenter]}
+            numberOfLines={1}
           >
-            <Text style={[styles.buttonText, button.disabled && styles.buttonTextDisabled]}>{button.title}</Text>
-          </TouchableOpacity>
-        )}
+            {title}
+          </Text>
+          {effectiveSubtitle && (
+            <Text
+              style={[styles.subtitle, centerTitle && styles.textCenter]}
+              numberOfLines={1}
+            >
+              {effectiveSubtitle}
+            </Text>
+          )}
+        </View>
+
+        {/* Right Section */}
+        <View style={styles.rightSection}>
+          {effectiveRight}
+        </View>
       </View>
+
+      {children && <View style={styles.childrenContainer}>{children}</View>}
     </LinearGradient>
   );
 };
@@ -59,33 +101,57 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 48,
-    paddingTop: 50, // Extra padding for status bar
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    paddingTop: 60, // Status bar padding
+    minHeight: 100,
   },
-  textContainer: {
+  contentLeft: {
+    justifyContent: 'flex-start',
+  },
+  contentCenter: {
+    justifyContent: 'space-between',
+  },
+  leftSection: {
+    minWidth: 40,
+    alignItems: 'flex-start',
+    marginRight: 8,
+  },
+  centerSection: {
     flex: 1,
-    marginRight: 16,
+    justifyContent: 'center',
+  },
+  rightSection: {
+    minWidth: 40,
+    alignItems: 'flex-end',
+    marginLeft: 8,
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#ffffff',
-    marginBottom: 4,
+    marginBottom: 2,
   },
-  text: {
+  subtitle: {
     fontSize: 14,
     color: '#f3f4f6',
     lineHeight: 20,
   },
+  textCenter: {
+    textAlign: 'center',
+  },
+  childrenContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  // Legacy button styles
   button: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderRadius: 8,
-    minWidth: 80,
+    minWidth: 70,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
