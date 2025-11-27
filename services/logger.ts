@@ -2,6 +2,8 @@
  * Logger service to handle application logging.
  * Can be extended to send logs to a remote service (e.g., Sentry) in the future.
  */
+declare const __DEV__: boolean;
+
 const Logger = {
     log: (message: string, ...args: any[]) => {
         if (__DEV__) {

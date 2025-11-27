@@ -16,7 +16,7 @@ const HomeScreen = () => {
     try {
       await signOut();
     } catch (error) {
-
+      console.error(error)
     }
   };
 
