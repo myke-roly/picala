@@ -1,22 +1,31 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
 import { usePersistentAuth } from '@/hooks/usePersistentAuth';
 import { signOut } from '@/services/auth';
 import { useRouter } from 'expo-router';
-import { CustomButton, Header, MatchCard, Text } from '@/components';
+import { CustomButton, Text, GradientHeader, CategoryFilter, FeaturedCard, MatchCard } from '@/components';
 import { BackgroundColors } from '@/constants/Colors';
 import { getUpcomingMatch, Match } from '@/services/matches';
 import { Share, Alert } from 'react-native';
 
+const CATEGORIES = [
+  { id: 'all', name: 'All', icon: 'grid' },
+  { id: 'football', name: 'Football', icon: 'american-football' },
+  { id: 'basketball', name: 'Basketball', icon: 'basketball' },
+  { id: 'baseball', name: 'Baseball', icon: 'baseball' },
+  { id: 'volleyball', name: 'Volleyball', icon: 'tennisball' },
+];
+
 const HomeScreen = () => {
   const { user, isAuthenticated } = usePersistentAuth();
   const router = useRouter();
+  const [activeCategory, setActiveCategory] = React.useState('all');
 
   const handleLogout = async () => {
     try {
       await signOut();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -25,22 +34,11 @@ const HomeScreen = () => {
   };
 
   const handleMatchPress = (matchId: string) => {
-
     router.push({
       pathname: '/match',
       params: { matchId },
     });
   };
-
-  const [upcomingMatch, setUpcomingMatch] = React.useState<Match | null>(null);
-
-  React.useEffect(() => {
-    const loadMatch = async () => {
-      const match = await getUpcomingMatch();
-      setUpcomingMatch(match);
-    };
-    loadMatch();
-  }, []);
 
   const handleInvite = async () => {
     try {
@@ -51,159 +49,80 @@ const HomeScreen = () => {
       Alert.alert('Error', 'Could not share invite.');
     }
   };
+
   // Mock data for matches
   const matches = [
     {
       id: '1',
-      team1: { logo: '', name: 'Barcelona FC' },
-      team2: { logo: '', name: 'Real Madrid' },
-      date: 'Dec 15, 2024',
-      time: '20:00',
-      location: 'Camp Nou, Barcelona',
-      needsPlayers: true,
-      playerCount: 8,
+      team1: { logo: '', name: 'DET lions' },
+      team2: { logo: '', name: 'KC Chiefs' },
+      date: 'Friday, Nov 24 - 9:00 PM',
+      odds1: '+225',
+      odds2: '-265',
     },
     {
       id: '2',
-      team1: {
-        logo: '',
-        name: 'Manchester United',
-      },
-      team2: {
-        logo: '',
-        name: 'Liverpool',
-      },
-      date: 'Dec 16, 2024',
-      time: '15:30',
-      location: 'Old Trafford, Manchester',
-      needsPlayers: true,
-      playerCount: 11,
-    },
-    {
-      id: '3',
-      team1: { logo: '', name: 'Bayern Munich' },
-      team2: { logo: '', name: 'Borussia Dortmund' },
-      date: 'Dec 17, 2024',
-      time: '19:45',
-      location: 'Allianz Arena, Munich',
-      needsPlayers: true,
-      playerCount: 6,
+      team1: { logo: '', name: 'NY Giants' },
+      team2: { logo: '', name: 'DAL Cowboys' },
+      date: 'Sunday, Nov 26 - 4:30 PM',
+      odds1: '+150',
+      odds2: '-180',
     },
   ];
 
   return (
-    <>
-      <Header
-        title="Earn more"
-        text="Invite friends to join the app and earn more points"
-        button={{ title: 'Invite friends', onPress: () => { } }}
-      />
+    <View style={styles.container}>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          {isAuthenticated ? (
-            <Text>Welcome, {user?.email}</Text>
-          ) : (
-            <CustomButton title="Sign In" onPress={handleLogin} />
-          )}
-        </View>
+        <GradientHeader
+          onInvite={handleInvite}
+          onMenuPress={isAuthenticated ? handleLogout : handleLogin}
+          userEmail={user?.email}
+        />
 
-        <View style={styles.inviteSection}>
-          <Text variant="subtitle" level="md" strong style={styles.sectionTitle}>
-            Invite Friends
-          </Text>
-          {/* TODO: Implement invite friends functionality */}
-          <View style={styles.inviteCard}>
-            <Text>Invite your friends to play!</Text>
-            <CustomButton
-              title="Invite"
-              onPress={handleInvite}
-              variant="outline"
-              size="small"
-              style={{ marginTop: 8 }}
-            />
-          </View>
-        </View>
+        <CategoryFilter
+          categories={CATEGORIES}
+          activeCategory={activeCategory}
+          onCategoryPress={setActiveCategory}
+        />
 
-        <View style={styles.matchesContainer}>
+        <FeaturedCard
+          imageSource={require('@/assets/images/featured-player.png')}
+          label="American football"
+          title={`November\nbroadcast`}
+          time="59:45"
+        />
+
+        <View style={styles.matchesList}>
           {matches.map((match) => (
             <MatchCard
               key={match.id}
               team1={match.team1}
               team2={match.team2}
               date={match.date}
-              time={match.time}
-              location={match.location}
-              playerCount={match.playerCount}
-              maxPlayers={match.playerCount}
+              odds1={match.odds1}
+              odds2={match.odds2}
               onPress={() => handleMatchPress(match.id)}
             />
           ))}
         </View>
 
-        {isAuthenticated && (
-          <View style={styles.logoutContainer}>
-            <CustomButton title="Sign Out" variant="danger" onPress={handleLogout} />
-          </View>
-        )}
+        <View style={{ height: 100 }} />
       </ScrollView>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#f3f4f6',
   },
   scrollView: {
     flex: 1,
   },
-  header: {
-    padding: 20,
-    paddingTop: 10,
-  },
-  userInfo: {
-    marginVertical: 10,
-    alignItems: 'center',
-  },
-  userEmail: {
-    fontSize: 16,
-    color: '#6b7280',
-  },
-  authMessage: {
-    fontSize: 16,
-    color: '#6b7280',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  matchesContainer: {
+  matchesList: {
+    paddingHorizontal: 20,
     gap: 16,
-  },
-  logoutContainer: {
-    padding: 16,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  inviteSection: {
-    marginHorizontal: 16,
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    marginBottom: 8,
-  },
-  inviteCard: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });
 

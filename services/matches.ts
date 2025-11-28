@@ -15,6 +15,8 @@ export interface Match {
     location: string;
     playerCount: number;
     maxPlayers: number;
+    odds1?: string;
+    odds2?: string;
 }
 
 // Mock data

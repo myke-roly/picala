@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Text, MatchCard } from '@/components';
 import { getFeaturedMatches, Match } from '@/services/matches';
@@ -48,7 +48,11 @@ const ExploreContentList: FC<{ featuredMatches: Match[]; onPressItem: (match: Ma
       {featuredMatches.map((match) => (
         <MatchCard
           key={match.id}
-          {...match}
+          team1={match.team1}
+          team2={match.team2}
+          date={match.date}
+          odds1={match.odds1 || '+100'} // Fallback for mock data
+          odds2={match.odds2 || '-100'} // Fallback for mock data
           onPress={() => onPressItem(match)}
         />
       ))}
@@ -89,21 +93,5 @@ const styles = StyleSheet.create({
   matchesContainer: {
     gap: 16,
   },
-  featuredCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: AccentColors.primary,
-  },
-  eventCard: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-  },
-  cardDetails: {
-    gap: 4,
-  },
 });
+
