@@ -1,22 +1,14 @@
 import React, { FC } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Text, MatchCard } from '@/components';
 import { getFeaturedMatches, Match } from '@/services/matches';
 import { BackgroundColors, TextColors, AccentColors } from '@/constants';
+import { useQuery } from '@/hooks/useQuery';
 
 export default function ExploreScreen() {
   const router = useRouter();
-
-  const [featuredMatches, setFeaturedMatches] = React.useState<Match[]>([]);
-
-  React.useEffect(() => {
-    const loadMatches = async () => {
-      const matches = await getFeaturedMatches();
-      setFeaturedMatches(matches);
-    };
-    loadMatches();
-  }, []);
+  const { data: featuredMatches, loading, error } = useQuery(getFeaturedMatches);
 
   return (
     <View style={styles.container}>
@@ -28,11 +20,26 @@ export default function ExploreScreen() {
 
         <View style={styles.content}>
           <Text style={styles.sectionTitle}>Featured Matches</Text>
-          <View style={styles.matchesContainer}>
-            <ExploreContentList
-              featuredMatches={featuredMatches}
-              onPressItem={(match) => router.push({ pathname: '/match', params: { id: match.id } })} />
-          </View>
+
+          {loading && (
+            <View style={styles.centerContainer}>
+              <ActivityIndicator size="large" color={AccentColors.primary} />
+            </View>
+          )}
+
+          {error && (
+            <View style={styles.centerContainer}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+
+          {!loading && !error && featuredMatches && (
+            <View style={styles.matchesContainer}>
+              <ExploreContentList
+                featuredMatches={featuredMatches}
+                onPressItem={(match) => router.push({ pathname: '/match', params: { id: match.id } })} />
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -92,6 +99,16 @@ const styles = StyleSheet.create({
   },
   matchesContainer: {
     gap: 16,
+  },
+  centerContainer: {
+    padding: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    color: AccentColors.error,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 

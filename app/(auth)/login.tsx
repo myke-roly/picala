@@ -4,16 +4,22 @@ import Form, { FormField, FormButton } from '@/components/Form';
 import { signIn } from '@/services/auth';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Text } from '@/components';
+import { useMutation } from '@/hooks/useMutation';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState('');
   const router = useRouter();
   const params = useLocalSearchParams();
+
+  const { mutate: login, loading, error } = useMutation(
+    ({ email, password }: { email: string; password: string }) => signIn(email, password),
+    {
+      onSuccess: () => router.replace('/(tabs)'),
+    }
+  );
 
   useEffect(() => {
     if (params.verified === 'true') {
@@ -36,28 +42,15 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    setError('');
-    setLoading(true);
-
     if (!validateEmail(email)) {
-      setLoading(false);
       return;
     }
 
     if (!password) {
-      setError('Please enter your password');
-      setLoading(false);
       return;
     }
 
-    try {
-      await signIn(email, password);
-      router.replace('/(tabs)');
-    } catch (err: any) {
-      setError(err.message || 'Failed to login. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    login({ email, password });
   };
 
   const formFields: FormField[] = [
@@ -110,7 +103,7 @@ const Login = () => {
   ];
 
   return (
-    <Form title="Sign in to your account" fields={formFields} buttons={formButtons} error={error} success={success} />
+    <Form title="Sign in to your account" fields={formFields} buttons={formButtons} error={error ?? undefined} success={success} />
   );
 };
 
