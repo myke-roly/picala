@@ -4,10 +4,12 @@ export const DEEP_LINKS = {
   VERIFY_EMAIL: `${URL_SCHEME}verify-email`,
   LOGIN: `${URL_SCHEME}login`,
   REGISTER: `${URL_SCHEME}register`,
+  RESET_PASSWORD: `${URL_SCHEME}reset-password`,
 } as const;
 
 export const DEEP_LINK_PATHS = {
   VERIFY_EMAIL: '/verify-email',
   LOGIN: '/login',
   REGISTER: '/register',
+  RESET_PASSWORD: '/reset-password',
 } as const;

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Form, { FormField, FormButton } from '@/components/Form';
 import { signIn } from '@/services/auth';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Text } from '@/components';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,32 +11,49 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const router = useRouter();
   const params = useLocalSearchParams();
 
-  // Check if user just verified their email
   useEffect(() => {
     if (params.verified === 'true') {
       setSuccess('Email verified successfully! You can now sign in.');
     }
   }, [params.verified]);
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      setEmailError('Email is required');
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
   const handleLogin = async () => {
     setError('');
     setLoading(true);
 
-    if (!email || !password) {
-      setError('Please fill in all fields');
+    if (!validateEmail(email)) {
+      setLoading(false);
+      return;
+    }
+
+    if (!password) {
+      setError('Please enter your password');
       setLoading(false);
       return;
     }
 
     try {
       await signIn(email, password);
-      // Navigate to the main app after successful login
       router.replace('/(tabs)');
     } catch (err: any) {
-
       setError(err.message || 'Failed to login. Please try again.');
     } finally {
       setLoading(false);
@@ -47,11 +66,15 @@ const Login = () => {
       label: 'Email Address',
       placeholder: 'Enter your email',
       value: email,
-      onChangeText: setEmail,
+      onChangeText: (text: string) => {
+        setEmail(text);
+        if (emailError) validateEmail(text);
+      },
       keyboardType: 'email-address',
       autoCapitalize: 'none',
       autoComplete: 'email',
       required: true,
+      error: emailError,
     },
     {
       key: 'password',
@@ -78,6 +101,12 @@ const Login = () => {
       onPress: () => router.push('/register'),
       disabled: loading,
     },
+    {
+      variant: 'outline',
+      title: "Forgot Password?",
+      onPress: () => router.push('/forgot-password'),
+      disabled: loading,
+    }
   ];
 
   return (

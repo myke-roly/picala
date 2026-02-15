@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useState} from 'react';
 import {TextInput, TextInputProps, StyleSheet, View, Text} from 'react-native';
 
 interface CustomInputProps extends TextInputProps {
@@ -10,6 +10,8 @@ interface CustomInputProps extends TextInputProps {
 
 export const CustomInput = forwardRef<TextInput, CustomInputProps>(
   ({label, error, containerStyle, style, required, ...props}, ref) => {
+    const [isFocused, setIsFocused] = useState(false);
+
     return (
       <View style={[styles.container, containerStyle]}>
         {label && (
@@ -20,8 +22,21 @@ export const CustomInput = forwardRef<TextInput, CustomInputProps>(
         )}
         <TextInput
           ref={ref}
-          style={[styles.input, error && styles.inputError, style]}
+          style={[
+            styles.input,
+            isFocused && styles.inputFocused,
+            error && styles.inputError,
+            style,
+          ]}
           placeholderTextColor="#9ca3af"
+          onFocus={(e) => {
+            setIsFocused(true);
+            props.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            props.onBlur?.(e);
+          }}
           {...props}
         />
         {error && <Text style={styles.errorText}>{error}</Text>}
@@ -51,6 +66,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1f2937',
   },
+  inputFocused: {
+    borderColor: '#dc285d',
+    borderWidth: 2,
+  },
   inputError: {
     borderColor: '#ef4444',
   },
@@ -60,6 +79,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   required: {
-    color: '#ef4444',
+    color: '#dc285d',
   },
 });
+
+export default CustomInput;

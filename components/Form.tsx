@@ -1,6 +1,6 @@
 import React, {ReactNode, useRef, useEffect} from 'react';
 import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
-import {Text, CustomButton, CustomInput} from '@/components';
+import {Text, CustomButton, CustomInput, AuthLogo} from '@/components';
 
 export interface FormField {
   key: string;
@@ -65,6 +65,7 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.formContainer}>
+          <AuthLogo />
           <Text variant="title" style={styles.title}>
             {title}
           </Text>
@@ -114,37 +115,49 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   formContainer: {
-    padding: 20,
+    padding: 24,
     width: '100%',
     maxWidth: 400,
     alignSelf: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
   title: {
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: 32,
+    color: '#1c434e',
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 8,
   },
   buttonContainer: {
-    gap: 16,
+    gap: 12,
+    marginTop: 8,
   },
   errorText: {
-    color: '#ef4444',
+    color: '#dc285d',
     textAlign: 'center',
     marginBottom: 10,
+    fontSize: 14,
+    fontWeight: '500',
   },
   successText: {
     color: '#10b981',
     textAlign: 'center',
     marginBottom: 10,
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
 

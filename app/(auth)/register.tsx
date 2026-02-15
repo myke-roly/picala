@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
 import Form, { FormField, FormButton } from '@/components/Form';
 import { signUp } from '@/services/auth';
+import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -9,14 +10,33 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
   const router = useRouter();
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      setEmailError('Email is required');
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
 
   const handleRegister = async () => {
     setError('');
     setLoading(true);
 
-    // Basic validation
-    if (!email || !password || !confirmPassword) {
+    if (!validateEmail(email)) {
+      setLoading(false);
+      return;
+    }
+
+    if (!password || !confirmPassword) {
       setError('Please fill in all fields');
       setLoading(false);
       return;
@@ -38,17 +58,14 @@ const Register = () => {
       const result = await signUp(email, password);
 
       if (result.requiresEmailConfirmation) {
-        // Navigate to email verification screen
         router.push({
           pathname: '/(auth)/send-email',
           params: { email },
         });
       } else {
-        // User is already verified, navigate to main app
         router.replace('/(tabs)');
       }
     } catch (err: any) {
-
       setError(err.message || 'Failed to register. Please try again.');
     } finally {
       setLoading(false);
@@ -61,11 +78,15 @@ const Register = () => {
       label: 'Email Address',
       placeholder: 'Enter your email',
       value: email,
-      onChangeText: setEmail,
+      onChangeText: (text: string) => {
+        setEmail(text);
+        if (emailError) validateEmail(text);
+      },
       keyboardType: 'email-address',
       autoCapitalize: 'none',
       autoComplete: 'email',
       required: true,
+      error: emailError,
     },
     {
       key: 'password',
@@ -104,7 +125,11 @@ const Register = () => {
     },
   ];
 
-  return <Form title="Create your account" fields={formFields} buttons={formButtons} error={error} />;
+  return (
+    <Form title="Create your account" fields={formFields} buttons={formButtons} error={error}>
+      <PasswordStrengthIndicator password={password} />
+    </Form>
+  );
 };
 
 export default Register;

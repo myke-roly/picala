@@ -34,7 +34,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   return (
     <TouchableOpacity style={buttonStyle} disabled={disabled || loading} activeOpacity={0.8} {...props}>
       {loading ? (
-        <ActivityIndicator size="small" color={variant === 'primary' ? 'white' : '#4f46e5'} />
+        <ActivityIndicator size="small" color={variant === 'primary' ? 'white' : '#dc285d'} />
       ) : (
         <Text style={textStyle}>{title}</Text>
       )}
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
 
   // Variants
   primary: {
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#dc285d',
   },
   secondary: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#4f46e5',
+    borderColor: '#dc285d',
   },
   danger: {
     backgroundColor: '#ef4444',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   secondaryText: {
-    color: '#4f46e5',
+    color: '#dc285d',
   },
   dangerText: {
     color: 'white',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   linkText: {
-    color: '#4f46e5',
+    color: '#dc285d',
   },
 
   // Text sizes

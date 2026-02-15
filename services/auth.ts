@@ -107,6 +107,31 @@ export const resendVerificationEmail = async (email: string): Promise<{ success:
   }
 };
 
+export const forgotPassword = async (email: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: DEEP_LINKS.RESET_PASSWORD,
+    });
+
+    if (error) {
+      throw {
+        code: error.message,
+        message: getErrorMessage(error.message),
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Password reset link sent! Please check your email.',
+    };
+  } catch (error: any) {
+    throw {
+      code: error.code || 'auth/unknown',
+      message: error.message || getErrorMessage(error.code),
+    };
+  }
+};
+
 export const verifyEmail = async (token: string): Promise<User> => {
   try {
     const { data, error } = await supabase.auth.verifyOtp({
