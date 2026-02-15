@@ -47,6 +47,12 @@ export const Colors = {
   backgrounds: BackgroundColors,
   text: TextColors,
   accents: AccentColors,
+  // Tab bar colors
+  tabBar: {
+    active: '#dc285d',
+    inactive: '#afc8cc',
+    background: 'rgba(28, 67, 78, 0.95)',
+  },
 } as const;
 
 // Utility functions for color usage

@@ -1,6 +1,6 @@
-import React, {ReactNode, useRef, useEffect} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
-import {Text, CustomButton, CustomInput, AuthLogo} from '@/components';
+import React, { ReactNode, useRef, useEffect } from 'react';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { Text, CustomButton, CustomInput, AuthLogo } from '@/components';
 
 export interface FormField {
   key: string;
@@ -14,6 +14,7 @@ export interface FormField {
   autoComplete?: 'email' | 'password' | 'name' | 'tel' | 'url' | 'off';
   required?: boolean;
   multiline?: boolean;
+  error?: string;
 }
 
 export interface FormButton {
@@ -38,7 +39,7 @@ interface FormProps {
   validation?: FormValidation;
 }
 
-const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, children}) => {
+const Form: React.FC<FormProps> = ({ title, fields, buttons, error, success, children }) => {
   const firstInputRef = useRef<TextInput>(null);
 
   // Auto-focus on first input when component mounts
@@ -119,6 +120,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
+    marginHorizontal: 16,
   },
   formContainer: {
     padding: 24,
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
