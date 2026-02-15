@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Form, { FormField, FormButton } from '@/components/Form';
 import { signIn } from '@/services/auth';
 import { useRouter, useLocalSearchParams } from 'expo-router';

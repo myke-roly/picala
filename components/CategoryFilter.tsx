@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, Pressable, StyleSheet } from 'react-native';
 import { Text } from './Text';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -23,11 +23,12 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, activeCateg
             contentContainerStyle={styles.categoriesContainer}
         >
             {categories.map((cat) => (
-                <TouchableOpacity
+                <Pressable
                     key={cat.id}
-                    style={[
+                    style={({ pressed }) => [
                         styles.categoryItem,
                         activeCategory === cat.id && styles.categoryItemActive,
+                        pressed && { opacity: 0.7 }
                     ]}
                     onPress={() => onCategoryPress(cat.id)}
                 >
@@ -40,7 +41,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, activeCateg
                             color={activeCategory === cat.id ? '#fff' : '#1a1b26'}
                         />
                     )}
-                </TouchableOpacity>
+                </Pressable>
             ))}
         </ScrollView>
     );

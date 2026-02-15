@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, Image, Pressable, Dimensions } from 'react-native';
 import { Text } from './Text';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,9 +20,9 @@ const GradientHeader: React.FC<GradientHeaderProps> = ({ onInvite, onMenuPress, 
         >
             <View style={styles.topBar}>
                 <View />
-                <TouchableOpacity onPress={onMenuPress}>
+                <Pressable onPress={onMenuPress} style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}>
                     <Ionicons name="menu" size={24} color="white" />
-                </TouchableOpacity>
+                </Pressable>
             </View>
 
             <View style={styles.headerContent}>
@@ -31,9 +31,12 @@ const GradientHeader: React.FC<GradientHeaderProps> = ({ onInvite, onMenuPress, 
                     <Text style={styles.headerSubtitle}>
                         Invite your friends to receive payouts for their successful parlays.
                     </Text>
-                    <TouchableOpacity style={styles.inviteButton} onPress={onInvite}>
+                    <Pressable
+                        style={({ pressed }) => [styles.inviteButton, { opacity: pressed ? 0.7 : 1 }]}
+                        onPress={onInvite}
+                    >
                         <Text style={styles.inviteButtonText}>Invite friend</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 <Image
                     source={require('@/assets/images/header-bg.png')}

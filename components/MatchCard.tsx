@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from './Text';
 import { Ionicons } from '@expo/vector-icons';
 import { Team } from '@/services/matches';
@@ -26,10 +26,8 @@ const MatchCard: React.FC<MatchCardProps> = ({
   odds2,
   onPress,
 }) => {
-  const CardContainer = onPress ? TouchableOpacity : View;
-
-  return (
-    <CardContainer style={styles.matchCard} onPress={onPress} activeOpacity={0.7}>
+  const content = (
+    <>
       <View style={styles.matchHeader}>
         <Text style={styles.matchDate}>{date}</Text>
         <Ionicons name="star" size={16} color="#1a1b26" />
@@ -65,13 +63,30 @@ const MatchCard: React.FC<MatchCardProps> = ({
         )}
       </View>
 
-      <TouchableOpacity
-        style={styles.actionButton}
+      <Pressable
+        style={({ pressed }) => [styles.actionButton, pressed && { opacity: 0.7 }]}
         onPress={onPress}
       >
         <Text style={styles.actionButtonText}>Place a parlay</Text>
-      </TouchableOpacity>
-    </CardContainer>
+      </Pressable>
+    </>
+  );
+
+  if (onPress) {
+    return (
+      <Pressable
+        style={({ pressed }) => [styles.matchCard, pressed && { opacity: 0.7 }]}
+        onPress={onPress}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return (
+    <View style={styles.matchCard}>
+      {content}
+    </View>
   );
 };
 

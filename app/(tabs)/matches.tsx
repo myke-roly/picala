@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
-import {Text} from '@/components/Text';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants/Colors';
+import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
+import { Text } from '@/components/Text';
+import { BackgroundColors, TextColors, AccentColors } from '@/constants/Colors';
 
 interface Match {
   id: string;
-  team1: {name: string; logo: string};
-  team2: {name: string; logo: string};
+  team1: { name: string; logo: string };
+  team2: { name: string; logo: string };
   date: string;
   sport: string;
   status: 'upcoming' | 'live' | 'completed';
@@ -16,24 +16,24 @@ interface Match {
 const MOCK_MATCHES: Match[] = [
   {
     id: '1',
-    team1: {name: 'DET Lions', logo: ''},
-    team2: {name: 'KC Chiefs', logo: ''},
+    team1: { name: 'DET Lions', logo: '' },
+    team2: { name: 'KC Chiefs', logo: '' },
     date: 'Friday, Nov 24 - 9:00 PM',
     sport: 'Football',
     status: 'upcoming',
   },
   {
     id: '2',
-    team1: {name: 'NY Giants', logo: ''},
-    team2: {name: 'DAL Cowboys', logo: ''},
+    team1: { name: 'NY Giants', logo: '' },
+    team2: { name: 'DAL Cowboys', logo: '' },
     date: 'Sunday, Nov 26 - 4:30 PM',
     sport: 'Football',
     status: 'upcoming',
   },
   {
     id: '3',
-    team1: {name: 'LAL Lakers', logo: ''},
-    team2: {name: 'GSW Warriors', logo: ''},
+    team1: { name: 'LAL Lakers', logo: '' },
+    team2: { name: 'GSW Warriors', logo: '' },
     date: 'Live Now',
     sport: 'Basketball',
     status: 'live',
@@ -41,8 +41,8 @@ const MOCK_MATCHES: Match[] = [
   },
   {
     id: '4',
-    team1: {name: 'NYY Yankees', logo: ''},
-    team2: {name: 'BOS Red Sox', logo: ''},
+    team1: { name: 'NYY Yankees', logo: '' },
+    team2: { name: 'BOS Red Sox', logo: '' },
     date: 'Final',
     sport: 'Baseball',
     status: 'completed',
@@ -50,7 +50,7 @@ const MOCK_MATCHES: Match[] = [
   },
 ];
 
-const MatchItem = ({match}: {match: Match}) => {
+const MatchItem = ({ match }: { match: Match }) => {
   const statusColors = {
     upcoming: AccentColors.alternative,
     live: AccentColors.primary,
@@ -58,7 +58,7 @@ const MatchItem = ({match}: {match: Match}) => {
   };
 
   return (
-    <TouchableOpacity style={styles.matchCard} activeOpacity={0.8}>
+    <Pressable style={({ pressed }) => [styles.matchCard, pressed && { opacity: 0.8 }]}>
       <View style={styles.matchHeader}>
         <Text variant="caption" color={TextColors.secondary}>
           {match.sport}
@@ -66,7 +66,7 @@ const MatchItem = ({match}: {match: Match}) => {
         <View
           style={[
             styles.statusBadge,
-            {backgroundColor: statusColors[match.status]},
+            { backgroundColor: statusColors[match.status] },
           ]}
         >
           <Text variant="caption" color={BackgroundColors.white}>
@@ -107,7 +107,7 @@ const MatchItem = ({match}: {match: Match}) => {
       <Text variant="caption" color={TextColors.secondary} style={styles.dateText}>
         {match.date}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -129,35 +129,32 @@ const MatchesScreen = () => {
         contentContainerStyle={styles.scrollContent}
       >
         <View style={styles.filtersContainer}>
-          <TouchableOpacity style={styles.filterChip} activeOpacity={0.8}>
+          <Pressable style={({ pressed }) => [styles.filterChip, pressed && { opacity: 0.8 }]}>
             <Text variant="caption" color={BackgroundColors.white}>
               All
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterChip, styles.filterChipInactive]}
-            activeOpacity={0.8}
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [styles.filterChip, styles.filterChipInactive, pressed && { opacity: 0.8 }]}
           >
             <Text variant="caption" color={TextColors.secondary}>
               Football
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterChip, styles.filterChipInactive]}
-            activeOpacity={0.8}
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [styles.filterChip, styles.filterChipInactive, pressed && { opacity: 0.8 }]}
           >
             <Text variant="caption" color={TextColors.secondary}>
               Basketball
             </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterChip, styles.filterChipInactive]}
-            activeOpacity={0.8}
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [styles.filterChip, styles.filterChipInactive, pressed && { opacity: 0.8 }]}
           >
             <Text variant="caption" color={TextColors.secondary}>
               Baseball
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         <View style={styles.matchesList}>
@@ -166,7 +163,7 @@ const MatchesScreen = () => {
           ))}
         </View>
 
-        <View style={{height: 100}} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
@@ -215,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,

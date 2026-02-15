@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
-import {Text} from '@/components/Text';
-import {CustomButton} from '@/components';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants/Colors';
+import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
+import { Text } from '@/components/Text';
+import { CustomButton } from '@/components';
+import { BackgroundColors, TextColors, AccentColors } from '@/constants/Colors';
 
 interface MenuItem {
   id: string;
@@ -12,11 +12,11 @@ interface MenuItem {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  {id: '1', title: 'Edit Profile', subtitle: 'Change your info', icon: 'person'},
-  {id: '2', title: 'Notifications', subtitle: 'Manage alerts', icon: 'bell'},
-  {id: '3', title: 'Privacy', subtitle: 'Security settings', icon: 'lock'},
-  {id: '4', title: 'Help & Support', subtitle: 'Get assistance', icon: 'help'},
-  {id: '5', title: 'About', subtitle: 'App info', icon: 'info'},
+  { id: '1', title: 'Edit Profile', subtitle: 'Change your info', icon: 'person' },
+  { id: '2', title: 'Notifications', subtitle: 'Manage alerts', icon: 'bell' },
+  { id: '3', title: 'Privacy', subtitle: 'Security settings', icon: 'lock' },
+  { id: '4', title: 'Help & Support', subtitle: 'Get assistance', icon: 'help' },
+  { id: '5', title: 'About', subtitle: 'App info', icon: 'info' },
 ];
 
 const ProfileScreen = () => {
@@ -40,11 +40,11 @@ const ProfileScreen = () => {
                 JD
               </Text>
             </View>
-            <TouchableOpacity style={styles.editAvatarButton}>
+            <Pressable style={({ pressed }) => [styles.editAvatarButton, pressed && { opacity: 0.8 }]}>
               <Text variant="caption" color={BackgroundColors.white}>
                 Edit
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           <Text variant="title" level="lg" color={TextColors.primary} center>
@@ -94,13 +94,13 @@ const ProfileScreen = () => {
           </Text>
           <View style={styles.menuCard}>
             {MENU_ITEMS.map((item, index) => (
-              <TouchableOpacity
+              <Pressable
                 key={item.id}
-                style={[
+                style={({ pressed }) => [
                   styles.menuItem,
                   index < MENU_ITEMS.length - 1 && styles.menuItemBorder,
+                  pressed && { opacity: 0.8 }
                 ]}
-                activeOpacity={0.8}
               >
                 <View style={styles.menuItemContent}>
                   <View style={styles.menuIcon}>
@@ -122,7 +122,7 @@ const ProfileScreen = () => {
                 <Text variant="body" color={TextColors.disabled}>
                   ›
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         </View>
@@ -130,13 +130,13 @@ const ProfileScreen = () => {
         <View style={styles.logoutSection}>
           <CustomButton
             title="Log Out"
-            onPress={() => {}}
+            onPress={() => { }}
             variant="outline"
             style={styles.logoutButton}
           />
         </View>
 
-        <View style={{height: 100}} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 5,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,

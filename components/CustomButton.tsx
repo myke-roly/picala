@@ -1,7 +1,7 @@
 import React from 'react';
-import {TouchableOpacity, TouchableOpacityProps, StyleSheet, Text, ActivityIndicator} from 'react-native';
+import { Pressable, PressableProps, StyleSheet, Text, ActivityIndicator } from 'react-native';
 
-export interface CustomButtonProps extends TouchableOpacityProps {
+export interface CustomButtonProps extends PressableProps {
   title: string;
   variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'link';
   size?: 'small' | 'medium' | 'large';
@@ -20,25 +20,28 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
   style,
   ...props
 }) => {
-  const buttonStyle = [
-    styles.button,
-    styles[variant],
-    styles[size],
-    fullWidth && styles.fullWidth,
-    disabled && styles.disabled,
-    style,
-  ];
-
   const textStyle = [styles.text, styles[`${variant}Text`], styles[`${size}Text`]];
 
   return (
-    <TouchableOpacity style={buttonStyle} disabled={disabled || loading} activeOpacity={0.8} {...props}>
+    <Pressable
+      style={(state) => [
+        styles.button,
+        styles[variant],
+        styles[size],
+        fullWidth && styles.fullWidth,
+        disabled && styles.disabled,
+        typeof style === 'function' ? style(state) : style,
+        state.pressed && { opacity: 0.8 },
+      ]}
+      disabled={disabled || loading}
+      {...props}
+    >
       {loading ? (
         <ActivityIndicator size="small" color={variant === 'primary' ? 'white' : '#dc285d'} />
       ) : (
         <Text style={textStyle}>{title}</Text>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

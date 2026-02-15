@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
-import {Text} from '@/components/Text';
-import {BackgroundColors, TextColors, AccentColors} from '@/constants/Colors';
+import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
+import { Text } from '@/components/Text';
+import { BackgroundColors, TextColors, AccentColors } from '@/constants/Colors';
 
 interface Message {
   id: string;
@@ -18,37 +18,37 @@ interface Message {
 const MOCK_MESSAGES: Message[] = [
   {
     id: '1',
-    user: {name: 'Alex Johnson', online: true},
+    user: { name: 'Alex Johnson', online: true },
     lastMessage: 'Hey! Are you coming to the match tomorrow?',
     time: '2 min',
     unread: 2,
   },
   {
     id: '2',
-    user: {name: 'Sarah Miller', online: false},
+    user: { name: 'Sarah Miller', online: false },
     lastMessage: 'Great game! Lets play again soon.',
     time: '1 hour',
     unread: 0,
   },
   {
     id: '3',
-    user: {name: 'Mike Davis', online: true},
+    user: { name: 'Mike Davis', online: true },
     lastMessage: 'Can you bring extra balls?',
     time: '3 hours',
     unread: 1,
   },
   {
     id: '4',
-    user: {name: 'Emily Chen', online: false},
+    user: { name: 'Emily Chen', online: false },
     lastMessage: 'Thanks for the invite!',
     time: 'Yesterday',
     unread: 0,
   },
 ];
 
-const MessageItem = ({message}: {message: Message}) => {
+const MessageItem = ({ message }: { message: Message }) => {
   return (
-    <TouchableOpacity style={styles.messageCard} activeOpacity={0.8}>
+    <Pressable style={({ pressed }) => [styles.messageCard, pressed && { opacity: 0.8 }]}>
       <View style={styles.avatarContainer}>
         <View style={styles.avatar}>
           <Text variant="title" color={BackgroundColors.white}>
@@ -84,7 +84,7 @@ const MessageItem = ({message}: {message: Message}) => {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
@@ -119,7 +119,7 @@ const MessagesScreen = () => {
           ))}
         </View>
 
-        <View style={{height: 100}} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,

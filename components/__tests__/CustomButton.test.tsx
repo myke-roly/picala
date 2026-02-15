@@ -56,11 +56,11 @@ describe('CustomButton Component', () => {
         const { getByRole } = render(<CustomButton title="Loading" loading onPress={onPressMock} />);
 
         // When loading, the text is gone, so we target the button itself
-        // TouchableOpacity usually has 'button' role if accessible, but let's try finding by accessibility role if possible or just the container
+        // Pressable usually has 'button' role if accessible, but let's try finding by accessibility role if possible or just the container
         // Since we can't easily find by text, we might need to rely on the fact that it shouldn't fire.
         // However, finding the element to press is tricky without testID.
         // Let's skip this specific test case or add testID to component if needed. 
         // For now, let's assume the disabled prop logic in component covers this (disabled={disabled || loading})
-        // We can verify the disabled prop is passed to TouchableOpacity
+        // We can verify the disabled prop is passed to Pressable
     });
 });
