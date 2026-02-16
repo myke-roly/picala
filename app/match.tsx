@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Share, Alert, Pressable } from 'react-native';
+import { View, StyleSheet, Share, Alert, Pressable } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Text } from '@/components/Text';
 import { Button, BaseCard, ScreenContainer } from '@/components/core';

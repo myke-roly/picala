@@ -3,7 +3,6 @@ import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
 import { exchangeCodeForSession, setSession, verifyOtp } from '@/services/auth';
-import { DEEP_LINK_PATHS } from '@/constants/deepLinks';
 
 const LinkingScreen = () => {
   const params = useLocalSearchParams();
@@ -29,7 +28,7 @@ const LinkingScreen = () => {
         router.replace('/(auth)/login?verified=true');
       }, 1000);
     } catch (error) {
-      console.error('Link verification error:', error);
+      // console.error('Link verification error:', error);
       router.replace('/(auth)/invalid-magic-link');
     }
   };

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Pressable, ScrollView, Alert } from 'react-native';
-import { Redirect, useRouter } from 'expo-router';
+import { View, StyleSheet, Pressable, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
 import { Button, ScreenContainer, BaseCard } from '@/components/core';
 import { Colors } from '@/constants/Colors';

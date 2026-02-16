@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { forgotPassword } from '@/services/auth';
-import { Text } from '@/components/Text';
-import { Button, BaseInput, ScreenContainer } from '@/components/core';
+import { ScreenContainer } from '@/components/core';
 import Form from '@/components/Form';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Spacing';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -93,46 +90,5 @@ const ForgotPassword = () => {
     </ScreenContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    marginTop: 40,
-    marginBottom: 40,
-    alignItems: 'center',
-  },
-  title: {
-    color: Colors.primary,
-    fontSize: 32,
-    marginBottom: 8,
-  },
-  subtitle: {
-    textAlign: 'center',
-    paddingHorizontal: 20,
-  },
-  form: {
-    flex: 1,
-  },
-  button: {
-    marginTop: Spacing.md,
-    marginBottom: Spacing.md,
-  },
-  messageContainer: {
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  errorContainer: {
-    backgroundColor: '#FEE2E2',
-  },
-  errorText: {
-    color: '#991B1B',
-  },
-  successContainer: {
-    backgroundColor: '#DCFCE7',
-  },
-  successText: {
-    color: '#166534',
-  },
-});
 
 export default ForgotPassword;

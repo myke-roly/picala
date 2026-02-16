@@ -1,9 +1,8 @@
 import React, { ReactNode, useRef, useEffect } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput } from 'react-native';
 import { Text } from '@/components/Text';
 import { Button } from '@/components/core/Button/Button';
 import { BaseInput } from '@/components/core/Input/BaseInput';
-import AuthLogo from '@/components/AuthLogo';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
 import { useColorScheme } from '@/hooks/useColorScheme';

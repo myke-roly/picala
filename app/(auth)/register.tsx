@@ -6,7 +6,6 @@ import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
 import { Text } from '@/components/Text';
 import { ScreenContainer } from '@/components/core';
 import Form from '@/components/Form';
-import { Spacing } from '@/constants/Spacing';
 import { Colors } from '@/constants/Colors';
 
 const Register = () => {
@@ -174,13 +173,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
   },
-  form: {
-    flex: 1,
-  },
-  button: {
-    marginTop: Spacing.md,
-    marginBottom: Spacing.xl,
-  },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -188,15 +180,6 @@ const styles = StyleSheet.create({
   },
   loginLink: {
     color: Colors.primary,
-  },
-  errorContainer: {
-    backgroundColor: '#FEE2E2',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  errorText: {
-    color: '#991B1B',
   },
 });
 

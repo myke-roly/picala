@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/Text';
 import { ScreenContainer, BaseInput } from '@/components/core';
 import { Colors } from '@/constants/Colors';
@@ -50,7 +49,6 @@ const MOCK_MESSAGES: Message[] = [
 ];
 
 const MessagesScreen = () => {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = React.useState('');
 
   return (

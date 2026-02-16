@@ -2,7 +2,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { StyleSheet, View, Pressable, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { IconSymbol } from '@/components/ui/IconSymbol';
