@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, StyleProp, ViewStyle, Image} from 'react-native';
-import {Text} from '@/components';
-import {BackgroundColors, TextColors} from '@/constants/Colors';
+import { View, StyleSheet, StyleProp, ViewStyle, Image } from 'react-native';
+import { Text } from '@/components';
+import { BackgroundColors, TextColors } from '@/constants/Colors';
 
 interface Team {
   logo: string;
@@ -17,7 +17,7 @@ export interface TeamMatchProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const EmptyTeamLogo = ({name, size = 48}: {name: string; size?: number}) => {
+const EmptyTeamLogo = ({ name, size = 48 }: { name: string; size?: number }) => {
   const initials = name
     .split(' ')
     .map((word) => word.charAt(0))
@@ -25,29 +25,29 @@ const EmptyTeamLogo = ({name, size = 48}: {name: string; size?: number}) => {
     .slice(0, 2);
 
   return (
-    <View style={[styles.teamLogo, {width: size, height: size}]}>
-      <Text level="lg" strong>
+    <View style={[styles.teamLogo, { width: size, height: size }]}>
+      <Text variant="h3" weight="bold">
         {initials.toUpperCase()}
       </Text>
     </View>
   );
 };
 
-const TeamComponent = ({logo, name}: Team) => {
+const TeamComponent = ({ logo, name }: Team) => {
   const isEmpty = !logo;
 
   return (
     <View style={styles.teamSection}>
-      {isEmpty ? <EmptyTeamLogo name={name} /> : <Image source={{uri: logo}} style={styles.teamLogo} />}
+      {isEmpty ? <EmptyTeamLogo name={name} /> : <Image source={{ uri: logo }} style={styles.teamLogo} />}
 
-      <Text center strong>
+      <Text center weight="bold">
         {name}
       </Text>
     </View>
   );
 };
 
-const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate, showVS = true, style}) => {
+const TeamMatch: React.FC<TeamMatchProps> = ({ team1, team2, matchTime, matchDate, showVS = true, style }) => {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.content}>
@@ -57,11 +57,11 @@ const TeamMatch: React.FC<TeamMatchProps> = ({team1, team2, matchTime, matchDate
         {/* VS and Time */}
         <View style={styles.vsContainer}>
           {showVS && (
-            <Text variant="subtitle" color="secondary" strong>
+            <Text variant="h4" color={TextColors.secondary} weight="bold">
               VS
             </Text>
           )}
-          {matchTime && <Text strong>{matchTime}</Text>}
+          {matchTime && <Text weight="bold">{matchTime}</Text>}
           {matchDate && (
             <Text variant="caption" color={TextColors.secondary}>
               {matchDate}

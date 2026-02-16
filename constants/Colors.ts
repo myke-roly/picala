@@ -70,4 +70,8 @@ export const AccentColors = {
   error: Colors.status.error,
 } as const;
 
+export const ColorCombinations = {
+  headerGradient: [Colors.primary, '#BE123C'], // Pink-600 to Pink-700
+} as const;
+
 export default Colors;

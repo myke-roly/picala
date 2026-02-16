@@ -2,16 +2,14 @@
 
 exports[`Text Component combines multiple props 1`] = `
 <Text
-  level="lg"
-  strong={true}
   style={
     [
       {
-        "fontSize": 14,
-        "lineHeight": 21,
+        "fontSize": 32,
+        "lineHeight": 40,
       },
       {
-        "fontFamily": "Inter_400Regular",
+        "fontFamily": "Inter_700Bold",
       },
       {
         "color": "primary",
@@ -25,6 +23,54 @@ exports[`Text Component combines multiple props 1`] = `
   }
 >
   Combined Props Text
+</Text>
+`;
+
+exports[`Text Component renders with body variants 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontSize": 14,
+        "lineHeight": 21,
+      },
+      {
+        "fontFamily": "Inter_400Regular",
+      },
+      {
+        "color": "#0F172A",
+      },
+      false,
+      false,
+      undefined,
+    ]
+  }
+>
+  Body Text
+</Text>
+`;
+
+exports[`Text Component renders with caption variants 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontSize": 12,
+        "lineHeight": 18,
+      },
+      {
+        "fontFamily": "Inter_400Regular",
+      },
+      {
+        "color": "#64748B",
+      },
+      false,
+      false,
+      undefined,
+    ]
+  }
+>
+  Caption Text
 </Text>
 `;
 
@@ -66,7 +112,7 @@ exports[`Text Component renders with custom color 1`] = `
         "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "secondary",
+        "color": "#ff0000",
       },
       false,
       false,
@@ -102,90 +148,16 @@ exports[`Text Component renders with default props 1`] = `
 </Text>
 `;
 
-exports[`Text Component renders with different levels 1`] = `
-<Text
-  level="lg"
-  style={
-    [
-      {
-        "fontSize": 14,
-        "lineHeight": 21,
-      },
-      {
-        "fontFamily": "Inter_400Regular",
-      },
-      {
-        "color": "#0F172A",
-      },
-      false,
-      false,
-      undefined,
-    ]
-  }
->
-  Large Text
-</Text>
-`;
-
-exports[`Text Component renders with strong styling 1`] = `
-<Text
-  strong={true}
-  style={
-    [
-      {
-        "fontSize": 14,
-        "lineHeight": 21,
-      },
-      {
-        "fontFamily": "Inter_400Regular",
-      },
-      {
-        "color": "#0F172A",
-      },
-      false,
-      false,
-      undefined,
-    ]
-  }
->
-  Strong Text
-</Text>
-`;
-
-exports[`Text Component renders with subtitle variant 1`] = `
+exports[`Text Component renders with header variants 1`] = `
 <Text
   style={
     [
       {
-        "fontSize": 14,
-        "lineHeight": 21,
+        "fontSize": 32,
+        "lineHeight": 40,
       },
       {
-        "fontFamily": "Inter_400Regular",
-      },
-      {
-        "color": "#0F172A",
-      },
-      false,
-      false,
-      undefined,
-    ]
-  }
->
-  Subtitle Text
-</Text>
-`;
-
-exports[`Text Component renders with title variant 1`] = `
-<Text
-  style={
-    [
-      {
-        "fontSize": 14,
-        "lineHeight": 21,
-      },
-      {
-        "fontFamily": "Inter_400Regular",
+        "fontFamily": "Inter_700Bold",
       },
       {
         "color": "#0F172A",
@@ -197,5 +169,29 @@ exports[`Text Component renders with title variant 1`] = `
   }
 >
   Title Text
+</Text>
+`;
+
+exports[`Text Component renders with weight styling 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontSize": 14,
+        "lineHeight": 21,
+      },
+      {
+        "fontFamily": "Inter_700Bold",
+      },
+      {
+        "color": "#0F172A",
+      },
+      false,
+      false,
+      undefined,
+    ]
+  }
+>
+  Bold Text
 </Text>
 `;
