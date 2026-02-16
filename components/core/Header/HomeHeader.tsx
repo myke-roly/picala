@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/Text';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
@@ -22,45 +22,42 @@ export function HomeHeader({
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, { color: Colors[colorScheme].text.primary }]} weight="bold">
-        Home
-      </Text>
-
       <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.iconButton}
+        <Pressable
+          style={({ pressed }) => [
+            styles.iconButton,
+            pressed && { opacity: 0.7 }
+          ]}
           onPress={onNotificationPress}
         >
           <IconSymbol name="bell.fill" size={24} color={Colors[colorScheme].text.secondary} />
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity onPress={onProfilePress} style={styles.avatarContainer}>
+        <Pressable
+          onPress={onProfilePress}
+          style={({ pressed }) => [
+            styles.avatarContainer,
+            pressed && { opacity: 0.7 }
+          ]}
+        >
           {/* Ideally use an Image here if user has one, using initials for now matching Stitch somewhat */}
-          <View style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.light.input }}>
+          <View style={styles.avatarInner}>
             <Text weight="bold" style={styles.avatarText}>
               {userName.charAt(0).toUpperCase()}
             </Text>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingVertical: Spacing.lg,
-    paddingHorizontal: Spacing.sm,
-    backgroundColor: 'transparent',
-  },
-  title: {
-    fontSize: 32,
-    letterSpacing: -0.5,
+    paddingVertical: Spacing.md,
   },
   actions: {
     flexDirection: 'row',
@@ -83,6 +80,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F1F5F9', // Fallback color
+  },
+  avatarInner: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F3F4F6', // Colors.light.input fallback
   },
   avatarImage: {
     width: '100%',

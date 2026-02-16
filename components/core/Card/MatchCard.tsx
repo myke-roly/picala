@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { View, StyleSheet, Pressable, ViewStyle } from 'react-native';
 import { Text } from '@/components/Text';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
@@ -33,7 +33,14 @@ export function MatchCard({
   const displayTitle = title || (team1 && team2 ? `${team1.name} vs ${team2.name}` : 'Match Details');
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[styles.container, style]}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.container,
+        style,
+        pressed && { opacity: 0.9, transform: [{ scale: 0.98 }] }
+      ]}
+    >
       <View style={[styles.card, { backgroundColor: Colors[colorScheme].card, borderColor: Colors[colorScheme].border }]}>
         <View style={styles.topSection}>
           <View style={styles.infoContainer}>
@@ -62,15 +69,15 @@ export function MatchCard({
 
           <View style={styles.teamsContainer}>
             {team1 && (
-              <View style={[styles.teamAvatar, { backgroundColor: '#DBEAFE', zIndex: 2, borderColor: Colors[colorScheme].card }]}>
+              <View style={[styles.teamAvatar, styles.team1Avatar, { borderColor: Colors[colorScheme].card }]}>
                 {/* Placeholder for team logo */}
-                <Text weight="bold" style={{ color: '#1E3A8A', fontSize: 10 }}>{team1.name[0]}</Text>
+                <Text weight="bold" style={styles.team1Text}>{team1.name[0]}</Text>
               </View>
             )}
             {team2 && (
-              <View style={[styles.teamAvatar, { backgroundColor: '#FEE2E2', marginLeft: -8, zIndex: 1, borderColor: Colors[colorScheme].card }]}>
+              <View style={[styles.teamAvatar, styles.team2Avatar, { borderColor: Colors[colorScheme].card }]}>
                 {/* Placeholder for team logo */}
-                <Text weight="bold" style={{ color: '#991B1B', fontSize: 10 }}>{team2.name[0]}</Text>
+                <Text weight="bold" style={styles.team2Text}>{team2.name[0]}</Text>
               </View>
             )}
           </View>
@@ -86,14 +93,14 @@ export function MatchCard({
             </Text>
           </View>
 
-          <TouchableOpacity style={[styles.viewButton, { backgroundColor: colorScheme === 'dark' ? '#FFFFFF' : '#0F172A' }]}>
+          <View style={[styles.viewButton, { backgroundColor: colorScheme === 'dark' ? '#FFFFFF' : '#0F172A' }]}>
             <Text variant="small" weight="semibold" style={{ color: colorScheme === 'dark' ? '#0F172A' : '#FFFFFF', fontSize: 10 }}>
               View
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
@@ -142,6 +149,23 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  team1Avatar: {
+    backgroundColor: '#DBEAFE',
+    zIndex: 2,
+  },
+  team2Avatar: {
+    backgroundColor: '#FEE2E2',
+    marginLeft: -8,
+    zIndex: 1,
+  },
+  team1Text: {
+    color: '#1E3A8A',
+    fontSize: 10,
+  },
+  team2Text: {
+    color: '#991B1B',
+    fontSize: 10,
   },
   divider: {
     height: 1,

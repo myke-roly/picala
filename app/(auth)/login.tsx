@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, Pressable, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Text } from '@/components/Text';
 import { Button } from '@/components/core/Button/Button';
@@ -160,9 +160,12 @@ const Login = () => {
               />
             </View>
 
-            <TouchableOpacity
+            <Pressable
               onPress={() => router.push('/forgot-password')}
-              style={styles.forgotPassword}
+              style={({ pressed }) => [
+                styles.forgotPassword,
+                pressed && { opacity: 0.7 }
+              ]}
             >
               <Text
                 variant="small"
@@ -174,7 +177,7 @@ const Login = () => {
               >
                 Forgot Password?
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
       </KeyboardAvoidingView>

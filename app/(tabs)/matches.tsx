@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
 import { MatchCard, ScreenContainer, CategoryFilter } from '@/components/core';
-import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
 
 interface Match {
@@ -74,11 +73,6 @@ const MatchesScreen = () => {
 
   return (
     <ScreenContainer withScroll>
-      <View style={styles.header}>
-        <Text variant="h1">Matches</Text>
-        <Text variant="body" opacity={0.6}>Follow your favorite teams</Text>
-      </View>
-
       <CategoryFilter
         categories={TABS}
         activeCategory={activeTab}
@@ -105,17 +99,11 @@ const MatchesScreen = () => {
           )}
         </View>
       </View>
-
-      <View style={{ height: 100 }} />
     </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    paddingVertical: Spacing.xl,
-    paddingTop: 20,
-  },
   section: {
     marginTop: Spacing.md,
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import { Text } from '@/components/Text';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
@@ -14,7 +14,13 @@ interface FeaturedMatchProps {
 
 export function FeaturedMatch({ title, category, time, onPress }: FeaturedMatchProps) {
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={styles.container}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.container,
+        pressed && { opacity: 0.95, transform: [{ scale: 0.99 }] }
+      ]}
+    >
       <ImageBackground
         source={require('@/assets/images/featured-player.png')}
         style={styles.image}
@@ -43,7 +49,7 @@ export function FeaturedMatch({ title, category, time, onPress }: FeaturedMatchP
           </View>
         </LinearGradient>
       </ImageBackground>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

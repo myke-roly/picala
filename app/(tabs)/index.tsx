@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { usePersistentAuth } from '@/hooks/usePersistentAuth';
 import { Text } from '@/components/Text';
 import {
+  Button,
   CategoryFilter,
   FeaturedMatch,
   HomeHeader,
@@ -11,8 +12,8 @@ import {
   ScreenContainer
 } from '@/components/core';
 import { Spacing } from '@/constants/Spacing';
-import { Colors } from '@/constants/Colors';
-import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
+import { Colors, TextColors } from '@/constants/Colors';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Category } from '@/components/core/Filter/CategoryFilter';
 
@@ -72,56 +73,50 @@ const HomeScreen = () => {
         onNotificationPress={() => Alert.alert('Notifications', 'No new notifications')}
       />
 
-      {/* Create Match Button */}
-      <View style={styles.createMatchContainer}>
-        <TouchableOpacity
-          style={styles.createMatchButton}
-          onPress={() => Alert.alert('Create Match', 'Coming soon!')}
-          activeOpacity={0.9}
-        >
-          <IconSymbol name="plus" size={24} color="#FFFFFF" />
-          <Text weight="bold" style={styles.createMatchText}>Create Match</Text>
-        </TouchableOpacity>
-      </View>
+      <Button
+        leftIcon={<IconSymbol name="plus" color={TextColors.white} />}
+        title="Create Match"
+        onPress={() => Alert.alert('Create Match', 'Coming soon!')}
+      />
 
-      {/* Categories */}
-      <View style={styles.categoriesContainer}>
-        <CategoryFilter
-          categories={CATEGORIES}
-          activeCategory={activeCategory}
-          onCategoryPress={setActiveCategory}
-        />
-      </View>
+      <CategoryFilter
+        categories={CATEGORIES}
+        activeCategory={activeCategory}
+        onCategoryPress={setActiveCategory}
+        style={styles.categoriesContainer}
+      />
 
-      {/* Upcoming Matches */}
       <View style={styles.sectionHeader}>
         <Text variant="h3" weight="bold">My Upcoming Matches</Text>
-        <TouchableOpacity onPress={() => router.push('/matches')}>
+        <Pressable
+          onPress={() => router.push('/matches')}
+          style={({ pressed }) => pressed && { opacity: 0.7 }}
+        >
           <Text variant="small" weight="bold" style={{ color: Colors.primary }}>See all</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.matchesList}
-        style={styles.matchesScroll}
-      >
-        {upcomingMatches.map((match) => (
-          <MatchCard
-            key={match.id}
-            team1={match.team1}
-            team2={match.team2}
-            date={match.date}
-            time={match.time}
-            location={match.location}
-            onPress={() => handleMatchPress(match.id)}
-            style={{ width: 280, marginRight: Spacing.md }}
-          />
-        ))}
-      </ScrollView>
+      <View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ gap: Spacing.md }}
+        >
+          {upcomingMatches.map((match) => (
+            <MatchCard
+              key={match.id}
+              team1={match.team1}
+              team2={match.team2}
+              date={match.date}
+              time={match.time}
+              location={match.location}
+              onPress={() => handleMatchPress(match.id)}
+            />
+          ))}
+        </ScrollView>
+      </View>
 
-      {/* Active Invitations */}
+
       <View style={styles.sectionHeader}>
         <Text variant="h3" weight="bold">Active Invitations</Text>
       </View>
@@ -138,12 +133,24 @@ const HomeScreen = () => {
         </Text>
 
         <View style={styles.invitationActions}>
-          <TouchableOpacity style={[styles.invitationButton, { backgroundColor: Colors.primary, borderWidth: 0 }]}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.invitationButton,
+              { backgroundColor: Colors.primary, borderWidth: 0 },
+              pressed && { opacity: 0.8 }
+            ]}
+          >
             <Text weight="bold" style={{ color: '#FFFFFF' }}>Accept</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.invitationButton, { borderColor: Colors[colorScheme].border }]}>
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.invitationButton,
+              { borderColor: Colors[colorScheme].border },
+              pressed && { backgroundColor: Colors[colorScheme].input }
+            ]}
+          >
             <Text weight="bold" style={{ color: Colors[colorScheme].text.primary }}>Decline</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
 
@@ -158,36 +165,13 @@ const HomeScreen = () => {
         time="2:00 PM"
         onPress={() => handleMatchPress('featured')}
       />
-
-      <View style={{ height: 100 }} />
     </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  createMatchContainer: {
-    marginBottom: Spacing.xl,
-  },
-  createMatchButton: {
-    backgroundColor: Colors.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: Spacing.lg,
-    borderRadius: Spacing.borderRadius.xl,
-    gap: Spacing.sm,
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  createMatchText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-  },
   categoriesContainer: {
-    marginBottom: Spacing.md,
+    marginVertical: Spacing.xxl
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -196,12 +180,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     marginTop: Spacing.sm,
   },
-  matchesScroll: {
-    marginHorizontal: -Spacing.screenPadding, // Allow scrolling edge to edge
-    marginBottom: Spacing.xl,
-  },
-  matchesList: {
-    paddingHorizontal: Spacing.screenPadding,
+  matchCardItem: {
+    width: 280,
+    marginRight: Spacing.md,
   },
   invitationCard: {
     padding: Spacing.lg,

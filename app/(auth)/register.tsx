@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { signUp } from '@/services/auth';
 import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
@@ -145,11 +145,14 @@ const Register = () => {
 
         <View style={styles.footer}>
           <Text variant="body">Already have an account? </Text>
-          <TouchableOpacity onPress={() => router.back()}>
+          <Pressable
+            onPress={() => router.back()}
+            style={({ pressed }) => pressed && { opacity: 0.7 }}
+          >
             <Text variant="link" weight="semibold" style={styles.loginLink}>
               Sign In
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </Form>
     </ScreenContainer>

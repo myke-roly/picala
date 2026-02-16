@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, Pressable, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
 import { Button, ScreenContainer, BaseCard } from '@/components/core';
@@ -67,10 +67,6 @@ const ProfileScreen = () => {
 
   return (
     <ScreenContainer withScroll>
-      <View style={styles.header}>
-        <Text variant="h1">Profile</Text>
-      </View>
-
       <BaseCard style={styles.profileHeader}>
         <View style={styles.avatar}>
           <Text variant="h1" weight="bold" style={styles.avatarText}>{userInitial}</Text>
@@ -89,12 +85,13 @@ const ProfileScreen = () => {
         <Text variant="h3" weight="bold" style={styles.sectionTitle}>Account Settings</Text>
         <BaseCard padding="xs">
           {MENU_ITEMS.map((item, index) => (
-            <TouchableOpacity
+            <Pressable
               key={item.id}
               onPress={item.onPress}
-              style={[
+              style={({ pressed }) => [
                 styles.menuItem,
-                index < MENU_ITEMS.length - 1 && styles.menuDivider
+                index < MENU_ITEMS.length - 1 && styles.menuDivider,
+                pressed && { backgroundColor: '#F8FAFC' }
               ]}
             >
               <View style={styles.menuItemContent}>
@@ -104,7 +101,7 @@ const ProfileScreen = () => {
                 <Text variant="body" weight="medium">{item.title}</Text>
               </View>
               <IconSymbol name="chevron.right" size={16} color="#94A3B8" />
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </BaseCard>
       </View>
@@ -118,8 +115,6 @@ const ProfileScreen = () => {
           style={{ borderColor: Colors.status.error }}
         />
       </View>
-
-      <View style={{ height: 100 }} />
     </ScreenContainer>
   );
 };
