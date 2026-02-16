@@ -11,8 +11,6 @@ export { default as Header } from './Header';
 export { default as Icon } from './Icon';
 export { default as IconPress } from './IconPress';
 export { default as TeamMatch } from './TeamMatch';
-export { default as GradientHeader } from './GradientHeader';
-export { default as GradientBackground } from './GradientBackground';
 export { default as CategoryFilter } from './CategoryFilter';
 export { default as FeaturedCard } from './FeaturedCard';
 export { default as PasswordStrengthIndicator } from './PasswordStrengthIndicator';
