@@ -2,23 +2,24 @@
 
 exports[`Text Component combines multiple props 1`] = `
 <Text
+  level="lg"
+  strong={true}
   style={
     [
       {
-        "fontWeight": "700",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 20,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
-      },
-      {
-        "fontWeight": "700",
+        "color": "primary",
       },
       {
         "textAlign": "center",
       },
+      false,
       undefined,
     ]
   }
@@ -32,18 +33,19 @@ exports[`Text Component renders with center alignment 1`] = `
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
       {
         "textAlign": "center",
       },
+      false,
       undefined,
     ]
   }
@@ -57,16 +59,17 @@ exports[`Text Component renders with custom color 1`] = `
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#a58266",
+        "color": "secondary",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -80,16 +83,17 @@ exports[`Text Component renders with default props 1`] = `
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -100,19 +104,21 @@ exports[`Text Component renders with default props 1`] = `
 
 exports[`Text Component renders with different levels 1`] = `
 <Text
+  level="lg"
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 20,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -123,21 +129,21 @@ exports[`Text Component renders with different levels 1`] = `
 
 exports[`Text Component renders with strong styling 1`] = `
 <Text
+  strong={true}
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {
-        "fontWeight": "700",
-      },
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -151,16 +157,17 @@ exports[`Text Component renders with subtitle variant 1`] = `
   style={
     [
       {
-        "fontWeight": "600",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -174,16 +181,17 @@ exports[`Text Component renders with title variant 1`] = `
   style={
     [
       {
-        "fontWeight": "700",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
