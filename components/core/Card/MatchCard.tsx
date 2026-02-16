@@ -1,158 +1,169 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import { Text } from '@/components/Text';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
-import { BaseCard } from './BaseCard';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 interface MatchCardProps {
-  team1: { name: string; logo: string };
-  team2: { name: string; logo: string };
+  team1?: { name: string; logo?: string };
+  team2?: { name: string; logo?: string };
+  title?: string;
   date: string;
+  time?: string;
   location?: string;
   onPress?: () => void;
+  style?: ViewStyle;
 }
 
-export function MatchCard({ team1, team2, date, location, onPress }: MatchCardProps) {
+export function MatchCard({
+  team1,
+  team2,
+  title,
+  date,
+  time,
+  location,
+  onPress,
+  style
+}: MatchCardProps) {
+  const colorScheme = useColorScheme() ?? 'light';
+
+  // Default title if not provided, based on teams
+  const displayTitle = title || (team1 && team2 ? `${team1.name} vs ${team2.name}` : 'Match Details');
+
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-      <BaseCard style={styles.card}>
-        <View style={styles.header}>
-          <View style={styles.liveContainer}>
-            <View style={styles.liveDot} />
-            <Text variant="small" weight="bold" style={styles.liveText}>LIVE</Text>
-          </View>
-          <Text variant="caption" opacity={0.6}>{date}</Text>
-        </View>
-
-        <View style={styles.teamsContainer}>
-          <View style={styles.team}>
-            <View style={styles.logoPlaceholder}>
-              <Text weight="bold" style={styles.logoInitial}>{team1.name[0]}</Text>
-            </View>
-            <Text variant="body" weight="semibold" center style={styles.teamName}>
-              {team1.name}
+    <TouchableOpacity onPress={onPress} activeOpacity={0.9} style={[styles.container, style]}>
+      <View style={[styles.card, { backgroundColor: Colors[colorScheme].card, borderColor: Colors[colorScheme].border }]}>
+        <View style={styles.topSection}>
+          <View style={styles.infoContainer}>
+            <Text
+              variant="caption"
+              weight="bold"
+              style={styles.dateText}
+            >
+              {date.toUpperCase()}
+            </Text>
+            <Text
+              variant="h3"
+              weight="bold"
+              numberOfLines={1}
+              style={[styles.matchTitle, { color: Colors[colorScheme].text.primary }]}
+            >
+              {displayTitle}
+            </Text>
+            <Text
+              variant="small"
+              style={{ color: Colors[colorScheme].text.secondary }}
+            >
+              {location || 'TBA'}
             </Text>
           </View>
 
-          <View style={styles.vsContainer}>
-            <Text variant="h3" weight="bold" opacity={0.2}>VS</Text>
-          </View>
-
-          <View style={styles.team}>
-            <View style={styles.logoPlaceholder}>
-              <Text weight="bold" style={styles.logoInitial}>{team2.name[0]}</Text>
-            </View>
-            <Text variant="body" weight="semibold" center style={styles.teamName}>
-              {team2.name}
-            </Text>
+          <View style={styles.teamsContainer}>
+            {team1 && (
+              <View style={[styles.teamAvatar, { backgroundColor: '#DBEAFE', zIndex: 2, borderColor: Colors[colorScheme].card }]}>
+                {/* Placeholder for team logo */}
+                <Text weight="bold" style={{ color: '#1E3A8A', fontSize: 10 }}>{team1.name[0]}</Text>
+              </View>
+            )}
+            {team2 && (
+              <View style={[styles.teamAvatar, { backgroundColor: '#FEE2E2', marginLeft: -8, zIndex: 1, borderColor: Colors[colorScheme].card }]}>
+                {/* Placeholder for team logo */}
+                <Text weight="bold" style={{ color: '#991B1B', fontSize: 10 }}>{team2.name[0]}</Text>
+              </View>
+            )}
           </View>
         </View>
+
+        <View style={[styles.divider, { backgroundColor: Colors[colorScheme].border }]} />
 
         <View style={styles.footer}>
-          <View style={styles.locationContainer}>
-            <IconSymbol name="mappin.and.ellipse" size={14} color={Colors.primary} />
-            <Text variant="small" style={styles.locationText}>
-              {location || 'Main Stadium'}
+          <View style={styles.timeContainer}>
+            <IconSymbol name="clock.fill" size={14} color={Colors[colorScheme].text.secondary} />
+            <Text variant="small" weight="medium" style={[styles.timeText, { color: Colors[colorScheme].text.secondary }]}>
+              {time || 'TBA'}
             </Text>
           </View>
-          <TouchableOpacity style={styles.detailsButton}>
-            <Text variant="small" weight="bold" style={styles.detailsText}>
-              VIEW DETAILS
+
+          <TouchableOpacity style={[styles.viewButton, { backgroundColor: colorScheme === 'dark' ? '#FFFFFF' : '#0F172A' }]}>
+            <Text variant="small" weight="semibold" style={{ color: colorScheme === 'dark' ? '#0F172A' : '#FFFFFF', fontSize: 10 }}>
+              View
             </Text>
           </TouchableOpacity>
         </View>
-      </BaseCard>
+      </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    marginBottom: Spacing.md,
+  container: {
+    minWidth: 260,
   },
-  header: {
+  card: {
+    borderRadius: Spacing.borderRadius.xl,
+    padding: Spacing.md,
+    borderWidth: 1,
+    // Add shadow using platform specific styles if needed, mostly rely on border for minimalist look
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  topSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.lg,
+    alignItems: 'flex-start',
+    marginBottom: Spacing.md,
   },
-  liveContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FEE2E2',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
+  infoContainer: {
+    flex: 1,
+    paddingRight: Spacing.sm,
   },
-  liveDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: Colors.status.error,
-    marginRight: 6,
+  dateText: {
+    color: Colors.primary,
+    marginBottom: 4,
+    letterSpacing: 0.5,
   },
-  liveText: {
-    color: Colors.status.error,
-    fontSize: 10,
+  matchTitle: {
+    marginBottom: 2,
+    fontSize: 16,
   },
   teamsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.xl,
-    paddingHorizontal: Spacing.md,
+    paddingTop: 4,
   },
-  team: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  logoPlaceholder: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#F3F4F6',
+  teamAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
   },
-  logoInitial: {
-    fontSize: 24,
-    color: Colors.primary,
-  },
-  teamName: {
-    fontSize: 14,
-  },
-  vsContainer: {
-    paddingHorizontal: Spacing.md,
+  divider: {
+    height: 1,
+    width: '100%',
+    marginBottom: Spacing.md,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
   },
-  locationContainer: {
+  timeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 4,
   },
-  locationText: {
-    marginLeft: 4,
-    color: '#64748B',
+  timeText: {
+    marginLeft: 0,
   },
-  detailsButton: {
-    backgroundColor: Colors.primary,
+  viewButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 6,
-  },
-  detailsText: {
-    color: '#FFFFFF',
-    fontSize: 10,
+    borderRadius: 8,
   },
 });

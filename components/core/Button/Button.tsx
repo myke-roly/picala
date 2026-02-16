@@ -51,7 +51,11 @@ export function Button({
         return {
           button: {
             backgroundColor: Colors.primary,
-            boxShadow: '0 4px 12px rgba(233, 30, 99, 0.3)',
+            shadowColor: Colors.primary,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.3,
+            shadowRadius: 12,
+            elevation: 4,
           },
           text: { color: '#FFFFFF' },
           loadingColor: '#FFFFFF',

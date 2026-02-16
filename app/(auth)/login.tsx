@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Text } from '@/components/Text';
-import { Button, BaseInput, ScreenContainer } from '@/components/core';
-import Form from '@/components/Form';
+import { Button } from '@/components/core/Button/Button';
+import { BaseInput } from '@/components/core/Input/BaseInput';
 import { Spacing } from '@/constants/Spacing';
 import { Colors } from '@/constants/Colors';
 import { signIn } from '@/services/auth';
 import { useMutation } from '@/hooks/useMutation';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { ScreenContainer } from '@/components/core';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const params = useLocalSearchParams();
+  const colorScheme = useColorScheme() ?? 'light';
 
   const { mutate: login, loading, error } = useMutation(
     ({ email, password }: { email: string; password: string }) => signIn(email, password),
@@ -53,140 +56,207 @@ const Login = () => {
   };
 
   return (
-    <ScreenContainer>
-      <Form
-        title="Picala"
-        fields={[
-          {
-            key: 'email',
-            label: 'Email Address',
-            placeholder: 'Enter your email',
-            value: email,
-            onChangeText: (text: string) => {
-              setEmail(text);
-              if (emailError) validateEmail(text);
-            },
-            keyboardType: 'email-address',
-            autoCapitalize: 'none',
-            leftIcon: 'envelope.fill',
-            error: emailError,
-            autoComplete: 'email',
-          },
-          {
-            key: 'password',
-            label: 'Password',
-            placeholder: 'Enter your password',
-            value: password,
-            onChangeText: setPassword,
-            secureTextEntry: !showPassword,
-            autoCapitalize: 'none',
-            leftIcon: 'lock.fill',
-            autoComplete: 'password',
-            renderAfter: (
-              <TouchableOpacity
-                onPress={() => router.push('/forgot-password')}
-                style={styles.forgotPassword}
-              >
-                <Text variant="link" weight="medium" style={styles.forgotPasswordText}>
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
-            ),
-          },
-        ]}
-        buttons={[
-          {
-            title: 'Sign In',
-            onPress: handleLogin,
-            variant: 'primary',
-            loading: loading,
-          },
-        ]}
-        success={success}
-        error={error || undefined}
+    <ScreenContainer withScroll style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
       >
-        <View style={styles.header}>
-          <Text variant="body" opacity={0.7} style={styles.subtitle}>
-            Sign in to find and join matches around you
-          </Text>
-        </View>
+        <View style={[
+          styles.card,
+          {
+            backgroundColor: Colors[colorScheme].card,
+            borderColor: Colors[colorScheme].border,
+          }
+        ]}>
+          <View style={styles.header}>
+            <Text
+              style={[styles.title, { color: Colors.primary }]}
+              weight="bold"
+            >
+              Picala
+            </Text>
+            <Text
+              style={[
+                styles.subtitle,
+                { color: Colors[colorScheme].text.secondary }
+              ]}
+              weight="medium"
+            >
+              YOUR SPORTS BETTING COMPANION
+            </Text>
+            <Text
+              variant="h3"
+              weight="semibold"
+              style={[
+                styles.heading,
+                { color: Colors[colorScheme].text.primary }
+              ]}
+            >
+              Sign in to your account
+            </Text>
+          </View>
 
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text variant="caption" style={styles.dividerText}>OR</Text>
-          <View style={styles.dividerLine} />
-        </View>
+          <View style={styles.form}>
+            <BaseInput
+              label="Email Address"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                if (emailError) validateEmail(text);
+              }}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              leftIcon="envelope.fill"
+              error={emailError}
+              required
+            />
 
-        <Button
-          variant="secondary"
-          title="Create Account"
-          onPress={() => router.push('/register')}
-          style={styles.button}
-        />
-      </Form>
+            <BaseInput
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Enter your password"
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              autoComplete="password"
+              leftIcon="lock.fill"
+              rightIcon={showPassword ? "eye.slash.fill" : "eye.fill"}
+              onRightIconPress={() => setShowPassword(!showPassword)}
+              required
+            />
+
+            {error && (
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText} variant="small">
+                  {error}
+                </Text>
+              </View>
+            )}
+
+            {success && (
+              <View style={styles.successContainer}>
+                <Text style={styles.successText} variant="small">
+                  {success}
+                </Text>
+              </View>
+            )}
+
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Sign in"
+                onPress={handleLogin}
+                loading={loading}
+                variant="primary"
+                size="large"
+              />
+
+              <Button
+                title="Don't have an account? Sign up"
+                onPress={() => router.push('/register')}
+                variant="outline"
+                size="large"
+              />
+            </View>
+
+            <TouchableOpacity
+              onPress={() => router.push('/forgot-password')}
+              style={styles.forgotPassword}
+            >
+              <Text
+                variant="small"
+                weight="medium"
+                style={[
+                  styles.forgotPasswordText,
+                  { color: Colors[colorScheme].text.secondary }
+                ]}
+              >
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingVertical: Spacing.xl,
+    justifyContent: 'center',
+    minHeight: '100%',
+  },
+  keyboardView: {
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+    maxWidth: 400,
+    alignSelf: 'center',
+  },
+  card: {
+    borderRadius: Spacing.borderRadius.xl,
+    borderWidth: 1,
+    padding: Spacing.xl * 1.5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 2,
+  },
   header: {
-    marginTop: 60,
-    marginBottom: 40,
     alignItems: 'center',
+    marginBottom: Spacing.xl,
   },
   title: {
-    color: Colors.primary,
-    fontSize: 40,
-    marginBottom: 8,
+    fontSize: 32,
+    marginBottom: Spacing.xs,
+    letterSpacing: -0.5,
   },
   subtitle: {
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: Spacing.xl,
     textAlign: 'center',
-    paddingHorizontal: 20,
+  },
+  heading: {
+    textAlign: 'center',
   },
   form: {
-    flex: 1,
+    gap: Spacing.sm,
+  },
+  buttonContainer: {
+    gap: Spacing.md,
+    marginTop: Spacing.sm,
   },
   forgotPassword: {
-    alignSelf: 'flex-end',
-    marginBottom: Spacing.xxl,
+    alignItems: 'center',
+    marginTop: Spacing.lg,
   },
   forgotPasswordText: {
-    color: Colors.primary,
-  },
-  button: {
-    marginBottom: Spacing.md,
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: Spacing.xl,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#E2E8F0',
-  },
-  dividerText: {
-    marginHorizontal: Spacing.md,
-    color: '#94A3B8',
-  },
-  successContainer: {
-    backgroundColor: '#DCFCE7',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  successText: {
-    color: '#166534',
+    textDecorationLine: 'underline',
   },
   errorContainer: {
     backgroundColor: '#FEE2E2',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 20,
+    padding: Spacing.md,
+    borderRadius: Spacing.borderRadius.sm,
+    marginBottom: Spacing.md,
   },
   errorText: {
-    color: '#991B1B',
+    color: '#DC2626',
+    textAlign: 'center',
+  },
+  successContainer: {
+    backgroundColor: '#DCFCE7',
+    padding: Spacing.md,
+    borderRadius: Spacing.borderRadius.sm,
+    marginBottom: Spacing.md,
+  },
+  successText: {
+    color: '#16A34A',
+    textAlign: 'center',
   },
 });
 
