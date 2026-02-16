@@ -70,6 +70,7 @@ const Login = () => {
         ]}>
           <View style={styles.header}>
             <Text
+              variant="h1"
               style={[styles.title, { color: Colors.primary }]}
               weight="bold"
             >
@@ -213,7 +214,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   title: {
-    fontSize: 32,
     marginBottom: Spacing.xs,
     letterSpacing: -0.5,
   },

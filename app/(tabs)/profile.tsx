@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Pressable, ScrollView, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
 import { Button, ScreenContainer, BaseCard } from '@/components/core';
 import { Colors } from '@/constants/Colors';
@@ -30,7 +30,7 @@ const ProfileScreen = () => {
         onPress: async () => {
           try {
             await signOut();
-            router.replace('/(auth)/login');
+            router.replace('/(tabs)');
           } catch (error) {
             Alert.alert('Error', 'Failed to log out.');
           }
@@ -64,6 +64,13 @@ const ProfileScreen = () => {
 
   const userInitial = user?.email?.[0].toUpperCase() || 'P';
   const userName = user?.email?.split('@')[0] || 'User';
+
+  if (!isAuthenticated) {
+    return <ScreenContainer withScroll>
+      <Text variant="h2" weight="bold">You are not logged in</Text>
+      <Button title="Log In" onPress={() => router.push('/(auth)/login')} />
+    </ScreenContainer>;
+  }
 
   return (
     <ScreenContainer withScroll>
