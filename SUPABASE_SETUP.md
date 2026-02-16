@@ -50,11 +50,12 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-
 
 ## 6. Configure Deep Links for Email Verification
 
-1. In your Supabase dashboard, go to "Authentication" → "Settings"
-2. Under "URL Configuration", set:
-   - **Site URL**: `picala://` (your app's URL scheme)
-   - **Redirect URLs**: Add `picala://verify-email`
-3. Save the changes
+1. In your Supabase dashboard, go to "Authentication" → "URL Configuration"
+2. Set **Site URL** to your website URL (e.g., `https://example.com`) or a dummy URL.
+3. Under **Redirect URLs**, add the following:
+   - `picala://verify-email` (for Development Builds / Production)
+   - `exp://<YOUR_IP>:8081/--/verify-email` (for Expo Go - see section 8)
+4. Save the changes.
 
 ## 7. Set Up Database Tables (Optional)
 
@@ -89,7 +90,25 @@ CREATE POLICY "Users can insert own profile" ON profiles
   FOR INSERT WITH CHECK (auth.uid() = id);
 ```
 
-## 8. Test Your Setup
+## 8. Deep Link Testing & Configuration
+
+### Option A: Development Build / Production (Recommended)
+- **Redirect URL in Supabase**: `picala://verify-email`
+- **How to Run**: `npx expo run:ios` or `npx expo run:android`
+- **Why**: Persistent URL scheme, works exactly like production.
+
+### Option B: Expo Go (Standard)
+- **Redirect URL in Supabase**: `exp://<YOUR_IP>:8081/--/verify-email`
+  - *Note*: Replace `<YOUR_IP>` with your computer's IP address (e.g., `192.168.1.5`).
+  - You can find this IP when running `npx expo start` (look for the LAN URL).
+  - The `/--/` part is crucial: it tells Expo Go to pass the deep link path to your app.
+- **Important**: If your IP changes (e.g., different Wi-Fi), you must update this URL in Supabase.
+
+### Testing Commands
+1. **Simulator (iOS - Dev Build)**: `xcrun simctl openurl booted picala://verify-email`
+2. **Emulator (Android - Dev Build)**: `adb shell am start -W -a android.intent.action.VIEW -d "picala://verify-email"`
+
+## 9. Test Your Setup
 
 1. Start your Expo development server: `npm start`
 2. Try to register a new account using the registration form
@@ -97,22 +116,6 @@ CREATE POLICY "Users can insert own profile" ON profiles
 4. Click the verification link - it should open your app
 5. Try to sign in with the created account
 6. Verify that you can sign out and sign back in
-
-## 9. Email Confirmation (Optional)
-
-By default, Supabase requires email confirmation. To disable this for development:
-
-1. Go to "Authentication" → "Settings"
-2. Under "User Registration", toggle off "Enable email confirmations"
-
-## Deep Link Testing
-
-To test deep links:
-
-1. **Development**: Use Expo Go and test with `picala://verify-email`
-2. **Production**: Build your app and test with real email verification links
-3. **Simulator**: Use `xcrun simctl openurl booted picala://verify-email` (iOS)
-4. **Emulator**: Use `adb shell am start -W -a android.intent.action.VIEW -d "picala://verify-email"` (Android)
 
 ## Troubleshooting
 

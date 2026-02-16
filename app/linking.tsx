@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
-import {useLocalSearchParams, useRouter} from 'expo-router';
-import {Text} from '@/components/Text';
-import {verifyEmail} from '@/services/auth';
-import {DEEP_LINK_PATHS} from '@/constants/deepLinks';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Text } from '@/components/Text';
+import { exchangeCodeForSession, setSession, verifyOtp } from '@/services/auth';
+import { DEEP_LINK_PATHS } from '@/constants/deepLinks';
 
 const LinkingScreen = () => {
   const params = useLocalSearchParams();
@@ -13,32 +13,37 @@ const LinkingScreen = () => {
   const handleVerifyEmail = async () => {
     try {
       setMessage('Verifying email...');
-      const token = params.token as string;
+      const { token, code, access_token, refresh_token } = params;
 
-      await verifyEmail(token);
+      if (code) {
+        await exchangeCodeForSession(code as string);
+      } else if (access_token && refresh_token) {
+        await setSession(access_token as string, refresh_token as string);
+      } else if (token) {
+        await verifyOtp(token as string);
+      } else {
+        throw new Error('No verification token or code found.');
+      }
 
       setTimeout(() => {
         router.replace('/(auth)/login?verified=true');
-      }, 2000);
+      }, 1000);
     } catch (error) {
+      console.error('Link verification error:', error);
       router.replace('/(auth)/invalid-magic-link');
     }
   };
 
   useEffect(() => {
     const handleVerification = async () => {
-      const path = params.path as string;
-      switch (true) {
-        case path.includes(DEEP_LINK_PATHS.VERIFY_EMAIL):
-          await handleVerifyEmail();
-          break;
-        default:
-          break;
+      // Check if we have any relevant auth parameters
+      if (params.code || params.token || (params.access_token && params.refresh_token)) {
+        await handleVerifyEmail();
       }
     };
 
     handleVerification();
-  }, [params.path, handleVerifyEmail]);
+  }, [params, handleVerifyEmail]);
 
   return (
     <View style={styles.container}>
