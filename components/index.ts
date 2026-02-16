@@ -12,7 +12,6 @@ export { default as Icon } from './Icon';
 export { default as IconPress } from './IconPress';
 export { default as TeamMatch } from './TeamMatch';
 export { default as CategoryFilter } from './CategoryFilter';
-export { default as FeaturedCard } from './FeaturedCard';
 export { default as PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 export { default as AuthLogo } from './AuthLogo';
 export { Text } from './Text';
