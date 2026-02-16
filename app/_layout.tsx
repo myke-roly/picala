@@ -1,24 +1,37 @@
-import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
-import {useFonts} from 'expo-font';
-import {Stack} from 'expo-router';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import {StatusBar} from 'expo-status-bar';
-import {useEffect} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import {useColorScheme} from '@/hooks/useColorScheme';
-import {AuthProvider, useAuth} from '@/contexts/AuthContext';
-import {setupDeepLinkListener} from '@/utils/deepLinkHandler';
-import {AuthLoadingScreen} from '@/components/AuthLoadingScreen';
+import {
+  Inter_300Light,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold
+} from '@expo-google-fonts/inter';
+
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { setupDeepLinkListener } from '@/utils/deepLinkHandler';
+import { AuthLoadingScreen } from '@/components/AuthLoadingScreen';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutContent() {
-  const {loading} = useAuth();
+  const { loading } = useAuth();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Inter_300Light,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
   });
 
   useEffect(() => {
@@ -41,10 +54,10 @@ function RootLayoutContent() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-        <Stack.Screen name="(auth)" options={{headerShown: false}} />
-        <Stack.Screen name="linking" options={{headerShown: false}} />
-        <Stack.Screen name="match" options={{headerShown: false}} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="linking" options={{ headerShown: false }} />
+        <Stack.Screen name="match" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

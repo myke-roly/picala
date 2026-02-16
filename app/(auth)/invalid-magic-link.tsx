@@ -1,7 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
-import {useRouter} from 'expo-router';
-import {Text, CustomButton} from '@/components/';
+import { View, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Text } from '@/components/Text';
+import { Button, ScreenContainer, BaseCard } from '@/components/core';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 const InvalidMagicLinkScreen = () => {
   const router = useRouter();
@@ -15,101 +19,94 @@ const InvalidMagicLinkScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.icon}>🔗</Text>
-
-          <Text style={styles.title}>Invalid Magic Link</Text>
-
-          <Text style={styles.message}>The magic link you used is invalid or has expired. This can happen if:</Text>
-
-          <View style={styles.reasonsContainer}>
-            <Text style={styles.reason}>• The link has expired</Text>
-            <Text style={styles.reason}>• The link was already used</Text>
-            <Text style={styles.reason}>• The link was modified</Text>
-            <Text style={styles.reason}>• You're using an old link</Text>
-          </View>
-
-          <Text style={styles.helpText}>Please request a new magic link or try logging in with your credentials.</Text>
-
-          <View style={styles.buttonContainer}>
-            <CustomButton
-              fullWidth
-              title="Go to Login"
-              onPress={handleGoToLogin}
-              variant="primary"
-              style={styles.button}
-            />
-
-            <CustomButton
-              fullWidth
-              title="Create Account"
-              onPress={handleGoToRegister}
-              variant="outline"
-              style={styles.button}
-            />
-          </View>
+    <ScreenContainer>
+      <View style={styles.content}>
+        <View style={styles.iconContainer}>
+          <IconSymbol name="link.badge.plus" size={48} color={Colors.status.error} />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        <Text variant="h1" center style={styles.title}>Invalid Link</Text>
+
+        <Text variant="body" center opacity={0.7} style={styles.message}>
+          The magic link you used is invalid or has expired. This can happen for several reasons:
+        </Text>
+
+        <BaseCard style={styles.reasonsCard} padding="lg">
+          <ReasonItem text="The link has expired" />
+          <ReasonItem text="The link was already used" />
+          <ReasonItem text="The link was modified" />
+          <ReasonItem text="You're using an older link" />
+        </BaseCard>
+
+        <Text variant="caption" center opacity={0.5} style={styles.helpText}>
+          Please request a new magic link or try logging in with your password.
+        </Text>
+
+        <View style={styles.buttonContainer}>
+          <Button
+            variant="primary"
+            title="Back to Login"
+            onPress={handleGoToLogin}
+          />
+          <Button
+            variant="secondary"
+            title="Create Account"
+            onPress={handleGoToRegister}
+            style={{ marginTop: Spacing.md }}
+          />
+        </View>
+      </View>
+    </ScreenContainer>
   );
 };
 
+const ReasonItem = ({ text }: { text: string }) => (
+  <View style={styles.reasonItem}>
+    <IconSymbol name="xmark.circle.fill" size={16} color={Colors.status.error} />
+    <Text variant="body" style={styles.reasonText}>{text}</Text>
+  </View>
+);
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-  },
   content: {
     flex: 1,
     alignItems: 'center',
-    width: '100%',
-    padding: 20,
+    justifyContent: 'center',
+    paddingVertical: 40,
   },
-  icon: {
-    fontSize: 20,
-    marginBottom: 20,
-    color: '#ef4444',
+  iconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#FEE2E2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.xxl,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 16,
-    textAlign: 'center',
-    color: '#1f2937',
+    marginBottom: Spacing.md,
+    color: Colors.status.error,
   },
   message: {
-    fontSize: 16,
-    textAlign: 'center',
+    marginBottom: Spacing.xl,
     lineHeight: 24,
-    marginBottom: 20,
-    color: '#6b7280',
   },
-  reasonsContainer: {
-    alignSelf: 'stretch',
-    marginBottom: 20,
-    paddingHorizontal: 20,
+  reasonsCard: {
+    width: '100%',
+    gap: Spacing.md,
+    marginBottom: Spacing.xl,
   },
-  reason: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 8,
-    color: '#6b7280',
-    textAlign: 'left',
+  reasonItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  reasonText: {
+    marginLeft: 12,
   },
   helpText: {
-    fontSize: 14,
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 30,
-    color: '#9ca3af',
+    marginBottom: Spacing.xxl,
   },
   buttonContainer: {
-    width: '100%',
-    gap: 12,
-  },
-  button: {
     width: '100%',
   },
 });

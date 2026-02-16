@@ -1,12 +1,17 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, ScrollView, SafeAreaView} from 'react-native';
-import {useLocalSearchParams} from 'expo-router';
-import {Text, CustomButton} from '@/components/';
-import {resendVerificationEmail} from '@/services/auth';
+import React, { useState } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Text } from '@/components/Text';
+import { Button, ScreenContainer } from '@/components/core';
+import { resendVerificationEmail } from '@/services/auth';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 const SendEmailScreen = () => {
   const params = useLocalSearchParams();
-  const {email} = params;
+  const { email } = params;
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -16,8 +21,8 @@ const SendEmailScreen = () => {
 
     try {
       await resendVerificationEmail(email as string);
+      Alert.alert('Email Sent', 'We have resent the verification email.');
     } catch (error: any) {
-      console.error('Send email error:', error);
       setError(error.message || 'Failed to send email. Please try again.');
     } finally {
       setLoading(false);
@@ -25,94 +30,90 @@ const SendEmailScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.content}>
-          <Text style={styles.icon}>📧</Text>
-
-          <Text style={styles.title}>Email Sent to {email}</Text>
-
-          <Text style={styles.message}>
-            We've sent a magic link to your email address. Please check your inbox and click the link to continue.
-          </Text>
-
-          <Text style={styles.helpText}>Don't see the email? Check your spam folder or try resending.</Text>
-
-          {error && <Text style={styles.errorText}>{error}</Text>}
-
-          <View style={styles.buttonContainer}>
-            <CustomButton
-              loading={loading}
-              fullWidth
-              title="Resend Email"
-              onPress={handleResendEmail}
-              style={styles.button}
-            />
-          </View>
+    <ScreenContainer>
+      <View style={styles.content}>
+        <View style={styles.iconContainer}>
+          <IconSymbol name="envelope.badge.fill" size={48} color={Colors.primary} />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+        <Text variant="h1" center style={styles.title}>Check your email</Text>
+
+        <Text variant="body" center opacity={0.7} style={styles.message}>
+          We've sent a magic link to <Text weight="bold" style={{ color: Colors.primary }}>{email}</Text>.
+          Click the link in the email to verify your account and continue.
+        </Text>
+
+        <Text variant="caption" center opacity={0.5} style={styles.helpText}>
+          Don't see the email? Check your spam folder or try resending.
+        </Text>
+
+        {error ? (
+          <View style={styles.errorContainer}>
+            <Text variant="small" style={styles.errorText}>{error}</Text>
+          </View>
+        ) : null}
+
+        <View style={styles.buttonContainer}>
+          <Button
+            variant="primary"
+            title="Resend Email"
+            onPress={handleResendEmail}
+            loading={loading}
+          />
+          <Button
+            variant="secondary"
+            title="Back to Login"
+            onPress={() => router.replace('/(auth)/login')}
+            style={{ marginTop: Spacing.md }}
+          />
+        </View>
+      </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
   content: {
     flex: 1,
     alignItems: 'center',
-    width: '100%',
-    padding: 20,
+    justifyContent: 'center',
+    paddingVertical: 40,
   },
-  icon: {
-    fontSize: 25,
-    marginBottom: 20,
-    color: '#3b82f6',
+  iconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#FCE7F3',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.xxl,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 16,
-    textAlign: 'center',
-    color: '#1f2937',
+    marginBottom: Spacing.md,
+    color: Colors.primary,
   },
   message: {
-    fontSize: 16,
-    textAlign: 'center',
+    marginVertical: Spacing.lg,
     lineHeight: 24,
-    marginBottom: 30,
-    color: '#6b7280',
   },
   helpText: {
-    fontSize: 14,
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 30,
-    color: '#9ca3af',
+    marginBottom: Spacing.xxl,
+  },
+  errorContainer: {
+    backgroundColor: '#FEE2E2',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+    width: '100%',
   },
   errorText: {
-    color: '#ef4444',
+    color: '#991B1B',
     textAlign: 'center',
-    marginBottom: 20,
-    fontSize: 14,
   },
   buttonContainer: {
     width: '100%',
-    gap: 12,
-  },
-  button: {
-    width: '100%',
+    marginTop: Spacing.xl,
   },
 });
 
 export default SendEmailScreen;
-
-SendEmailScreen.options = {
-  headerShown: false,
-};

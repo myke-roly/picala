@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { Text } from '@/components/Text';
+import { Colors } from '@/constants/Colors';
+import { Typography } from '@/constants/Typography';
 
 interface PasswordStrengthIndicatorProps {
   password: string;
@@ -9,7 +12,7 @@ type StrengthLevel = 'weak' | 'fair' | 'good' | 'strong';
 
 const getPasswordStrength = (password: string): { level: StrengthLevel; score: number } => {
   let score = 0;
-  
+
   if (!password) {
     return { level: 'weak', score: 0 };
   }
@@ -29,15 +32,15 @@ const getPasswordStrength = (password: string): { level: StrengthLevel; score: n
 const getStrengthColor = (level: StrengthLevel): string => {
   switch (level) {
     case 'weak':
-      return '#ef4444';
+      return Colors.status.error;
     case 'fair':
-      return '#f59e0b';
+      return Colors.status.warning;
     case 'good':
-      return '#10b981';
+      return Colors.status.success;
     case 'strong':
-      return '#059669';
+      return Colors.status.win;
     default:
-      return '#e5e7eb';
+      return '#E2E8F0';
   }
 };
 
@@ -72,7 +75,9 @@ const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({ p
       <View style={styles.barContainer}>
         <View style={[styles.bar, { width: `${percentage}%`, backgroundColor: color }]} />
       </View>
-      <Text style={[styles.text, { color }]}>Password strength: {text}</Text>
+      <Text variant="small" weight="medium" style={{ color }}>
+        Password strength: {text}
+      </Text>
     </View>
   );
 };
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
   },
   barContainer: {
     height: 4,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: '#E2E8F0',
     borderRadius: 2,
     overflow: 'hidden',
     marginBottom: 4,
@@ -92,10 +97,6 @@ const styles = StyleSheet.create({
   bar: {
     height: '100%',
     borderRadius: 2,
-  },
-  text: {
-    fontSize: 12,
-    fontWeight: '500',
   },
 });
 

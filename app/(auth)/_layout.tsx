@@ -1,21 +1,19 @@
-import {Stack} from 'expo-router';
-import {GradientBackground} from '@/components';
+import { Stack } from 'expo-router';
+import { GradientBackground } from '@/components';
 
 export default function AuthLayout() {
   return (
-    <GradientBackground>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {backgroundColor: 'transparent'},
-        }}
-      >
-        <Stack.Screen name="login" />
-        <Stack.Screen name="register" />
-        <Stack.Screen name="send-email" />
-        <Stack.Screen name="invalid-magic-link" />
-        <Stack.Screen name="forgot-password" />
-      </Stack>
-    </GradientBackground>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: { backgroundColor: 'transparent' },
+      }}
+    >
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="send-email" />
+      <Stack.Screen name="invalid-magic-link" />
+      <Stack.Screen name="forgot-password" />
+    </Stack>
   );
 }

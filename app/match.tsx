@@ -1,24 +1,20 @@
-
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { CustomButton, Text, Header, IconPress } from '@/components';
-import TeamMatch from '@/components/TeamMatch';
-import { BackgroundColors, TextColors, AccentColors } from '@/constants';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Share, Alert } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Text } from '@/components/Text';
+import { Button, BaseCard, ScreenContainer } from '@/components/core';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
 import { joinMatch } from '@/services/matches';
-import { Share, Alert } from 'react-native';
 
 export default function MatchScreen() {
   const router = useRouter();
-
-  const handleBackPress = () => {
-    router.back();
-  };
+  const { matchId } = useLocalSearchParams();
 
   const handleJoinMatch = async () => {
     try {
-      const success = await joinMatch('current-match-id');
+      const success = await joinMatch(matchId as string || 'current-match-id');
       if (success) {
         Alert.alert('Success', 'You have joined the match!');
       }
@@ -31,7 +27,7 @@ export default function MatchScreen() {
     try {
       await Share.share({
         message: 'Check out this match on Picala!',
-        url: 'https://picala.app/match/current-match-id', // Mock URL
+        url: `https://picala.app/match/${matchId || 'id'}`,
       });
     } catch (error) {
       Alert.alert('Error', 'Could not share match.');
@@ -39,203 +35,205 @@ export default function MatchScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Header
-        title="Barcelona vs Real Madrid"
-        centerTitle
-        left={<IconPress name="chevron-back" size="md" color="white" onPress={handleBackPress} />}
-        right={<IconPress name="share-outline" size="md" color="white" onPress={handleShareMatch} />}
-      />
+    <ScreenContainer withScroll>
+      <View style={styles.navBar}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.navButton}>
+          <IconSymbol name="chevron.left" size={24} color={Colors.primary} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleShareMatch} style={styles.navButton}>
+          <IconSymbol name="square.and.arrow.up" size={24} color={Colors.primary} />
+        </TouchableOpacity>
+      </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        {/* Match Header */}
-        <TeamMatch
-          team1={{ logo: '', name: 'Barcelona' }}
-          team2={{ logo: '', name: 'Real Madrid' }}
-          matchTime="20:00"
-          matchDate="Sat, 15 Apr"
-          style={{ marginBottom: 24 }}
-        />
+      <View style={styles.matchHero}>
+        <View style={styles.teamSection}>
+          <View style={styles.logoPlaceholder}>
+            <Text variant="h2" weight="bold">B</Text>
+          </View>
+          <Text variant="body" weight="bold" center>Barcelona</Text>
+        </View>
 
-        {/* Match Info */}
-        <View style={styles.infoSection}>
-          <View style={styles.infoCard}>
-            <View style={styles.infoRow}>
-              <Ionicons name="location-outline" size={20} color={TextColors.secondary} />
-              <Text>Camp Nou, Barcelona</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Ionicons name="calendar-outline" size={20} color={TextColors.secondary} />
-              <Text>Saturday, April 15, 2024</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Ionicons name="time-outline" size={20} color={TextColors.secondary} />
-              <Text>20:00 - 22:00 (2 hours)</Text>
-            </View>
+        <View style={styles.vsSection}>
+          <Text variant="h3" weight="bold" opacity={0.2}>VS</Text>
+          <View style={styles.timeBadge}>
+            <Text variant="small" weight="bold" style={styles.timeText}>20:00</Text>
           </View>
         </View>
 
-        {/* Player Status */}
-        <View style={styles.playerSection}>
-          <Text variant="subtitle" level="md" strong>
-            Player Status
-          </Text>
-          <View style={styles.playerCard}>
-            <View style={styles.playerStats}>
-              <View style={styles.statItem}>
-                <Text variant="title" level="lg" strong>
-                  8
-                </Text>
-                <Text variant="caption" color="secondary">
-                  Current Players
-                </Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text variant="title" level="lg" strong>
-                  11
-                </Text>
-                <Text variant="caption" color="secondary">
-                  Max Players
-                </Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text variant="title" level="lg" strong>
-                  3
-                </Text>
-                <Text variant="caption" color="secondary">
-                  Needed
-                </Text>
-              </View>
-            </View>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '73%' }]} />
-            </View>
+        <View style={styles.teamSection}>
+          <View style={styles.logoPlaceholder}>
+            <Text variant="h2" weight="bold">R</Text>
           </View>
+          <Text variant="body" weight="bold" center>Real Madrid</Text>
         </View>
+      </View>
 
-        {/* Match Rules */}
-        <View style={styles.rulesSection}>
-          <Text variant="subtitle" level="md" strong>
-            Match Rules
-          </Text>
-          <View style={styles.rulesCard}>
-            <View style={styles.ruleItem}>
-              <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <Text>11 players per team</Text>
-            </View>
-            <View style={styles.ruleItem}>
-              <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <Text>90 minutes duration</Text>
-            </View>
-            <View style={styles.ruleItem}>
-              <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <Text>Bring your own equipment</Text>
-            </View>
-            <View style={styles.ruleItem}>
-              <Ionicons name="checkmark-circle" size={16} color={AccentColors.primary} />
-              <Text>Fair play required</Text>
-            </View>
+      <View style={styles.content}>
+        <Text variant="h3" weight="bold" style={styles.sectionTitle}>Match Information</Text>
+        <BaseCard padding="md" style={styles.infoCard}>
+          <InfoRow icon="mappin.and.ellipse" text="Camp Nou, Barcelona" />
+          <InfoRow icon="calendar" text="Saturday, April 15, 2024" />
+          <InfoRow icon="clock" text="20:00 - 22:00 (2 hours)" />
+        </BaseCard>
+
+        <Text variant="h3" weight="bold" style={styles.sectionTitle}>Player Availability</Text>
+        <BaseCard padding="lg">
+          <View style={styles.statsGrid}>
+            <StatItem label="Players" value="8" total="11" />
+            <StatItem label="Needed" value="3" />
+            <StatItem label="Waitlist" value="0" />
           </View>
-        </View>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: '73%' }]} />
+          </View>
+        </BaseCard>
 
-        {/* Action Buttons */}
-        <View style={styles.actionSection}>
-          <CustomButton
+        <Text variant="h3" weight="bold" style={styles.sectionTitle}>Rules & Requirements</Text>
+        <BaseCard padding="md">
+          <RuleItem text="11 players per team" />
+          <RuleItem text="90 minutes duration" />
+          <RuleItem text="Bring your own equipment" />
+          <RuleItem text="Fair play required" />
+        </BaseCard>
+
+        <View style={styles.actions}>
+          <Button
+            variant="primary"
             title="Join Match"
             onPress={handleJoinMatch}
-            variant="primary"
-            size="large"
-            style={styles.joinButton}
           />
-          <CustomButton
+          <Button
+            variant="secondary"
             title="Contact Organizer"
-            onPress={() => console.log('Contact organizer')}
-            variant="outline"
-            size="medium"
-            style={styles.contactButton}
+            onPress={() => Alert.alert('Contact', 'Organizer contact details coming soon.')}
+            style={{ marginTop: Spacing.md }}
           />
         </View>
-      </ScrollView>
-    </View>
+      </View>
+
+      <View style={{ height: 100 }} />
+    </ScreenContainer>
   );
 }
 
+const InfoRow = ({ icon, text }: { icon: string; text: string }) => (
+  <View style={styles.infoRow}>
+    <IconSymbol name={icon as any} size={20} color={Colors.primary} />
+    <Text variant="body" style={styles.infoRowText}>{text}</Text>
+  </View>
+);
+
+const StatItem = ({ label, value, total }: { label: string; value: string; total?: string }) => (
+  <View style={styles.statItem}>
+    <View style={styles.statValueContainer}>
+      <Text variant="h3" weight="bold">{value}</Text>
+      {total && <Text variant="caption" opacity={0.5}>/{total}</Text>}
+    </View>
+    <Text variant="small" opacity={0.6}>{label}</Text>
+  </View>
+);
+
+const RuleItem = ({ text }: { text: string }) => (
+  <View style={styles.ruleItem}>
+    <IconSymbol name="checkmark.circle.fill" size={16} color={Colors.status.success} />
+    <Text variant="body" style={styles.ruleItemText}>{text}</Text>
+  </View>
+);
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: BackgroundColors.light,
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: Spacing.md,
   },
-  scrollView: {
-    flex: 1,
-    padding: 16,
+  navButton: {
+    padding: 8,
   },
-  infoSection: {
-    marginBottom: 20,
+  matchHero: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: Spacing.xl,
+    marginBottom: Spacing.lg,
+  },
+  teamSection: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  vsSection: {
+    alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+  },
+  logoPlaceholder: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  timeBadge: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginTop: 8,
+  },
+  timeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+  },
+  content: {
+    flex: 1,
+  },
+  sectionTitle: {
+    marginBottom: Spacing.md,
+    marginTop: Spacing.lg,
   },
   infoCard: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    padding: 16,
+    gap: Spacing.md,
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
   },
-
-  playerSection: {
-    paddingHorizontal: 16,
-    marginBottom: 20,
+  infoRowText: {
+    marginLeft: 12,
   },
-
-  playerCard: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    padding: 16,
-  },
-  playerStats: {
+  statsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 16,
+    marginBottom: Spacing.lg,
   },
   statItem: {
     alignItems: 'center',
   },
-
+  statValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
   progressBar: {
     height: 8,
-    backgroundColor: BackgroundColors.elevated,
+    backgroundColor: '#F1F5F9',
     borderRadius: 4,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: AccentColors.primary,
-    borderRadius: 4,
-  },
-  rulesSection: {
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  rulesCard: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: Colors.primary,
   },
   ruleItem: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
   },
-
-  actionSection: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
+  ruleItemText: {
+    marginLeft: 10,
   },
-  joinButton: {
-    marginBottom: 12,
-  },
-  contactButton: {
-    marginBottom: 20,
+  actions: {
+    marginTop: Spacing.xxl,
   },
 });

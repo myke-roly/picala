@@ -1,14 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
-import { BackgroundColors, TextColors, AccentColors } from '@/constants/Colors';
+import { ScreenContainer, BaseInput } from '@/components/core';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 
 interface Message {
   id: string;
   user: {
     name: string;
-    avatar?: string;
-    online?: boolean;
+    avatarInitial: string;
+    online: boolean;
   };
   lastMessage: string;
   time: string;
@@ -18,203 +22,187 @@ interface Message {
 const MOCK_MESSAGES: Message[] = [
   {
     id: '1',
-    user: { name: 'Alex Johnson', online: true },
+    user: { name: 'Alex Johnson', avatarInitial: 'A', online: true },
     lastMessage: 'Hey! Are you coming to the match tomorrow?',
-    time: '2 min',
+    time: '2m',
     unread: 2,
   },
   {
     id: '2',
-    user: { name: 'Sarah Miller', online: false },
+    user: { name: 'Sarah Miller', avatarInitial: 'S', online: false },
     lastMessage: 'Great game! Lets play again soon.',
-    time: '1 hour',
+    time: '1h',
     unread: 0,
   },
   {
     id: '3',
-    user: { name: 'Mike Davis', online: true },
+    user: { name: 'Mike Davis', avatarInitial: 'M', online: true },
     lastMessage: 'Can you bring extra balls?',
-    time: '3 hours',
+    time: '3h',
     unread: 1,
   },
   {
     id: '4',
-    user: { name: 'Emily Chen', online: false },
+    user: { name: 'Emily Chen', avatarInitial: 'E', online: false },
     lastMessage: 'Thanks for the invite!',
     time: 'Yesterday',
     unread: 0,
   },
 ];
 
-const MessageItem = ({ message }: { message: Message }) => {
-  return (
-    <Pressable style={({ pressed }) => [styles.messageCard, pressed && { opacity: 0.8 }]}>
-      <View style={styles.avatarContainer}>
-        <View style={styles.avatar}>
-          <Text variant="title" color={BackgroundColors.white}>
-            {message.user.name.charAt(0)}
-          </Text>
-        </View>
-        {message.user.online && <View style={styles.onlineIndicator} />}
-      </View>
-
-      <View style={styles.messageContent}>
-        <View style={styles.messageHeader}>
-          <Text variant="subtitle" strong>
-            {message.user.name}
-          </Text>
-          <Text variant="caption" color={TextColors.secondary}>
-            {message.time}
-          </Text>
-        </View>
-        <View style={styles.messagePreview}>
-          <Text
-            variant="body"
-            color={message.unread > 0 ? TextColors.primary : TextColors.secondary}
-            numberOfLines={1}
-          >
-            {message.lastMessage}
-          </Text>
-          {message.unread > 0 && (
-            <View style={styles.unreadBadge}>
-              <Text variant="caption" color={BackgroundColors.white} strong>
-                {message.unread}
-              </Text>
-            </View>
-          )}
-        </View>
-      </View>
-    </Pressable>
-  );
-};
-
 const MessagesScreen = () => {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = React.useState('');
+
   return (
-    <View style={styles.container}>
+    <ScreenContainer withScroll>
       <View style={styles.header}>
-        <Text variant="title" level="xl" color={TextColors.primary}>
-          Messages
-        </Text>
-        <Text variant="body" color={TextColors.secondary}>
-          Your conversations
-        </Text>
+        <Text variant="h1">Messages</Text>
+        <Text variant="body" opacity={0.6}>Reach out to your teammates</Text>
       </View>
 
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <View style={styles.searchContainer}>
-          <View style={styles.searchBar}>
-            <Text variant="body" color={TextColors.disabled}>
-              Search conversations...
-            </Text>
-          </View>
-        </View>
+      <BaseInput
+        placeholder="Search conversations..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        leftIcon="magnifyingglass"
+        containerStyle={styles.searchBar}
+      />
 
-        <View style={styles.messagesList}>
-          {MOCK_MESSAGES.map(message => (
-            <MessageItem key={message.id} message={message} />
-          ))}
-        </View>
+      <View style={styles.messagesList}>
+        {MOCK_MESSAGES.map((message, index) => (
+          <TouchableOpacity
+            key={message.id}
+            style={[
+              styles.messageItem,
+              index < MOCK_MESSAGES.length - 1 && styles.divider
+            ]}
+          >
+            <View style={styles.avatarContainer}>
+              <View style={styles.avatar}>
+                <Text weight="bold" style={styles.avatarText}>
+                  {message.user.avatarInitial}
+                </Text>
+              </View>
+              {message.user.online && <View style={styles.onlineDot} />}
+            </View>
 
-        <View style={{ height: 100 }} />
-      </ScrollView>
-    </View>
+            <View style={styles.content}>
+              <View style={styles.row}>
+                <Text variant="body" weight="bold" style={styles.name}>
+                  {message.user.name}
+                </Text>
+                <Text variant="caption" opacity={0.5}>
+                  {message.time}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text
+                  variant="body"
+                  numberOfLines={1}
+                  opacity={message.unread > 0 ? 1 : 0.6}
+                  weight={message.unread > 0 ? 'semibold' : 'regular'}
+                  style={styles.lastMessage}
+                >
+                  {message.lastMessage}
+                </Text>
+                {message.unread > 0 && (
+                  <View style={styles.unreadBadge}>
+                    <Text variant="small" weight="bold" style={styles.unreadText}>
+                      {message.unread}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={{ height: 100 }} />
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: BackgroundColors.light,
-  },
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 16,
-    backgroundColor: BackgroundColors.light,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 20,
-  },
-  searchContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    paddingVertical: Spacing.xl,
+    paddingTop: 20,
   },
   searchBar: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderColor: BackgroundColors.elevated,
+    marginBottom: Spacing.xl,
   },
   messagesList: {
-    paddingHorizontal: 20,
-    gap: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: Spacing.borderRadius.lg,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#F1F5F9',
   },
-  messageCard: {
+  messageItem: {
     flexDirection: 'row',
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    alignItems: 'center',
+    padding: Spacing.lg,
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
   },
   avatarContainer: {
     position: 'relative',
-    marginRight: 12,
+    marginRight: Spacing.md,
   },
   avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: AccentColors.alternative,
-    alignItems: 'center',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: Colors.primary,
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  onlineIndicator: {
+  avatarText: {
+    color: '#FFFFFF',
+    fontSize: 20,
+  },
+  onlineDot: {
     position: 'absolute',
     bottom: 2,
     right: 2,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: '#22c55e',
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: Colors.status.success,
     borderWidth: 2,
-    borderColor: BackgroundColors.white,
+    borderColor: '#FFFFFF',
   },
-  messageContent: {
+  content: {
     flex: 1,
-    justifyContent: 'center',
   },
-  messageHeader: {
+  row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 2,
   },
-  messagePreview: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  name: {
+    color: '#1E293B',
+  },
+  lastMessage: {
+    flex: 1,
+    marginRight: Spacing.md,
   },
   unreadBadge: {
-    backgroundColor: AccentColors.primary,
-    borderRadius: 10,
-    minWidth: 20,
+    backgroundColor: Colors.primary,
+    width: 20,
     height: 20,
-    alignItems: 'center',
+    borderRadius: 10,
     justifyContent: 'center',
-    paddingHorizontal: 6,
+    alignItems: 'center',
+  },
+  unreadText: {
+    color: '#FFFFFF',
+    fontSize: 10,
   },
 });
 

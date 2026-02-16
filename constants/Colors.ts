@@ -1,98 +1,73 @@
-// Color Palette for Picala App
+/**
+ * Design System Colors for Picala redesign
+ * Extracted from Stitch Minimalist Design
+ */
 
-// Fondos (Backgrounds)
-export const BackgroundColors = {
-  primary: '#4A2B34', // dark teal background
-  secondary: '#1c434e', // dark teal background
-  white: '#ffffff', // light cyan for cards
-  light: '#f5f5f5', // light cyan for cards
-  dark: '#2c2c2c', // light cyan for cards
-  elevated: '#afc8cc', // medium cyan for elevated surfaces
-} as const;
-
-// Texto (Text Colors)
-export const TextColors = {
-  white: '#ffffff', // white for text
-  dark: '#2c2c2c', // dark for text
-  primary: '#1c434e', // dark teal for primary text
-  secondary: '#a58266', // warm brown for secondary text
-  disabled: '#afc8cc', // medium cyan for disabled text
-} as const;
-
-// Colores de acento (Accent Colors)
-export const AccentColors = {
-  primary: '#dc285d', // vibrant pink/red for primary actions
-  alternative: '#a58266', // warm brown for alternative actions
-  warning: '#a58266', // warm brown for warnings
-  error: '#dc285d', // vibrant pink/red for errors
-} as const;
-
-// Legacy colors for backward compatibility
 export const Colors = {
+  primary: '#E91E63', // Vibrant pink-red from redesign
+  accent: '#1E3A8A',  // Deep indigo for buttons/actions
+
   light: {
-    text: '#000',
-    background: '#fff',
-    tint: '#2f95dc',
-    tabIconDefault: '#ccc',
-    tabIconSelected: '#2f95dc',
+    background: '#F8FAFC',
+    surface: '#FFFFFF',
+    text: {
+      primary: '#0F172A',
+      secondary: '#64748B',
+    },
+    border: '#E2E8F0',
+    card: '#FFFFFF',
+    input: '#F3F4F6',
   },
+
   dark: {
-    text: '#fff',
-    background: '#000',
-    tint: '#fff',
-    tabIconDefault: '#ccc',
-    tabIconSelected: '#fff',
+    background: '#0F172A',
+    surface: '#1E293B',
+    text: {
+      primary: '#F8FAFC',
+      secondary: '#94A3B8',
+    },
+    border: '#334155',
+    card: '#1E293B',
+    input: '#374151',
   },
-  // New color palette
-  backgrounds: BackgroundColors,
-  text: TextColors,
-  accents: AccentColors,
-  // Tab bar colors
+
+  status: {
+    success: '#16A34A',
+    error: '#DC2626',
+    warning: '#D97706',
+    win: '#16A34A',
+    loss: '#DC2626',
+  },
+
   tabBar: {
-    active: '#dc285d',
-    inactive: '#afc8cc',
-    background: 'rgba(28, 67, 78, 0.95)',
-  },
+    active: '#E91E63',
+    inactive: '#64748B',
+  }
 } as const;
 
-// Utility functions for color usage
-export const getBackgroundColor = (type: keyof typeof BackgroundColors) => {
-  return BackgroundColors[type];
-};
+// Legacy mappings for backward compatibility during migration
+export const BackgroundColors = {
+  primary: Colors.light.background,
+  secondary: Colors.light.surface,
+  white: '#ffffff',
+  light: Colors.light.background,
+  dark: Colors.dark.background,
+  elevated: Colors.light.surface,
+} as const;
 
-export const getTextColor = (type: keyof typeof TextColors) => {
-  return TextColors[type];
-};
+export const TextColors = {
+  white: '#ffffff',
+  dark: Colors.dark.text.primary,
+  primary: Colors.light.text.primary,
+  secondary: Colors.light.text.secondary,
+  disabled: '#94A3B8',
+} as const;
 
-export const getAccentColor = (type: keyof typeof AccentColors) => {
-  return AccentColors[type];
-};
-
-// Common color combinations
-export const ColorCombinations = {
-  // Header gradient
-  headerGradient: [BackgroundColors.primary, BackgroundColors.secondary],
-
-  // Card backgrounds
-  cardBackground: BackgroundColors.secondary,
-
-  // Button styles
-  primaryButton: {
-    background: AccentColors.primary,
-    text: BackgroundColors.secondary,
-  },
-  secondaryButton: {
-    background: AccentColors.alternative,
-    text: BackgroundColors.secondary,
-  },
-  warningButton: {
-    background: AccentColors.warning,
-    text: BackgroundColors.secondary,
-  },
-  errorButton: {
-    background: AccentColors.error,
-    text: BackgroundColors.secondary,
-  },
+export const AccentColors = {
+  primary: Colors.primary,
+  alternative: Colors.accent,
+  warning: Colors.status.warning,
+  error: Colors.status.error,
 } as const;
 
 export default Colors;

@@ -1,275 +1,205 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Pressable } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
-import { CustomButton } from '@/components';
-import { BackgroundColors, TextColors, AccentColors } from '@/constants/Colors';
+import { Button, ScreenContainer, BaseCard } from '@/components/core';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import { usePersistentAuth } from '@/hooks/usePersistentAuth';
+import { signOut } from '@/services/auth';
 
 interface MenuItem {
   id: string;
   title: string;
   subtitle?: string;
   icon: string;
+  onPress: () => void;
 }
 
-const MENU_ITEMS: MenuItem[] = [
-  { id: '1', title: 'Edit Profile', subtitle: 'Change your info', icon: 'person' },
-  { id: '2', title: 'Notifications', subtitle: 'Manage alerts', icon: 'bell' },
-  { id: '3', title: 'Privacy', subtitle: 'Security settings', icon: 'lock' },
-  { id: '4', title: 'Help & Support', subtitle: 'Get assistance', icon: 'help' },
-  { id: '5', title: 'About', subtitle: 'App info', icon: 'info' },
-];
-
 const ProfileScreen = () => {
+  const { user, isAuthenticated } = usePersistentAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    Alert.alert('Log Out', 'Are you sure you want to log out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Log Out',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await signOut();
+            router.replace('/(auth)/login');
+          } catch (error) {
+            Alert.alert('Error', 'Failed to log out.');
+          }
+        }
+      },
+    ]);
+  };
+
+  const MENU_ITEMS: MenuItem[] = [
+    {
+      id: '1', title: 'Edit Profile', icon: 'person.fill',
+      onPress: () => Alert.alert('Edit Profile', 'Coming soon!')
+    },
+    {
+      id: '2', title: 'Notifications', icon: 'bell.fill',
+      onPress: () => Alert.alert('Notifications', 'Coming soon!')
+    },
+    {
+      id: '3', title: 'Privacy Settings', icon: 'lock.fill',
+      onPress: () => Alert.alert('Privacy', 'Coming soon!')
+    },
+    {
+      id: '4', title: 'Help & Support', icon: 'questionmark.circle.fill',
+      onPress: () => Alert.alert('Support', 'Coming soon!')
+    },
+    {
+      id: '5', title: 'About Picala', icon: 'info.circle.fill',
+      onPress: () => Alert.alert('About', 'Picala v1.0.0')
+    },
+  ];
+
+  const userInitial = user?.email?.[0].toUpperCase() || 'P';
+  const userName = user?.email?.split('@')[0] || 'User';
+
   return (
-    <View style={styles.container}>
+    <ScreenContainer withScroll>
       <View style={styles.header}>
-        <Text variant="title" level="xl" color={TextColors.primary}>
-          Profile
-        </Text>
+        <Text variant="h1">Profile</Text>
       </View>
 
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <View style={styles.profileCard}>
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatar}>
-              <Text variant="title" level="xl" color={BackgroundColors.white}>
-                JD
-              </Text>
-            </View>
-            <Pressable style={({ pressed }) => [styles.editAvatarButton, pressed && { opacity: 0.8 }]}>
-              <Text variant="caption" color={BackgroundColors.white}>
-                Edit
-              </Text>
-            </Pressable>
-          </View>
-
-          <Text variant="title" level="lg" color={TextColors.primary} center>
-            John Doe
-          </Text>
-          <Text variant="body" color={TextColors.secondary} center>
-            john.doe@email.com
-          </Text>
-
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text variant="title" level="lg" color={AccentColors.primary} strong>
-                12
-              </Text>
-              <Text variant="caption" color={TextColors.secondary}>
-                Matches
-              </Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text variant="title" level="lg" color={AccentColors.primary} strong>
-                8
-              </Text>
-              <Text variant="caption" color={TextColors.secondary}>
-                Wins
-              </Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text variant="title" level="lg" color={AccentColors.primary} strong>
-                4.8
-              </Text>
-              <Text variant="caption" color={TextColors.secondary}>
-                Rating
-              </Text>
-            </View>
-          </View>
+      <BaseCard style={styles.profileHeader}>
+        <View style={styles.avatar}>
+          <Text variant="h1" weight="bold" style={styles.avatarText}>{userInitial}</Text>
         </View>
+        <Text variant="h2" weight="bold" style={styles.userName}>{userName}</Text>
+        <Text variant="body" opacity={0.6}>{user?.email}</Text>
 
-        <View style={styles.menuSection}>
-          <Text
-            variant="caption"
-            color={TextColors.secondary}
-            style={styles.sectionTitle}
-          >
-            ACCOUNT
-          </Text>
-          <View style={styles.menuCard}>
-            {MENU_ITEMS.map((item, index) => (
-              <Pressable
-                key={item.id}
-                style={({ pressed }) => [
-                  styles.menuItem,
-                  index < MENU_ITEMS.length - 1 && styles.menuItemBorder,
-                  pressed && { opacity: 0.8 }
-                ]}
-              >
-                <View style={styles.menuItemContent}>
-                  <View style={styles.menuIcon}>
-                    <Text variant="body" color={AccentColors.primary}>
-                      {getIconEmoji(item.icon)}
-                    </Text>
-                  </View>
-                  <View style={styles.menuText}>
-                    <Text variant="body" color={TextColors.primary}>
-                      {item.title}
-                    </Text>
-                    {item.subtitle && (
-                      <Text variant="caption" color={TextColors.secondary}>
-                        {item.subtitle}
-                      </Text>
-                    )}
-                  </View>
+        <View style={styles.statsRow}>
+          <StatItem label="Matches" value="12" />
+          <StatItem label="Wins" value="8" />
+          <StatItem label="Rank" value="Gold" />
+        </View>
+      </BaseCard>
+
+      <View style={styles.menuSection}>
+        <Text variant="h3" weight="bold" style={styles.sectionTitle}>Account Settings</Text>
+        <BaseCard padding="xs">
+          {MENU_ITEMS.map((item, index) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={item.onPress}
+              style={[
+                styles.menuItem,
+                index < MENU_ITEMS.length - 1 && styles.menuDivider
+              ]}
+            >
+              <View style={styles.menuItemContent}>
+                <View style={styles.iconContainer}>
+                  <IconSymbol name={item.icon as any} size={20} color={Colors.primary} />
                 </View>
-                <Text variant="body" color={TextColors.disabled}>
-                  ›
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
+                <Text variant="body" weight="medium">{item.title}</Text>
+              </View>
+              <IconSymbol name="chevron.right" size={16} color="#94A3B8" />
+            </TouchableOpacity>
+          ))}
+        </BaseCard>
+      </View>
 
-        <View style={styles.logoutSection}>
-          <CustomButton
-            title="Log Out"
-            onPress={() => { }}
-            variant="outline"
-            style={styles.logoutButton}
-          />
-        </View>
+      <View style={styles.actions}>
+        <Button
+          variant="secondary"
+          title="Log Out"
+          onPress={handleLogout}
+          textStyle={{ color: Colors.status.error }}
+          style={{ borderColor: Colors.status.error }}
+        />
+      </View>
 
-        <View style={{ height: 100 }} />
-      </ScrollView>
-    </View>
+      <View style={{ height: 100 }} />
+    </ScreenContainer>
   );
 };
 
-function getIconEmoji(icon: string): string {
-  const emojis: Record<string, string> = {
-    person: '👤',
-    bell: '🔔',
-    lock: '🔒',
-    help: '❓',
-    info: 'ℹ️',
-  };
-  return emojis[icon] || '•';
-}
+const StatItem = ({ label, value }: { label: string; value: string }) => (
+  <View style={styles.statItem}>
+    <Text variant="h3" weight="bold" style={{ color: Colors.primary }}>{value}</Text>
+    <Text variant="small" weight="medium" opacity={0.5}>{label}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: BackgroundColors.light,
-  },
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 16,
-    backgroundColor: BackgroundColors.light,
+    paddingVertical: Spacing.xl,
+    paddingTop: 20,
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 20,
-  },
-  profileCard: {
-    backgroundColor: BackgroundColors.white,
-    marginHorizontal: 20,
-    borderRadius: 20,
-    padding: 24,
+  profileHeader: {
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
-  },
-  avatarContainer: {
-    position: 'relative',
-    marginBottom: 16,
+    paddingVertical: Spacing.xxl,
+    marginBottom: Spacing.xl,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: AccentColors.primary,
-    alignItems: 'center',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: Colors.primary,
     justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
   },
-  editAvatarButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: AccentColors.alternative,
-    borderRadius: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+  avatarText: {
+    color: '#FFFFFF',
+    fontSize: 40,
   },
-  statsContainer: {
+  userName: {
+    marginBottom: 4,
+  },
+  statsRow: {
     flexDirection: 'row',
-    marginTop: 20,
-    paddingTop: 20,
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: Spacing.xl,
+    paddingTop: Spacing.xl,
     borderTopWidth: 1,
-    borderTopColor: BackgroundColors.elevated,
+    borderTopColor: '#F1F5F9',
   },
   statItem: {
-    flex: 1,
     alignItems: 'center',
   },
-  statDivider: {
-    width: 1,
-    backgroundColor: BackgroundColors.elevated,
-  },
   menuSection: {
-    marginTop: 24,
-    paddingHorizontal: 20,
+    marginBottom: Spacing.xl,
   },
   sectionTitle: {
-    marginBottom: 12,
-    marginLeft: 4,
-  },
-  menuCard: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 16,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    marginBottom: Spacing.md,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    padding: Spacing.lg,
   },
-  menuItemBorder: {
+  menuDivider: {
     borderBottomWidth: 1,
-    borderBottomColor: BackgroundColors.light,
+    borderBottomColor: '#F1F5F9',
   },
   menuItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
   },
-  menuIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: BackgroundColors.light,
-    alignItems: 'center',
+  iconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FCE7F3', // Light pink background for icons
     justifyContent: 'center',
-    marginRight: 12,
+    alignItems: 'center',
+    marginRight: Spacing.md,
   },
-  menuText: {
-    flex: 1,
-  },
-  logoutSection: {
-    marginTop: 24,
-    paddingHorizontal: 20,
-  },
-  logoutButton: {
-    borderColor: AccentColors.primary,
+  actions: {
+    marginTop: Spacing.sm,
   },
 });
 
