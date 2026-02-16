@@ -107,7 +107,32 @@ export const resendVerificationEmail = async (email: string): Promise<{ success:
   }
 };
 
-export const verifyEmail = async (token: string): Promise<User> => {
+export const forgotPassword = async (email: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: DEEP_LINKS.RESET_PASSWORD,
+    });
+
+    if (error) {
+      throw {
+        code: error.message,
+        message: getErrorMessage(error.message),
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Password reset link sent! Please check your email.',
+    };
+  } catch (error: any) {
+    throw {
+      code: error.code || 'auth/unknown',
+      message: error.message || getErrorMessage(error.code),
+    };
+  }
+};
+
+export const verifyOtp = async (token: string): Promise<User> => {
   try {
     const { data, error } = await supabase.auth.verifyOtp({
       token_hash: token,
@@ -234,6 +259,65 @@ const isTokenExpired = (session: any): boolean => {
   // Consider token expired if it expires within the next 5 minutes
   return expiresAt.getTime() <= now.getTime() + 5 * 60 * 1000;
 };
+
+
+export const exchangeCodeForSession = async (code: string): Promise<{ success: boolean; session: any }> => {
+  try {
+    const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (error) {
+      throw {
+        code: error.message,
+        message: getErrorMessage(error.message),
+      };
+    }
+
+    if (!session) {
+      throw {
+        code: 'auth/session-missing',
+        message: 'Failed to retrieve session from code.',
+      };
+    }
+
+    return { success: true, session };
+  } catch (error: any) {
+    throw {
+      code: error.code || 'auth/unknown',
+      message: error.message || getErrorMessage(error.code),
+    };
+  }
+};
+
+export const setSession = async (access_token: string, refresh_token: string): Promise<{ success: boolean; session: any }> => {
+  try {
+    const { data: { session }, error } = await supabase.auth.setSession({
+      access_token,
+      refresh_token,
+    });
+
+    if (error) {
+      throw {
+        code: error.message,
+        message: getErrorMessage(error.message),
+      };
+    }
+
+    if (!session) {
+      throw {
+        code: 'auth/session-missing',
+        message: 'Failed to set session from tokens.',
+      };
+    }
+
+    return { success: true, session };
+  } catch (error: any) {
+    throw {
+      code: error.code || 'auth/unknown',
+      message: error.message || getErrorMessage(error.code),
+    };
+  }
+};
+
 
 // Helper function to convert Supabase error messages to user-friendly messages
 const ERROR_MESSAGES: Record<string, string> = {

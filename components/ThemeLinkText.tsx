@@ -1,6 +1,6 @@
-import {TouchableOpacity, StyleSheet} from 'react-native';
-import {Text, type CustomTextProps} from './Text';
-import {Link, type Href} from 'expo-router';
+import { Pressable, StyleSheet } from 'react-native';
+import { Text, type CustomTextProps } from './Text';
+import { Link, type Href } from 'expo-router';
 
 type ThemeLinkTextProps = CustomTextProps & {
   href?: Href;
@@ -8,7 +8,7 @@ type ThemeLinkTextProps = CustomTextProps & {
   center?: boolean;
 };
 
-export function ThemeLinkText({style, href, onPress, center = false, children, ...rest}: ThemeLinkTextProps) {
+export function ThemeLinkText({ style, href, onPress, center = false, children, ...rest }: ThemeLinkTextProps) {
   const content = (
     <Text variant="link" style={[style]} {...rest}>
       {children}
@@ -20,15 +20,15 @@ export function ThemeLinkText({style, href, onPress, center = false, children, .
   if (href) {
     return (
       <Link href={href} asChild>
-        <TouchableOpacity style={centerStyle}>{content}</TouchableOpacity>
+        <Pressable style={({ pressed }) => [centerStyle, pressed && { opacity: 0.7 }]}>{content}</Pressable>
       </Link>
     );
   }
 
   return (
-    <TouchableOpacity style={centerStyle} onPress={onPress}>
+    <Pressable style={({ pressed }) => [centerStyle, pressed && { opacity: 0.7 }]} onPress={onPress}>
       {content}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

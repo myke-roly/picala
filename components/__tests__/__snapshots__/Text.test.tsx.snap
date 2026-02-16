@@ -5,20 +5,19 @@ exports[`Text Component combines multiple props 1`] = `
   style={
     [
       {
-        "fontWeight": "700",
+        "fontSize": 32,
+        "lineHeight": 40,
       },
       {
-        "fontSize": 20,
+        "fontFamily": "Inter_700Bold",
       },
       {
-        "color": "#1c434e",
-      },
-      {
-        "fontWeight": "700",
+        "color": "primary",
       },
       {
         "textAlign": "center",
       },
+      false,
       undefined,
     ]
   }
@@ -27,23 +26,72 @@ exports[`Text Component combines multiple props 1`] = `
 </Text>
 `;
 
+exports[`Text Component renders with body variants 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontSize": 14,
+        "lineHeight": 21,
+      },
+      {
+        "fontFamily": "Inter_400Regular",
+      },
+      {
+        "color": "#0F172A",
+      },
+      false,
+      false,
+      undefined,
+    ]
+  }
+>
+  Body Text
+</Text>
+`;
+
+exports[`Text Component renders with caption variants 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontSize": 12,
+        "lineHeight": 18,
+      },
+      {
+        "fontFamily": "Inter_400Regular",
+      },
+      {
+        "color": "#64748B",
+      },
+      false,
+      false,
+      undefined,
+    ]
+  }
+>
+  Caption Text
+</Text>
+`;
+
 exports[`Text Component renders with center alignment 1`] = `
 <Text
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
       {
         "textAlign": "center",
       },
+      false,
       undefined,
     ]
   }
@@ -57,16 +105,17 @@ exports[`Text Component renders with custom color 1`] = `
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#a58266",
+        "color": "#ff0000",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -80,16 +129,17 @@ exports[`Text Component renders with default props 1`] = `
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 14,
+        "lineHeight": 21,
       },
       {
-        "fontSize": 16,
+        "fontFamily": "Inter_400Regular",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
@@ -98,96 +148,50 @@ exports[`Text Component renders with default props 1`] = `
 </Text>
 `;
 
-exports[`Text Component renders with different levels 1`] = `
+exports[`Text Component renders with header variants 1`] = `
 <Text
   style={
     [
       {
-        "fontWeight": "400",
+        "fontSize": 32,
+        "lineHeight": 40,
       },
       {
-        "fontSize": 20,
+        "fontFamily": "Inter_700Bold",
       },
       {
-        "color": "#1c434e",
+        "color": "#0F172A",
       },
-      {},
-      undefined,
-      undefined,
-    ]
-  }
->
-  Large Text
-</Text>
-`;
-
-exports[`Text Component renders with strong styling 1`] = `
-<Text
-  style={
-    [
-      {
-        "fontWeight": "400",
-      },
-      {
-        "fontSize": 16,
-      },
-      {
-        "color": "#1c434e",
-      },
-      {
-        "fontWeight": "700",
-      },
-      undefined,
-      undefined,
-    ]
-  }
->
-  Strong Text
-</Text>
-`;
-
-exports[`Text Component renders with subtitle variant 1`] = `
-<Text
-  style={
-    [
-      {
-        "fontWeight": "600",
-      },
-      {
-        "fontSize": 16,
-      },
-      {
-        "color": "#1c434e",
-      },
-      {},
-      undefined,
-      undefined,
-    ]
-  }
->
-  Subtitle Text
-</Text>
-`;
-
-exports[`Text Component renders with title variant 1`] = `
-<Text
-  style={
-    [
-      {
-        "fontWeight": "700",
-      },
-      {
-        "fontSize": 16,
-      },
-      {
-        "color": "#1c434e",
-      },
-      {},
-      undefined,
+      false,
+      false,
       undefined,
     ]
   }
 >
   Title Text
+</Text>
+`;
+
+exports[`Text Component renders with weight styling 1`] = `
+<Text
+  style={
+    [
+      {
+        "fontSize": 14,
+        "lineHeight": 21,
+      },
+      {
+        "fontFamily": "Inter_700Bold",
+      },
+      {
+        "color": "#0F172A",
+      },
+      false,
+      false,
+      undefined,
+    ]
+  }
+>
+  Bold Text
 </Text>
 `;

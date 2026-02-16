@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, ReactNode } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '@/components/Text';
 import { ColorCombinations } from '@/constants';
@@ -33,14 +33,17 @@ const Header: React.FC<HeaderProps> = ({
   // Map legacy props to new API if used
   const effectiveSubtitle = subtitle || text;
   const effectiveRight = right || (button ? (
-    <TouchableOpacity
-      style={[styles.button, button.disabled && styles.buttonDisabled]}
+    <Pressable
+      style={({ pressed }) => [
+        styles.button,
+        button.disabled && styles.buttonDisabled,
+        pressed && { opacity: 0.7 }
+      ]}
       onPress={button.onPress}
       disabled={button.disabled}
-      activeOpacity={0.7}
     >
       <Text style={[styles.buttonText, button.disabled && styles.buttonTextDisabled]}>{button.title}</Text>
-    </TouchableOpacity>
+    </Pressable>
   ) : null);
 
   return (

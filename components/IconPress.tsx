@@ -1,9 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, TouchableOpacityProps, StyleSheet} from 'react-native';
-import {TextColors} from '@/constants';
-import Icon, {IconProps} from './Icon';
+import { Pressable, PressableProps, StyleSheet } from 'react-native';
+import { TextColors } from '@/constants';
+import Icon, { IconProps } from './Icon';
 
-export interface IconPressProps extends TouchableOpacityProps, IconProps {
+export interface IconPressProps extends PressableProps, IconProps {
   onPress?: () => void;
   disabled?: boolean;
   activeOpacity?: number;
@@ -16,25 +16,26 @@ const IconPress: React.FC<IconPressProps> = ({
   onPress,
   disabled = false,
   activeOpacity = 0.7,
+  style,
   ...props
 }) => {
   const iconColor = disabled ? TextColors.disabled : color;
 
   return (
-    <TouchableOpacity
-      style={[
+    <Pressable
+      style={(state) => [
         styles.container,
         {
-          opacity: disabled ? 0.5 : 1,
+          opacity: disabled ? 0.5 : state.pressed ? activeOpacity : 1,
         },
+        typeof style === 'function' ? style(state) : style,
       ]}
       onPress={onPress}
       disabled={disabled}
-      activeOpacity={activeOpacity}
       {...props}
     >
       <Icon name={name} size={size} color={iconColor} />
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

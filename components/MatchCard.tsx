@@ -1,78 +1,163 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {Text, TeamMatch} from '@/components';
-import {TeamMatchProps} from './TeamMatch';
-import {BackgroundColors} from '@/constants';
+import { View, StyleSheet, Pressable } from 'react-native';
+import { Text } from './Text';
+import { Ionicons } from '@expo/vector-icons';
+import { Team } from '@/services/matches';
 
-interface MatchCardProps extends TeamMatchProps {
+interface MatchCardProps {
+  team1: Team;
+  team2: Team;
   date: string;
-  time: string;
-  location: string;
+  odds1?: string;
+  odds2?: string;
+  onPress?: () => void;
+  // Legacy props (optional for backward compatibility if needed, or ignored)
+  time?: string;
+  location?: string;
   playerCount?: number;
   maxPlayers?: number;
-  onPress?: () => void;
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({
   team1,
   team2,
   date,
-  time,
-  location,
-  playerCount,
-  maxPlayers,
+  odds1,
+  odds2,
   onPress,
 }) => {
-  const CardContainer = onPress ? TouchableOpacity : View;
-
-  return (
-    <CardContainer style={styles.container} onPress={onPress} activeOpacity={0.7}>
-      {/* Location at the top center */}
-      <View style={styles.locationContainer}>
-        <Text>{location}</Text>
+  const content = (
+    <>
+      <View style={styles.matchHeader}>
+        <Text style={styles.matchDate}>{date}</Text>
+        <Ionicons name="star" size={16} color="#1a1b26" />
       </View>
 
-      {/* Team Match Component */}
-      <TeamMatch team1={team1} team2={team2} matchTime={time} matchDate={date} style={styles.teamMatchContainer} />
-
-      {/* Optional player count info */}
-      {playerCount !== undefined && maxPlayers !== undefined && (
-        <View style={styles.playerInfo}>
-          <Text>
-            {playerCount}/{maxPlayers} players
-          </Text>
+      <View style={styles.teamRow}>
+        <View style={styles.teamInfo}>
+          {/* Placeholder for team logo */}
+          <View style={[styles.teamLogo, { backgroundColor: '#0077b6' }]} >
+            <Ionicons name="shield" size={16} color="#fff" />
+          </View>
+          <Text style={styles.teamName}>{team1.name}</Text>
         </View>
-      )}
-    </CardContainer>
+        {odds1 && (
+          <View style={styles.oddsBadge}>
+            <Text style={styles.oddsText}>{odds1}</Text>
+          </View>
+        )}
+      </View>
+
+      <View style={[styles.teamRow, { marginTop: 12 }]}>
+        <View style={styles.teamInfo}>
+          {/* Placeholder for team logo */}
+          <View style={[styles.teamLogo, { backgroundColor: '#d00000' }]} >
+            <Ionicons name="shield" size={16} color="#fff" />
+          </View>
+          <Text style={styles.teamName}>{team2.name}</Text>
+        </View>
+        {odds2 && (
+          <View style={styles.oddsBadge}>
+            <Text style={styles.oddsText}>{odds2}</Text>
+          </View>
+        )}
+      </View>
+
+      <Pressable
+        style={({ pressed }) => [styles.actionButton, pressed && { opacity: 0.7 }]}
+        onPress={onPress}
+      >
+        <Text style={styles.actionButtonText}>Place a parlay</Text>
+      </Pressable>
+    </>
+  );
+
+  if (onPress) {
+    return (
+      <Pressable
+        style={({ pressed }) => [styles.matchCard, pressed && { opacity: 0.7 }]}
+        onPress={onPress}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return (
+    <View style={styles.matchCard}>
+      {content}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: BackgroundColors.white,
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  matchCard: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 20,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+    marginBottom: 16,
   },
-  locationContainer: {
+  matchHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
-  teamMatchContainer: {
-    marginVertical: 8,
+  matchDate: {
+    color: '#64748b',
+    fontSize: 14,
   },
-  playerInfo: {
-    marginTop: 8,
+  teamRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  teamInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  teamLogo: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  teamName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0f172a',
+  },
+  oddsBadge: {
+    backgroundColor: '#f1f5f9',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  oddsText: {
+    color: '#059669',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  actionButton: {
+    backgroundColor: '#1a1b26',
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

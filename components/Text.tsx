@@ -1,83 +1,85 @@
-import {Text as RNText, type TextProps as RNTextProps, StyleSheet} from 'react-native';
-import {TextColors, AccentColors} from '@/constants/Colors';
+import { Text as RNText, type TextProps as RNTextProps, StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { Typography } from '@/constants/Typography';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export type CustomTextProps = RNTextProps & {
-  variant?: 'default' | 'title' | 'subtitle' | 'body' | 'caption' | 'link';
-  level?: 'sm' | 'md' | 'lg' | 'xl';
-  color?: keyof typeof TextColors | keyof typeof AccentColors | string;
+  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'body' | 'caption' | 'small' | 'link';
+  weight?: keyof typeof Typography.fontFamily;
+  color?: string;
   center?: boolean;
-  strong?: boolean;
+  opacity?: number;
 };
 
 export function Text({
   style,
-  variant = 'default',
-  level = 'md',
-  color = TextColors.primary,
+  variant = 'body',
+  weight,
+  color,
   center = false,
-  strong = false,
+  opacity,
   ...rest
 }: CustomTextProps) {
+  const colorScheme = useColorScheme() ?? 'light';
+
+  // Base styles based on variant
   const getVariantStyle = () => {
     switch (variant) {
-      case 'title':
-        return styles.title;
-      case 'subtitle':
-        return styles.subtitle;
-      case 'body':
-        return styles.body;
+      case 'h1':
+        return styles.h1;
+      case 'h2':
+        return styles.h2;
+      case 'h3':
+        return styles.h3;
+      case 'h4':
+        return styles.h4;
       case 'caption':
         return styles.caption;
+      case 'small':
+        return styles.small;
       case 'link':
         return styles.link;
+      case 'body':
       default:
-        return styles.default;
+        return styles.body;
     }
   };
 
-  const getLevelStyle = () => {
-    switch (level) {
-      case 'sm':
-        return styles.sm;
-      case 'md':
-        return styles.md;
-      case 'lg':
-        return styles.lg;
-      case 'xl':
-        return styles.xl;
-      default:
-        return styles.md;
+  // Font weight style
+  const getWeightStyle = () => {
+    if (weight && Typography.fontFamily[weight]) {
+      return { fontFamily: Typography.fontFamily[weight] };
     }
+
+    // Default weights for variants if not specified
+    if (variant.startsWith('h')) {
+      return { fontFamily: Typography.fontFamily.bold };
+    }
+    if (variant === 'link') {
+      return { fontFamily: Typography.fontFamily.medium };
+    }
+
+    return { fontFamily: Typography.fontFamily.regular };
   };
 
-  const getColorStyle = () => {
-    if (!color) return {};
+  const getTextColor = () => {
+    if (color) return color;
 
-    if (typeof color === 'string' && !color.includes('#')) {
-      // Check if it's a TextColor
-      if (color in TextColors) {
-        return {color: TextColors[color as keyof typeof TextColors]};
-      }
-      // Check if it's an AccentColor
-      if (color in AccentColors) {
-        return {color: AccentColors[color as keyof typeof AccentColors]};
-      }
+    if (variant === 'caption' || variant === 'small') {
+      return Colors[colorScheme].text.secondary;
     }
-    return {color: color as string};
-  };
 
-  const getStrongStyle = () => {
-    return strong ? styles.strong : {};
+    return Colors[colorScheme].text.primary;
   };
 
   return (
     <RNText
       style={[
         getVariantStyle(),
-        getLevelStyle(),
-        getColorStyle(),
-        getStrongStyle(),
-        center ? styles.center : undefined,
+        getWeightStyle(),
+        { color: getTextColor() },
+        center && { textAlign: 'center' },
+        opacity !== undefined && { opacity },
         style,
       ]}
       {...rest}
@@ -86,46 +88,36 @@ export function Text({
 }
 
 const styles = StyleSheet.create({
-  // Variant styles
-  default: {
-    fontWeight: '400',
+  h1: {
+    fontSize: Typography.sizes.h1,
+    lineHeight: Typography.sizes.h1 * Typography.lineHeight.tight,
   },
-  title: {
-    fontWeight: '700',
+  h2: {
+    fontSize: Typography.sizes.h2,
+    lineHeight: Typography.sizes.h2 * Typography.lineHeight.tight,
   },
-  subtitle: {
-    fontWeight: '600',
+  h3: {
+    fontSize: Typography.sizes.h3,
+    lineHeight: Typography.sizes.h3 * Typography.lineHeight.tight,
+  },
+  h4: {
+    fontSize: Typography.sizes.h4,
+    lineHeight: Typography.sizes.h4 * Typography.lineHeight.tight,
   },
   body: {
-    fontWeight: '400',
+    fontSize: Typography.sizes.body,
+    lineHeight: Typography.sizes.body * Typography.lineHeight.normal,
   },
   caption: {
-    fontWeight: '400',
+    fontSize: Typography.sizes.caption,
+    lineHeight: Typography.sizes.caption * Typography.lineHeight.normal,
+  },
+  small: {
+    fontSize: Typography.sizes.small,
+    lineHeight: Typography.sizes.small * Typography.lineHeight.normal,
   },
   link: {
-    fontWeight: '500',
+    fontSize: Typography.sizes.body,
     textDecorationLine: 'underline',
-  },
-
-  // Level styles (font sizes)
-  sm: {
-    fontSize: 12,
-  },
-  md: {
-    fontSize: 16,
-  },
-  lg: {
-    fontSize: 20,
-  },
-  xl: {
-    fontSize: 24,
-  },
-
-  // Utility styles
-  strong: {
-    fontWeight: '700',
-  },
-  center: {
-    textAlign: 'center',
   },
 });

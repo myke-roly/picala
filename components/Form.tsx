@@ -1,6 +1,12 @@
-import React, {ReactNode, useRef, useEffect} from 'react';
-import {View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput} from 'react-native';
-import {Text, CustomButton, CustomInput} from '@/components';
+import React, { ReactNode, useRef, useEffect } from 'react';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { Text } from '@/components/Text';
+import { Button } from '@/components/core/Button/Button';
+import { BaseInput } from '@/components/core/Input/BaseInput';
+import AuthLogo from '@/components/AuthLogo';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export interface FormField {
   key: string;
@@ -11,15 +17,20 @@ export interface FormField {
   secureTextEntry?: boolean;
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
-  autoComplete?: 'email' | 'password' | 'name' | 'tel' | 'url' | 'off';
+  autoComplete?: 'email' | 'password' | 'password-new' | 'name' | 'tel' | 'url' | 'off';
   required?: boolean;
   multiline?: boolean;
+  error?: string;
+  leftIcon?: string;
+  rightIcon?: string;
+  onRightIconPress?: () => void;
+  renderAfter?: ReactNode;
 }
 
 export interface FormButton {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
   loading?: boolean;
   disabled?: boolean;
 }
@@ -30,6 +41,7 @@ export interface FormValidation {
 
 interface FormProps {
   title: string;
+  subtitle?: string;
   fields: FormField[];
   buttons: FormButton[];
   error?: string;
@@ -38,7 +50,8 @@ interface FormProps {
   validation?: FormValidation;
 }
 
-const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, children}) => {
+const Form: React.FC<FormProps> = ({ title, subtitle, fields, buttons, error, success, children }) => {
+  const colorScheme = useColorScheme() ?? 'light';
   const firstInputRef = useRef<TextInput>(null);
 
   // Auto-focus on first input when component mounts
@@ -63,28 +76,47 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior="automatic"
       >
-        <View style={styles.formContainer}>
-          <Text variant="title" style={styles.title}>
+        <View
+          style={[
+            styles.formContainer,
+            { backgroundColor: Colors[colorScheme].surface }
+          ]}
+        >
+          <Text variant="h2" weight="bold" style={styles.title}>
             {title}
           </Text>
 
+          {subtitle && (
+            <Text variant="body" style={{ textAlign: 'center', marginBottom: Spacing.lg, opacity: 0.7 }}>
+              {subtitle}
+            </Text>
+          )}
+
           <View style={styles.inputContainer}>
             {fields.map((field, index) => (
-              <CustomInput
-                key={field.key}
-                ref={index === 0 ? firstInputRef : null}
-                label={field.label}
-                placeholder={field.placeholder}
-                value={field.value}
-                onChangeText={field.onChangeText}
-                secureTextEntry={field.secureTextEntry}
-                keyboardType={field.keyboardType}
-                autoCapitalize={field.autoCapitalize}
-                autoComplete={field.autoComplete}
-                required={field.required}
-                multiline={field.multiline}
-              />
+              <React.Fragment key={field.key}>
+                <BaseInput
+                  key={field.key}
+                  ref={index === 0 ? firstInputRef : null}
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  value={field.value}
+                  onChangeText={field.onChangeText}
+                  secureTextEntry={field.secureTextEntry}
+                  keyboardType={field.keyboardType}
+                  autoCapitalize={field.autoCapitalize}
+                  autoComplete={field.autoComplete}
+                  required={field.required}
+                  multiline={field.multiline}
+                  leftIcon={field.leftIcon}
+                  rightIcon={field.rightIcon}
+                  onRightIconPress={field.onRightIconPress}
+                  error={field.error}
+                />
+                {field.renderAfter}
+              </React.Fragment>
             ))}
           </View>
 
@@ -93,13 +125,14 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
 
           <View style={styles.buttonContainer}>
             {buttons.map((button, index) => (
-              <CustomButton
+              <Button
                 key={index}
                 title={button.title}
                 onPress={button.onPress}
-                variant={button.variant}
+                variant={button.variant || 'primary'}
                 loading={button.loading}
                 disabled={button.disabled}
+                fullWidth
               />
             ))}
           </View>
@@ -107,44 +140,52 @@ const Form: React.FC<FormProps> = ({title, fields, buttons, error, success, chil
           {children}
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView >
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9fafb',
   },
   scrollContainer: {
-    flexGrow: 1,
     justifyContent: 'center',
   },
   formContainer: {
-    padding: 20,
+    padding: Spacing.xl,
     width: '100%',
     maxWidth: 400,
     alignSelf: 'center',
+    borderRadius: Spacing.borderRadius.lg,
+    borderCurve: 'continuous',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
   },
   title: {
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: Spacing.xxl,
+    color: Colors.primary,
   },
   inputContainer: {
-    marginBottom: 20,
+    gap: Spacing.sm,
+    marginBottom: Spacing.sm,
   },
   buttonContainer: {
-    gap: 16,
+    gap: Spacing.md,
+    marginTop: Spacing.sm,
   },
   errorText: {
-    color: '#ef4444',
+    color: Colors.status.error,
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: Spacing.md,
+    fontSize: 14,
+    fontWeight: '500',
   },
   successText: {
-    color: '#10b981',
+    color: Colors.status.success,
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: Spacing.md,
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
 

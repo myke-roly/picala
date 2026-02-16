@@ -1,109 +1,132 @@
-import React, { FC } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Text, MatchCard } from '@/components';
-import { getFeaturedMatches, Match } from '@/services/matches';
-import { BackgroundColors, TextColors, AccentColors } from '@/constants';
+import { Text } from '@/components/Text';
+import {
+  ScreenContainer,
+  BaseInput,
+  MatchCard,
+  CategoryFilter
+} from '@/components/core';
+import { getFeaturedMatches } from '@/services/matches';
+import { useQuery } from '@/hooks/useQuery';
+import { Colors } from '@/constants/Colors';
+import { Spacing } from '@/constants/Spacing';
+
+const CATEGORIES = [
+  { id: 'all', name: 'All' },
+  { id: 'trending', name: 'Trending' },
+  { id: 'upcoming', name: 'Upcoming' },
+  { id: 'nearby', name: 'Nearby' },
+];
 
 export default function ExploreScreen() {
   const router = useRouter();
-
-  const [featuredMatches, setFeaturedMatches] = React.useState<Match[]>([]);
-
-  React.useEffect(() => {
-    const loadMatches = async () => {
-      const matches = await getFeaturedMatches();
-      setFeaturedMatches(matches);
-    };
-    loadMatches();
-  }, []);
+  const [activeCategory, setActiveCategory] = React.useState('all');
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const { data: featuredMatches, loading, error } = useQuery(getFeaturedMatches);
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Explore</Text>
-          <Text style={styles.subtitle}>Discover new matches and events</Text>
-        </View>
+    <ScreenContainer withScroll>
+      <View style={styles.header}>
+        <Text variant="h1">Explore</Text>
+        <Text variant="body" opacity={0.6}>Find your next favorite match</Text>
+      </View>
 
-        <View style={styles.content}>
-          <Text style={styles.sectionTitle}>Featured Matches</Text>
-          <View style={styles.matchesContainer}>
-            <ExploreContentList
-              featuredMatches={featuredMatches}
-              onPressItem={(match) => router.push({ pathname: '/match', params: { id: match.id } })} />
+      <BaseInput
+        placeholder="Search for matches, teams or venues..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        leftIcon="magnifyingglass"
+        containerStyle={styles.searchBar}
+      />
+
+      <CategoryFilter
+        categories={CATEGORIES}
+        activeCategory={activeCategory}
+        onCategoryPress={setActiveCategory}
+      />
+
+      <View style={styles.section}>
+        <Text variant="h3" weight="bold" style={styles.sectionTitle}>
+          {activeCategory === 'all' ? 'Featured for You' : `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Matches`}
+        </Text>
+
+        {loading && (
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+            <Text variant="caption" style={{ marginTop: 12 }}>Loading matches...</Text>
           </View>
-        </View>
-      </ScrollView>
-    </View>
+        )}
+
+        {error && (
+          <View style={styles.errorCard}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        )}
+
+        {!loading && !error && featuredMatches && (
+          <View style={styles.matchesContainer}>
+            {featuredMatches.map((match) => (
+              <MatchCard
+                key={match.id}
+                team1={match.team1}
+                team2={match.team2}
+                date={match.date}
+                location={match.location || 'Stadium Arena'}
+                onPress={() => router.push({ pathname: '/match', params: { id: match.id } })}
+              />
+            ))}
+
+            {featuredMatches.length === 0 && (
+              <View style={styles.emptyContainer}>
+                <Text variant="body" opacity={0.5}>No matches found.</Text>
+              </View>
+            )}
+          </View>
+        )}
+      </View>
+
+      <View style={{ height: 100 }} />
+    </ScreenContainer>
   );
 }
 
-const ExploreContentList: FC<{ featuredMatches: Match[]; onPressItem: (match: Match) => void }> = ({
-  featuredMatches,
-  onPressItem,
-}) => {
-  return (
-    <>
-      {featuredMatches.map((match) => (
-        <MatchCard
-          key={match.id}
-          {...match}
-          onPress={() => onPressItem(match)}
-        />
-      ))}
-    </>
-  );
-};
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: BackgroundColors.light,
-  },
-  scrollView: {
-    flex: 1,
-  },
   header: {
-    padding: 20,
-    paddingTop: 40,
+    paddingVertical: Spacing.xl,
+    paddingTop: 20,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: TextColors.primary,
-    marginBottom: 8,
+  searchBar: {
+    marginBottom: Spacing.xl,
   },
-  subtitle: {
-    fontSize: 16,
-    color: TextColors.secondary,
-  },
-  content: {
-    padding: 20,
+  section: {
+    marginTop: Spacing.sm,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1c434e',
-    marginBottom: 16,
+    marginBottom: Spacing.lg,
   },
   matchesContainer: {
-    gap: 16,
+    gap: Spacing.md,
   },
-  featuredCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
+  centerContainer: {
+    padding: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyContainer: {
+    padding: 60,
+    alignItems: 'center',
+  },
+  errorCard: {
+    backgroundColor: '#FEE2E2',
     padding: 20,
-    marginBottom: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: AccentColors.primary,
-  },
-  eventCard: {
-    backgroundColor: BackgroundColors.white,
     borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
+    alignItems: 'center',
   },
-  cardDetails: {
-    gap: 4,
+  errorText: {
+    color: Colors.status.error,
+    textAlign: 'center',
   },
 });
+
