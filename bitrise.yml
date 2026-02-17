@@ -11,8 +11,6 @@ app:
 workflows:
   dev:
     steps:
-      - checkout:
-          title: Checkout Repository
       - script:
           title: Install Dependencies
           inputs:
@@ -75,7 +73,7 @@ workflows:
                 npx eas build:list --platform android --status finished --limit 1 --json > build.json
                 BUILD_ID=$(node -e "console.log(JSON.parse(require('fs').readFileSync('build.json')).[0].id)")
                 npx eas build:download $BUILD_ID --platform android
-      - deploy-to-bitrise-archives:
+      - deploy-to-bitrise-app:
           title: Deploy APK to Bitrise
           inputs:
             - deploy_path: .
