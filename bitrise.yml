@@ -43,6 +43,7 @@ workflows:
         inputs:
         - platform: android
         - profile: dev
+        - access_token: $EXPO_TOKEN
     - deploy-to-bitrise-io@2: {}
 
   primary:
