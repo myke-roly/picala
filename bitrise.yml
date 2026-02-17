@@ -1,0 +1,81 @@
+format_version: "14"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+project_type: react-native
+
+app:
+  envs:
+    - EXPO_PUBLIC_SUPABASE_URL: "$EXPO_PUBLIC_SUPABASE_URL"
+    - EXPO_PUBLIC_SUPABASE_ANON_KEY: "$EXPO_PUBLIC_SUPABASE_ANON_KEY"
+
+workflows:
+  dev:
+    steps:
+      - checkout:
+          title: Checkout Repository
+      - script:
+          title: Install Dependencies
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npm ci
+      - script:
+          title: Type Check
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npm run type-check
+      - script:
+          title: Run ESLint
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npm run lint
+      - script:
+          title: Run Tests
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npm run test:ci
+      - script:
+          title: Install EAS CLI
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npm install -g eas-cli
+      - script:
+          title: Login to Expo
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npx expo login --token $EXPO_TOKEN
+          secrets:
+            - EXPO_TOKEN: "$EXPO_TOKEN"
+      - script:
+          title: EAS Build APK
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npx eas build -p android --profile dev --non-interactive
+          secrets:
+            - EXPO_TOKEN: "$EXPO_TOKEN"
+      - script:
+          title: Download APK
+          inputs:
+            - content: |
+                #!/bin/bash
+                set -e
+                npx eas build:list --platform android --status finished --limit 1 --json > build.json
+                BUILD_ID=$(node -e "console.log(JSON.parse(require('fs').readFileSync('build.json')).[0].id)")
+                npx eas build:download $BUILD_ID --platform android
+      - deploy-to-bitrise-archives:
+          title: Deploy APK to Bitrise
+          inputs:
+            - deploy_path: .

@@ -1,0 +1,14 @@
+{
+  "build": {
+    "dev": {
+      "developmentClient": false,
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {}
+    }
+  },
+  "cli": {
+    "version": ">=7.0.0"
+  }
+}
