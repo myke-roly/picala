@@ -1,79 +1,68 @@
-format_version: "14"
+format_version: '23'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
-
 project_type: react-native
 
 app:
   envs:
-    - EXPO_PUBLIC_SUPABASE_URL: "https://wttiojmndzmsxygzbtvg.supabase.co"
-    - EXPO_PUBLIC_SUPABASE_ANON_KEY: "sb_publishable_BMbLSXn9ADQs4bHAHI9QYw_9-0DwSEB"
+  - PLATFORM: android
+    opts:
+      is_expand: false
+  - EXPO_PUBLIC_SUPABASE_URL: https://wttiojmndzmsxygzbtvg.supabase.co
+    opts:
+      is_expand: false
+  - EXPO_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_BMbLSXn9ADQs4bHAHI9QYw_9-0DwSEB
+    opts:
+      is_expand: false
 
 workflows:
   dev:
+    description: |
+      Build de desarrollo - APK standalone para testing
     steps:
-      - script:
-          title: Install Dependencies
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npm install
-      - script:
-          title: Type Check
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npm run type-check
-      - script:
-          title: Run ESLint
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npm run lint
-      - script:
-          title: Run Tests
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npm run test:ci
-      - script:
-          title: Install EAS CLI
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npm install -g eas-cli
-      - script:
-          title: Login to Expo
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npx expo login --token $EXPO_TOKEN
-          secrets:
-            - EXPO_TOKEN: "$EXPO_TOKEN"
-      - script:
-          title: EAS Build APK
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npx eas build -p android --profile dev --non-interactive
-          secrets:
-            - EXPO_TOKEN: "$EXPO_TOKEN"
-      - script:
-          title: Download APK
-          inputs:
-            - content: |
-                #!/bin/bash
-                set -e
-                npx eas build:list --platform android --status finished --limit 1 --json > build.json
-                BUILD_ID=$(node -e "console.log(JSON.parse(require('fs').readFileSync('build.json')).[0].id)")
-                npx eas build:download $BUILD_ID --platform android
-      - deploy-to-bitrise-app:
-          title: Deploy APK to Bitrise
-          inputs:
-            - deploy_path: .
+    - git-clone@8: {}
+    - npm@2:
+        title: npm install
+        inputs:
+        - command: install
+    - npm@2:
+        title: npm run type-check
+        inputs:
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: npm run lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: npm test
+        inputs:
+        - command: test
+    - run-eas-build@0:
+        title: EAS Build APK
+        inputs:
+        - platform: android
+        - profile: dev
+    - deploy-to-bitrise-io@2: {}
+
+  primary:
+    description: |
+      Workflow principal - solo tests (se ejecuta en PRs)
+    steps:
+    - git-clone@8: {}
+    - restore-npm-cache@2: {}
+    - npm@2:
+        title: npm install
+        inputs:
+        - command: install
+    - npm@2:
+        title: npm test
+        inputs:
+        - command: test
+    - save-npm-cache@1: {}
+    - deploy-to-bitrise-io@2: {}
+
+meta:
+  bitrise.io:
+    stack: osx-xcode-26.2.x
+    machine_type_id: g2-m1.4core
