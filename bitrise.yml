@@ -42,7 +42,7 @@ workflows:
         title: EAS Build APK
         inputs:
         - platform: android
-        - profile: dev
+        - eas_options: --profile dev
         - access_token: $EXPO_TOKEN
     - deploy-to-bitrise-io@2: {}
 
