@@ -5,8 +5,8 @@ project_type: react-native
 
 app:
   envs:
-    - EXPO_PUBLIC_SUPABASE_URL: "$EXPO_PUBLIC_SUPABASE_URL"
-    - EXPO_PUBLIC_SUPABASE_ANON_KEY: "$EXPO_PUBLIC_SUPABASE_ANON_KEY"
+    - EXPO_PUBLIC_SUPABASE_URL: "https://wttiojmndzmsxygzbtvg.supabase.co"
+    - EXPO_PUBLIC_SUPABASE_ANON_KEY: "sb_publishable_BMbLSXn9ADQs4bHAHI9QYw_9-0DwSEB"
 
 workflows:
   dev:
