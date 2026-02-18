@@ -1,7 +1,7 @@
 {
   "build": {
     "dev": {
-      "developmentClient": false,
+      "developmentClient": true,
       "android": {
         "buildType": "debug"
       }
