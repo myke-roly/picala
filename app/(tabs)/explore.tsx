@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Text } from '@/components/Text';
 import {
@@ -28,11 +28,6 @@ export default function ExploreScreen() {
 
   return (
     <ScreenContainer withScroll>
-      <View style={styles.header}>
-        <Text variant="h1">Explore</Text>
-        <Text variant="body" opacity={0.6}>Find your next favorite match</Text>
-      </View>
-
       <BaseInput
         placeholder="Search for matches, teams or venues..."
         value={searchQuery}

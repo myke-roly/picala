@@ -1,9 +1,8 @@
 import React, { ReactNode, useRef, useEffect } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput } from 'react-native';
 import { Text } from '@/components/Text';
 import { Button } from '@/components/core/Button/Button';
 import { BaseInput } from '@/components/core/Input/BaseInput';
-import AuthLogo from '@/components/AuthLogo';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -67,87 +66,71 @@ const Form: React.FC<FormProps> = ({ title, subtitle, fields, buttons, error, su
   }, [fields.length]);
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    <View
+      style={[
+        styles.formContainer,
+        { backgroundColor: Colors[colorScheme].surface }
+      ]}
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior="automatic"
-      >
-        <View
-          style={[
-            styles.formContainer,
-            { backgroundColor: Colors[colorScheme].surface }
-          ]}
-        >
-          <Text variant="h2" weight="bold" style={styles.title}>
-            {title}
-          </Text>
+      <Text variant="h2" weight="bold" style={styles.title}>
+        {title}
+      </Text>
 
-          {subtitle && (
-            <Text variant="body" style={{ textAlign: 'center', marginBottom: Spacing.lg, opacity: 0.7 }}>
-              {subtitle}
-            </Text>
-          )}
+      {subtitle && (
+        <Text variant="body" style={{ textAlign: 'center', marginBottom: Spacing.lg, opacity: 0.7 }}>
+          {subtitle}
+        </Text>
+      )}
 
-          <View style={styles.inputContainer}>
-            {fields.map((field, index) => (
-              <React.Fragment key={field.key}>
-                <BaseInput
-                  key={field.key}
-                  ref={index === 0 ? firstInputRef : null}
-                  label={field.label}
-                  placeholder={field.placeholder}
-                  value={field.value}
-                  onChangeText={field.onChangeText}
-                  secureTextEntry={field.secureTextEntry}
-                  keyboardType={field.keyboardType}
-                  autoCapitalize={field.autoCapitalize}
-                  autoComplete={field.autoComplete}
-                  required={field.required}
-                  multiline={field.multiline}
-                  leftIcon={field.leftIcon}
-                  rightIcon={field.rightIcon}
-                  onRightIconPress={field.onRightIconPress}
-                  error={field.error}
-                />
-                {field.renderAfter}
-              </React.Fragment>
-            ))}
-          </View>
+      <View style={styles.inputContainer}>
+        {fields.map((field, index) => (
+          <React.Fragment key={field.key}>
+            <BaseInput
+              key={field.key}
+              ref={index === 0 ? firstInputRef : null}
+              label={field.label}
+              placeholder={field.placeholder}
+              value={field.value}
+              onChangeText={field.onChangeText}
+              secureTextEntry={field.secureTextEntry}
+              keyboardType={field.keyboardType}
+              autoCapitalize={field.autoCapitalize}
+              autoComplete={field.autoComplete}
+              required={field.required}
+              multiline={field.multiline}
+              leftIcon={field.leftIcon}
+              rightIcon={field.rightIcon}
+              onRightIconPress={field.onRightIconPress}
+              error={field.error}
+            />
+            {field.renderAfter}
+          </React.Fragment>
+        ))}
+      </View>
 
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
-          {success ? <Text style={styles.successText}>{success}</Text> : null}
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {success ? <Text style={styles.successText}>{success}</Text> : null}
 
-          <View style={styles.buttonContainer}>
-            {buttons.map((button, index) => (
-              <Button
-                key={index}
-                title={button.title}
-                onPress={button.onPress}
-                variant={button.variant || 'primary'}
-                loading={button.loading}
-                disabled={button.disabled}
-                fullWidth
-              />
-            ))}
-          </View>
+      <View style={styles.buttonContainer}>
+        {buttons.map((button, index) => (
+          <Button
+            key={index}
+            title={button.title}
+            onPress={button.onPress}
+            variant={button.variant || 'primary'}
+            loading={button.loading}
+            disabled={button.disabled}
+            fullWidth
+          />
+        ))}
+      </View>
 
-          {children}
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView >
+      {children}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   scrollContainer: {
     justifyContent: 'center',
   },

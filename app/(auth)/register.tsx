@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { signUp } from '@/services/auth';
 import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
 import { Text } from '@/components/Text';
 import { ScreenContainer } from '@/components/core';
 import Form from '@/components/Form';
-import { Spacing } from '@/constants/Spacing';
 import { Colors } from '@/constants/Colors';
 
 const Register = () => {
@@ -145,11 +144,14 @@ const Register = () => {
 
         <View style={styles.footer}>
           <Text variant="body">Already have an account? </Text>
-          <TouchableOpacity onPress={() => router.back()}>
+          <Pressable
+            onPress={() => router.back()}
+            style={({ pressed }) => pressed && { opacity: 0.7 }}
+          >
             <Text variant="link" weight="semibold" style={styles.loginLink}>
               Sign In
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </Form>
     </ScreenContainer>
@@ -171,13 +173,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
   },
-  form: {
-    flex: 1,
-  },
-  button: {
-    marginTop: Spacing.md,
-    marginBottom: Spacing.xl,
-  },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -185,15 +180,6 @@ const styles = StyleSheet.create({
   },
   loginLink: {
     color: Colors.primary,
-  },
-  errorContainer: {
-    backgroundColor: '#FEE2E2',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  errorText: {
-    color: '#991B1B',
   },
 });
 

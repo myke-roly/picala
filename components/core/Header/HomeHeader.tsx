@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/Text';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
@@ -18,38 +18,35 @@ export function HomeHeader({
   onNotificationPress
 }: HomeHeaderProps) {
   const colorScheme = useColorScheme() ?? 'light';
-
-  // Extract name from email as a fallback
   const userName = userEmail ? userEmail.split('@')[0] : 'Guest';
 
   return (
     <View style={styles.container}>
-      <View style={styles.userInfo}>
-        <TouchableOpacity onPress={onProfilePress} style={styles.avatarContainer}>
-          <View style={[styles.avatar, { backgroundColor: Colors.primary }]}>
+      <View style={styles.actions}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.iconButton,
+            pressed && { opacity: 0.7 }
+          ]}
+          onPress={onNotificationPress}
+        >
+          <IconSymbol name="bell.fill" size={24} color={Colors[colorScheme].text.secondary} />
+        </Pressable>
+
+        <Pressable
+          onPress={onProfilePress}
+          style={({ pressed }) => [
+            styles.avatarContainer,
+            pressed && { opacity: 0.7 }
+          ]}
+        >
+          {/* Ideally use an Image here if user has one, using initials for now matching Stitch somewhat */}
+          <View style={styles.avatarInner}>
             <Text weight="bold" style={styles.avatarText}>
               {userName.charAt(0).toUpperCase()}
             </Text>
           </View>
-        </TouchableOpacity>
-        <View style={styles.textContainer}>
-          <Text variant="caption" weight="medium" opacity={0.6}>
-            Welcome back,
-          </Text>
-          <Text variant="body" weight="bold">
-            {userName}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={[styles.iconButton, { backgroundColor: Colors[colorScheme].input }]}
-          onPress={onNotificationPress}
-        >
-          <IconSymbol name="bell.fill" size={20} color={Colors[colorScheme].text.primary} />
-          <View style={styles.badge} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -58,52 +55,45 @@ export function HomeHeader({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     paddingVertical: Spacing.md,
-    marginBottom: Spacing.lg,
-  },
-  userInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatarContainer: {
-    marginRight: Spacing.md,
-  },
-  avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-  },
-  textContainer: {
-    justifyContent: 'center',
   },
   actions: {
     flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
   },
   iconButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative',
   },
-  badge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.primary,
-    borderWidth: 1.5,
-    borderColor: '#FFFFFF',
+  avatarContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F1F5F9', // Fallback color
+  },
+  avatarInner: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F3F4F6', // Colors.light.input fallback
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
+  },
+  avatarText: {
+    fontSize: 16,
+    color: '#64748B',
   },
 });

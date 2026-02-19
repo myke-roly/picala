@@ -3,7 +3,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 import AnimatedTabBar from '@/components/ui/AnimatedTabBar';
 import { Colors } from '@/constants/Colors';
 

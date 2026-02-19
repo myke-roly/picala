@@ -1,11 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Text } from '@/components/Text';
 import { ScreenContainer, BaseInput } from '@/components/core';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
-import { IconSymbol } from '@/components/ui/IconSymbol';
 
 interface Message {
   id: string;
@@ -51,16 +49,10 @@ const MOCK_MESSAGES: Message[] = [
 ];
 
 const MessagesScreen = () => {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = React.useState('');
 
   return (
     <ScreenContainer withScroll>
-      <View style={styles.header}>
-        <Text variant="h1">Messages</Text>
-        <Text variant="body" opacity={0.6}>Reach out to your teammates</Text>
-      </View>
-
       <BaseInput
         placeholder="Search conversations..."
         value={searchQuery}
@@ -71,11 +63,12 @@ const MessagesScreen = () => {
 
       <View style={styles.messagesList}>
         {MOCK_MESSAGES.map((message, index) => (
-          <TouchableOpacity
+          <Pressable
             key={message.id}
-            style={[
+            style={({ pressed }) => [
               styles.messageItem,
-              index < MOCK_MESSAGES.length - 1 && styles.divider
+              index < MOCK_MESSAGES.length - 1 && styles.divider,
+              pressed && { backgroundColor: '#F8FAFC' }
             ]}
           >
             <View style={styles.avatarContainer}>
@@ -116,7 +109,7 @@ const MessagesScreen = () => {
                 )}
               </View>
             </View>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
 
@@ -126,10 +119,6 @@ const MessagesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    paddingVertical: Spacing.xl,
-    paddingTop: 20,
-  },
   searchBar: {
     marginBottom: Spacing.xl,
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Share, Alert } from 'react-native';
+import { View, StyleSheet, Share, Alert, Pressable } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Text } from '@/components/Text';
 import { Button, BaseCard, ScreenContainer } from '@/components/core';
@@ -37,12 +37,18 @@ export default function MatchScreen() {
   return (
     <ScreenContainer withScroll>
       <View style={styles.navBar}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.navButton}>
+        <Pressable
+          onPress={() => router.back()}
+          style={({ pressed }) => [styles.navButton, pressed && { opacity: 0.7 }]}
+        >
           <IconSymbol name="chevron.left" size={24} color={Colors.primary} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleShareMatch} style={styles.navButton}>
+        </Pressable>
+        <Pressable
+          onPress={handleShareMatch}
+          style={({ pressed }) => [styles.navButton, pressed && { opacity: 0.7 }]}
+        >
           <IconSymbol name="square.and.arrow.up" size={24} color={Colors.primary} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.matchHero}>

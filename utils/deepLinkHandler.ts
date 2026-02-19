@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 
 export const handleUrl = (url: string) => {
   try {
-    console.log('Incoming Deep Link:', url);
+    // console.log('Incoming Deep Link:', url);
     const parsed = Linking.parse(url);
 
     // Provide a default path if none exists (e.g. standard deep link launch)
@@ -27,7 +27,7 @@ export const handleUrl = (url: string) => {
     // Reset Password / Implicit flow sends #access_token=...
 
     // Simple manual hash parser for robustness if expo-linking doesn't catch it
-    let hashParams: Record<string, string> = {};
+    const hashParams: Record<string, string> = {};
     if (url.includes('#')) {
       const hashParts = url.split('#');
       const hashString = hashParts.length > 1 ? hashParts[1] : '';
@@ -57,11 +57,11 @@ export const handleUrl = (url: string) => {
       !path.startsWith('/--/'); // Ignore Expo Go internal paths if empty
 
     if (!isAuthLink && !isDeepLink) {
-      console.log('Ignoring non-actionable deep link:', { path });
+      // console.log('Ignoring non-actionable deep link:', { path });
       return;
     }
 
-    console.log('Processing deep link:', { path, allParams });
+    // console.log('Processing deep link:', { path, allParams });
 
     // Navigate to the linking handler screen with all params
     // Note: We only redirect if it's an auth link. 
@@ -74,7 +74,7 @@ export const handleUrl = (url: string) => {
       });
     } else {
       // Let normal routing happen or handle other deep links here
-      console.log('Passing through non-auth deep link');
+      // console.log('Passing through non-auth deep link');
     }
 
   } catch (e) {
@@ -90,8 +90,8 @@ export const setupDeepLinkListener = () => {
         handleUrl(url);
       }
     })
-    .catch((err) => {
-      console.warn('Error getting initial URL:', err);
+    .catch((e) => {
+      console.error('Error getting initial URL:', e);
     });
 
   // Listen for incoming links when app is already running

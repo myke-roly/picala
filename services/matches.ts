@@ -1,4 +1,3 @@
-import { supabase } from '../config/supabase';
 import Logger from './logger';
 
 export interface Team {

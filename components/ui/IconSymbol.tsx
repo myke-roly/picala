@@ -1,9 +1,9 @@
 // This file is a fallback for using MaterialIcons on Android and web.
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import {SymbolWeight} from 'expo-symbols';
+import { SymbolWeight } from 'expo-symbols';
 import React from 'react';
-import {OpaqueColorValue, StyleProp, TextStyle} from 'react-native';
+import { OpaqueColorValue, StyleProp, TextStyle } from 'react-native';
 
 // Add your SFSymbol to MaterialIcons mappings here.
 const MAPPING = {
@@ -16,6 +16,21 @@ const MAPPING = {
   // Other icons
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'envelope.fill': 'email',
+  'lock.fill': 'lock',
+  'eye.fill': 'visibility',
+  'eye.slash.fill': 'visibility-off',
+  'plus': 'add',
+  'bell.fill': 'notifications',
+  'soccerball': 'sports-soccer',
+  'volleyball': 'sports-volleyball',
+  'basketball': 'sports-basketball',
+  'tennisball': 'sports-tennis',
+  'sportscourt': 'sports-cricket', // Using as Padel fallback
+  'trophy.fill': 'emoji-events',
+  'clock.fill': 'schedule',
+  'calendar': 'calendar-today',
+  'mappin.and.ellipse': 'place',
 } as Partial<
   Record<import('expo-symbols').SymbolViewProps['name'], React.ComponentProps<typeof MaterialIcons>['name']>
 >;
