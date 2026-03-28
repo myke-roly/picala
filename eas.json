@@ -1,9 +1,40 @@
 {
   "build": {
     "dev": {
-      "developmentClient": false,
+      "developmentClient": true,
       "android": {
         "buildType": "debug"
+      },
+      "ios": {
+        "simulator": false,
+        "distribution": "internal"
+      },
+      "env": {
+        "EXPO_PUBLIC_BASE_URL": "exp://192.168.0.247:8081/--/"
+      }
+    },
+    "staging": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false,
+        "distribution": "internal"
+      },
+      "env": {
+        "EXPO_PUBLIC_BASE_URL": "https://staging.picala.app"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "simulator": false,
+        "distribution": "internal"
+      },
+      "env": {
+        "EXPO_PUBLIC_BASE_URL": "https://picala.app"
       }
     }
   },
