@@ -4,9 +4,6 @@ project_type: react-native
 
 app:
   envs:
-  - PLATFORM: android
-    opts:
-      is_expand: false
   - EXPO_PUBLIC_SUPABASE_URL: https://wttiojmndzmsxygzbtvg.supabase.co
     opts:
       is_expand: false
@@ -15,52 +12,248 @@ app:
       is_expand: false
 
 workflows:
-  dev:
+  # ============================================================
+  # Primary workflow - QA only (runs on PRs)
+  # ============================================================
+  primary:
     description: |
-      Build de desarrollo - APK standalone para testing
+      QA checks only - no builds. Triggered on all PRs.
     steps:
     - git-clone@8: {}
+    - restore-npm-cache@2: {}
     - npm@2:
-        title: npm install
+        title: npm ci
         inputs:
-        - command: install
+        - command: ci
     - npm@2:
-        title: npm run type-check
+        title: Type check
         inputs:
         - command: run
         - name: type-check
     - npm@2:
-        title: npm run lint
+        title: Lint
         inputs:
         - command: run
         - name: lint
     - npm@2:
-        title: npm test
+        title: Tests
         inputs:
-        - command: test
+        - command: run
+        - name: test:ci
+    - save-npm-cache@1: {}
+    - deploy-to-bitrise-io@2: {}
+
+  # ============================================================
+  # Dev builds (triggered on push to develop)
+  # ============================================================
+  dev_android:
+    description: |
+      Development build - Android debug APK (expo-dev-client)
+    steps:
+    - git-clone@8: {}
+    - restore-npm-cache@2: {}
+    - npm@2:
+        title: npm ci
+        inputs:
+        - command: ci
+    - npm@2:
+        title: Type check
+        inputs:
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: Lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: Tests
+        inputs:
+        - command: run
+        - name: test:ci
+    - save-npm-cache@1: {}
     - run-eas-build@0:
-        title: EAS Build APK
+        title: EAS Build Android (dev)
         inputs:
         - platform: android
         - eas_options: --profile dev
         - access_token: $EXPO_TOKEN
     - deploy-to-bitrise-io@2: {}
 
-  primary:
+  dev_ios:
     description: |
-      Workflow principal - solo tests (se ejecuta en PRs)
+      Development build - iOS Ad Hoc (expo-dev-client)
     steps:
     - git-clone@8: {}
     - restore-npm-cache@2: {}
     - npm@2:
-        title: npm install
+        title: npm ci
         inputs:
-        - command: install
+        - command: ci
     - npm@2:
-        title: npm test
+        title: Type check
         inputs:
-        - command: test
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: Lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: Tests
+        inputs:
+        - command: run
+        - name: test:ci
     - save-npm-cache@1: {}
+    - run-eas-build@0:
+        title: EAS Build iOS (dev)
+        inputs:
+        - platform: ios
+        - eas_options: --profile dev
+        - access_token: $EXPO_TOKEN
+    - deploy-to-bitrise-io@2: {}
+
+  # ============================================================
+  # Staging builds (triggered on push to staging)
+  # ============================================================
+  staging_android:
+    description: |
+      Staging build - Android APK
+    steps:
+    - git-clone@8: {}
+    - restore-npm-cache@2: {}
+    - npm@2:
+        title: npm ci
+        inputs:
+        - command: ci
+    - npm@2:
+        title: Type check
+        inputs:
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: Lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: Tests
+        inputs:
+        - command: run
+        - name: test:ci
+    - save-npm-cache@1: {}
+    - run-eas-build@0:
+        title: EAS Build Android (staging)
+        inputs:
+        - platform: android
+        - eas_options: --profile staging
+        - access_token: $EXPO_TOKEN
+    - deploy-to-bitrise-io@2: {}
+
+  staging_ios:
+    description: |
+      Staging build - iOS Ad Hoc
+    steps:
+    - git-clone@8: {}
+    - restore-npm-cache@2: {}
+    - npm@2:
+        title: npm ci
+        inputs:
+        - command: ci
+    - npm@2:
+        title: Type check
+        inputs:
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: Lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: Tests
+        inputs:
+        - command: run
+        - name: test:ci
+    - save-npm-cache@1: {}
+    - run-eas-build@0:
+        title: EAS Build iOS (staging)
+        inputs:
+        - platform: ios
+        - eas_options: --profile staging
+        - access_token: $EXPO_TOKEN
+    - deploy-to-bitrise-io@2: {}
+
+  # ============================================================
+  # Production builds (triggered on push to main)
+  # ============================================================
+  production_android:
+    description: |
+      Production build - Android APK
+    steps:
+    - git-clone@8: {}
+    - restore-npm-cache@2: {}
+    - npm@2:
+        title: npm ci
+        inputs:
+        - command: ci
+    - npm@2:
+        title: Type check
+        inputs:
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: Lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: Tests
+        inputs:
+        - command: run
+        - name: test:ci
+    - save-npm-cache@1: {}
+    - run-eas-build@0:
+        title: EAS Build Android (production)
+        inputs:
+        - platform: android
+        - eas_options: --profile production
+        - access_token: $EXPO_TOKEN
+    - deploy-to-bitrise-io@2: {}
+
+  production_ios:
+    description: |
+      Production build - iOS Ad Hoc
+    steps:
+    - git-clone@8: {}
+    - restore-npm-cache@2: {}
+    - npm@2:
+        title: npm ci
+        inputs:
+        - command: ci
+    - npm@2:
+        title: Type check
+        inputs:
+        - command: run
+        - name: type-check
+    - npm@2:
+        title: Lint
+        inputs:
+        - command: run
+        - name: lint
+    - npm@2:
+        title: Tests
+        inputs:
+        - command: run
+        - name: test:ci
+    - save-npm-cache@1: {}
+    - run-eas-build@0:
+        title: EAS Build iOS (production)
+        inputs:
+        - platform: ios
+        - eas_options: --profile production
+        - access_token: $EXPO_TOKEN
     - deploy-to-bitrise-io@2: {}
 
 meta:
